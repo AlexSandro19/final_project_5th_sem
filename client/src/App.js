@@ -1,28 +1,35 @@
 import { makeStyles } from "@mui/styles";
+import { createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter as Router } from "react-router-dom";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import { Paper } from "@mui/material";
-import { Typography } from "@mui/material";
+import { IconButton } from "@mui/material";
+
+import {Routes} from "./routes";
 import { Navigation } from "./components/Navigation";
-const useStyles = makeStyles((theme) => ({
+const theme = createTheme()
+const useStyles = makeStyles(() => ({
+ 
   root: {
-    backgroundColor:"#212123",
-    color:"#989898",
+    backgroundColor:"#FFE6B6",
+    color:"#000000",
     width:"100%",
-    display:"flex",
-    flexDirection:"column ",
     height: '100%',
   },
   content: {
-    flexGrow: 1,
-    padding:theme.spacing,
-    display: "block",
-    width: 1,
+    width:"100%",
+    height:"100%",
+    flexGrow: 2,
+    padding:theme.spacing(8),
+    display: "flex",
+    flexDirection:"row",
+   
   },
-  footer:{}
+  footer:{
+    paddingTop:"10%",
+  }
   
 }));
 
@@ -30,19 +37,21 @@ function App() {
 
   const classes = useStyles();
   return (
+
     <Router>
     <div className={classes.root}>
       <CssBaseline />
-      <header >
-        <Navigation/>
-      </header>
+      <Navigation/>
       <main className={classes.content}>
-      <Typography height="1000px">TEST</Typography> <Typography>TEST</Typography> <Typography>TEST</Typography> <Typography>TEST</Typography><Typography>TEST</Typography> <Typography>TEST</Typography><Typography>TEST</Typography> <Typography>TEST</Typography><Typography>TEST</Typography>
+      <Routes />
       </main>
       <footer className={classes.footer}>
+        <IconButton>
         <FacebookIcon/>
-        <InstagramIcon/>
-        <LinkedInIcon/>
+        </IconButton>
+       
+        <IconButton> <InstagramIcon/></IconButton>
+        <IconButton>  <LinkedInIcon/></IconButton>
       </footer>
     </div>
     </Router>
