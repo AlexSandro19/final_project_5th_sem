@@ -1,8 +1,12 @@
-import { AppBar } from "@mui/material";
+import { AppBar, ButtonBase } from "@mui/material";
 import { Toolbar } from "@mui/material";
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-const drawerWidth = 190;
+import { Button } from "@mui/material";
+import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { AuthPage } from "../pages/AuthPage";
+
 const useStyles = makeStyles((theme) => ({
     grow: {
       flexGrow: 1,
@@ -16,22 +20,50 @@ const useStyles = makeStyles((theme) => ({
 
 export const Navigation =()=>{
     const classes = useStyles();
+    const [modalOpen, setModalOpen] = useState(false);
+    const handleClickOpen = () => {
+      setModalOpen(true);
+    };
+  
+    const handleClose = () => {
+      setModalOpen(false);
+    };
     return(
         <>
-        <AppBar style={{backgroundColor:"#C4C4C4"}}  className={classes.appBar}>
+        <AppBar position="sticky" style={{backgroundColor:"#C4C4C4"}}  className={classes.appBar}>
             <Toolbar>
+      
             <Typography variant="h5" className={classes.grow}>
-              TREE
+            <ButtonBase
+            component={NavLink}
+            to="/"
+            activeClassName="active"
+            >
+            <Typography variant="h5" className={classes.grow}>
+            TREE
             </Typography>
-            <Typography>
-                ALL ITEMS
+            </ButtonBase>
             </Typography>
-            <Typography>
-                LOGIN
-            </Typography>
+            <Button
+            className={classes.button}
+            color="inherit"
+            component={NavLink}
+            to="/allitems"
+            activeClassName="active"
+          >
+            All Items
+          </Button>
+            <Button
+            className={classes.button}
+            color="inherit"
+            onClick={handleClickOpen}
+            activeClassName="active"
+          >
+            Login
+          </Button>
             </Toolbar>
         </AppBar>
-        
+        <AuthPage modalOpen={modalOpen} handleClose={handleClose}></AuthPage>
         </>
     )
 
