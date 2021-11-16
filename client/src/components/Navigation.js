@@ -5,8 +5,9 @@ import { makeStyles } from "@mui/styles";
 import { Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import { AuthPage } from "../pages/AuthPage";
-
+import AuthPage  from "../pages/AuthPage";
+import { connect } from "react-redux";
+import {loginRequest} from "../redux/actions/auth";
 const useStyles = makeStyles((theme) => ({
     grow: {
       flexGrow: 1,
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-export const Navigation =()=>{
+ const Navigation =(requesting,errors,loginRequest)=>{
     const classes = useStyles();
     const [modalOpen, setModalOpen] = useState(false);
     const handleClickOpen = () => {
@@ -28,6 +29,7 @@ export const Navigation =()=>{
     const handleClose = () => {
       setModalOpen(false);
     };
+
     return(
         <>
         <AppBar position="sticky" style={{backgroundColor:"#C4C4C4"}}  className={classes.appBar}>
@@ -63,8 +65,19 @@ export const Navigation =()=>{
           </Button>
             </Toolbar>
         </AppBar>
-        <AuthPage modalOpen={modalOpen} handleClose={handleClose}></AuthPage>
+        <AuthPage modalOpen={modalOpen} handleClose={handleClose} ></AuthPage>
         </>
     )
 
 }
+
+const mapStateToProps = (state) => {
+  return {
+    requesting: state.auth.requesting,
+    errors: state.auth.errors,
+  };
+};
+
+export default connect(mapStateToProps, { loginRequest })(
+  Navigation
+);

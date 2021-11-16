@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { Auth } from "../components/Auth";
-export const AuthPage=({modalOpen,handleClose})=>{
+import { loginRequest } from "../redux/actions/auth";
+
+const AuthPage=({modalOpen,handleClose,loginRequest})=>{
     const [formErrors, setFormErrors] = useState({});
 
     // useEffect(()=>{
@@ -22,20 +25,29 @@ export const AuthPage=({modalOpen,handleClose})=>{
     //     });
     //   }
     // }, [errors]);
-  
     const [form, setForm] = useState({
-      email: "",
-      password:"",
-    });
-  
-    const changeHandler = (event) => {
-      setForm({ ...form, [event.target.name]: event.target.value });
-    };
+        email: "",
+        password:"",
+      });
+      
+      const changeHandler = (event) => {
+        setForm({ ...form, [event.target.name]: event.target.value });
+      };
+      const submitHandler = async (event) => {
+        console.log(event)
+        event.preventDefault();
+        loginRequest(form);
+        handleClose(false);
+       //setFormErrors({});
+      };
+
+
     return(
     <Auth
     modalOpen={modalOpen}
     handleClose={handleClose}
     changeHandler={changeHandler}
+    submitHandler={submitHandler}
     form={form}
     formErrors={formErrors}
     />
@@ -43,3 +55,9 @@ export const AuthPage=({modalOpen,handleClose})=>{
     
 
 }
+const mapStateToProps = (state) => {
+    return {
+      
+    }
+}
+export default connect(mapStateToProps,{loginRequest})(AuthPage)

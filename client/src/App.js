@@ -7,8 +7,8 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import { IconButton } from "@mui/material";
 
-import {Routes} from "./routes";
-import { Navigation } from "./components/Navigation";
+import Routes from "./routes";
+import Navigation  from "./components/Navigation";
 const theme = createTheme()
 const useStyles = makeStyles(() => ({
  

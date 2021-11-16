@@ -1,5 +1,6 @@
-import { Card, CardActionArea, CardContent, Grid, Box, Typography } from "@mui/material";
+import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { connect } from "react-redux";
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -18,8 +19,9 @@ const useStyles=makeStyles(()=>({
     },
 
 }))
-export const HomePage=()=>{
+const HomePage=(test)=>{
 const classes=useStyles();
+
 return(
     <div>
         <Grid container  direction="row" justifyContent="center"  alignItems="center" spacing={2}>
@@ -63,7 +65,7 @@ return(
                 <Typography variant="h5">Dinning Chair</Typography>
                 <Typography variant="body1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo egestas nunc faucibus risus sit quisque...</Typography>
             </CardContent>
-        <CardActionArea style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
+        <CardActionArea   style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
         <Typography style={{textAlign:"center"}} variant="h6">CART</Typography>
         </CardActionArea>
         </Card>
@@ -72,3 +74,10 @@ return(
     </div>
 )
 }
+const mapStateToProps = (state) => {
+    return {
+      test:state.test
+    };
+  };
+  
+export default connect(mapStateToProps,{})(HomePage)
