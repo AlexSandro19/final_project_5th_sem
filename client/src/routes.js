@@ -1,8 +1,8 @@
 import { Switch } from "react-router-dom";
 import { Redirect, Route } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
-
-export const Routes=()=>{
+import HomePage  from "./pages/HomePage";
+import { connect } from "react-redux";
+const Routes=()=>{
 
     return(
         <Switch>
@@ -12,3 +12,8 @@ export const Routes=()=>{
         </Switch>
     )
 }
+const mapStateToProps = (state) => ({
+    
+  });
+  
+ export default connect(mapStateToProps)(Routes);

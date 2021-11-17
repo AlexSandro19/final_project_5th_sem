@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
       margin: theme.spacing(3, 1, 2),
     },
   }));
-export const Auth=({modalOpen,handleClose,handleClickOpen,form,changeHandler,formErrors})=>{
+export const Auth=({modalOpen,handleClose,form,submitHandler,changeHandler,formErrors})=>{
     const classes= useStyles();
 
     return(
@@ -78,6 +78,8 @@ export const Auth=({modalOpen,handleClose,handleClickOpen,form,changeHandler,for
           <Button
             variant="contained"
             color="primary"
+            type="submit"
+            onClick={submitHandler}
           >
             Submit
           </Button>
