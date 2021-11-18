@@ -10,6 +10,7 @@ const Routes=()=>{
             <Route path="/" exact><HomePage/> </Route>
             <Route path="/contact" exact><ContactForm/> </Route>
             <Route path="/allitems" exact></Route>
+            <Route path="/register" exact></Route>
             <Redirect to="/" ></Redirect>
         </Switch>
     )

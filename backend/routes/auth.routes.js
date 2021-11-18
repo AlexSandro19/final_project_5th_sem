@@ -11,46 +11,51 @@ require("dotenv").config();
 const router = Router();
 
 // POST /api/auth/users
-// router.post(
-//   "/users",
-//   auth,
-//   grantAccess("createAny", "account"),
-//   [
-//     check("email", "Invalid email").normalizeEmail().isEmail(),
-//     check("password", "Password too short").isLength({ min: 6 }),
-//   ],
-//   async (req, res) => {
-//     try {
-//       const errors = validationResult(req);
+ router.post(
+   "/users",
+   [
+    check("email","Enter valid email").normalizeEmail().isEmail(),
+    check("password","Enter a valid password").exists(),
+    check("name","Enter a valid name").exists().notEmpty(),
+    check("username","Enter a valid username").exists().notEmpty(),
+    check("phone","Enter a valid phone").exists().notEmpty(),
+    check("address","Enter a valid address").exists().notEmpty(),
+   ],
+   async (req, res) => {
+     try {
+       const errors = validationResult(req);
 
-//       if (!errors.isEmpty()) {
-//         return res.status(400).json({
-//           errors: errors.array(),
-//           message: "Invalid data while registering",
-//         });
-//       }
+       if (!errors.isEmpty()) {
+         return res.status(400).json({
+           errors: errors.array(),
+           message: "Invalid data while registering",
+         });
+      }
 
-//       const { email, password } = req.body;
+      const {name,username,address,phone,email, password } = req.body;
+      const role="USER";
+      const emailConfirmed=false;
+      const orders=[];
+      const cart=[];
+      const candidate = await User.findOne({ email });
 
-//       const candidate = await User.findOne({ email });
+    if (candidate) {
+         return res
+           .status(400)
+           .json({ message: "User with this email already exists" });
+       }
 
-//       if (candidate) {
-//         return res
-//           .status(400)
-//           .json({ message: "User with this email already exists" });
-//       }
+      const hashedPassword = await bcrypt.hash(password, 12);
+      const user = new User({ email, password: hashedPassword,role,name,username,address,phone,cart,orders,emailConfirmed });
 
-//       const hashedPassword = await bcrypt.hash(password, 12);
-//       const user = new User({ email, password: hashedPassword });
+      await user.save();
 
-//       await user.save();
-
-//       return res.status(201).json({ message: "User account created" });
-//     } catch (error) {
-//       return res.status(500).json({ message: "Something went" });
-//     }
-//   }
-// );
+       return res.status(201).json({ message: "User account created" });
+     } catch (error) {
+       return res.status(500).json({ message: "Something went wrong",error:error.message });
+     }
+}
+);
 
 // POST /api/auth/login
 router.post(

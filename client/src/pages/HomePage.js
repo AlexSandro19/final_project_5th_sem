@@ -56,8 +56,8 @@ return(
         </Grid>
        
         <Grid item xs={6}>
-        <Box style={{height:"600px"}}   className={classes.back}>
-        <Typography variant="h4" textAlign="center">Most Popular Items Right Now</Typography>
+        <Box style={{height:"300px"}}   className={classes.back}>
+        <Typography variant="h4" textAlign="center">Highest Rated Designs</Typography>
         <Grid container spacing={1}>
         <Grid item xs={6}>
         <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
@@ -69,14 +69,16 @@ return(
         <Typography style={{textAlign:"center"}} variant="h6">CART</Typography>
         </CardActionArea>
         </Card>
-        </Grid></Grid></Box></Grid>
+        </Grid></Grid></Box>
+        <Grid item xs={6}> <Box style={{height:"300px"}}   className={classes.back}></Box></Grid>
+        
+        </Grid>
         </Grid>
     </div>
 )
 }
 const mapStateToProps = (state) => {
     return {
-      test:state.test
     };
   };
   

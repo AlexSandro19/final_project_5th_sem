@@ -3,7 +3,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
   } from "../constants/auth";
-  
+  import {USER_UNSET} from "../constants/user"
   const initialState = {
     requesting: false,
     successful: false,
@@ -12,7 +12,7 @@ import {
 
 
   const reducer = (state = initialState, action) => {
-    console.log("HERE");
+    console.log(state);
     switch (action.type) {
       case LOGIN_REQUESTING:
         console.log("here");
@@ -33,6 +33,12 @@ import {
           requesting: false,
           successful: false,
         };
+      case USER_UNSET:
+        return{
+          errors:[],
+          requesting:false,
+          successful:false
+        }
       default:
         return state;
     }
