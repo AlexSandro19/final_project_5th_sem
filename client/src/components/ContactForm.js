@@ -1,7 +1,9 @@
 import React from "react";
 import emailjs from "emailjs-com";
+import { connect } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { TextField, Box, CardContent, CardMedia, Button, Typography } from '@mui/material';
+import { contactFormRequest } from "../redux/actions/contact";
 
 const useStyles = makeStyles((theme) => ({
    
@@ -17,36 +19,24 @@ const useStyles = makeStyles((theme) => ({
    
   }));
 
-const ContactForm = () => {
+const ContactForm = ({messageResponse, contactFormRequest}) => {
     
     const classes = useStyles();
-    
-    function sendEmail(e){
-        e.preventDefault();
-        emailjs.sendForm('service_hysszfa', 'template_yesofn7', e.target, 'user_JRQFq2IyPmOHEaFKZB6Ta')
-            .then((result) => {
-                console.log(result);
-            }, (error) => {
-                console.log(error);
-            });
-        e.target.reset();
+    const sendEmail = (name, email, subject, message) => {
+        /*contactFormRequest()*/
+        console.log(name)
+        console.log(email)
+        console.log(subject)
+        console.log("called")
     }
-    
     return (
-        <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 2, width: '40ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-            <div>
-                <form className = {classes.formEmail} onSubmit={sendEmail}>
+       
+                <form className = {classes.formEmail} >
                 <TextField
             required
             id = "outlined"
             defaultValue="name"
+            name = "name"
             />
                 <TextField
             required
@@ -69,14 +59,16 @@ const ContactForm = () => {
             multiline
             rows={5}
             />
-                <TextField
-            type="submit" 
-            value="Send"
-            />
+                <Button onClick={sendEmail}
+            type="submit">Submit</Button> 
+
                 </form>
-            </div>
-        </Box>
+          
     )
 }
 
-export default ContactForm
+const mapStateToProps = (state) => {
+    return { messageResponse: state.contact.message }
+}
+
+export default connect(mapStateToProps, { contactFormRequest })(ContactForm)
