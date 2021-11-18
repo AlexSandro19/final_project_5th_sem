@@ -1,8 +1,9 @@
-import { Button } from "@mui/material";
+import { Button, Link } from "@mui/material";
 import { Dialog,DialogContent,DialogTitle,DialogContentText,DialogActions } from "@mui/material";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { createTheme } from "@mui/material";
+import { NavLink } from "react-router-dom";
 const theme = createTheme()
 const useStyles = makeStyles(() => ({
     paper: {
@@ -18,11 +19,15 @@ const useStyles = makeStyles(() => ({
    
       color:"#989898",
       width: "100%", // Fix IE 11 issue.
-
+  
       marginTop: theme.spacing(1),
     },
     textField:{
+      
       color:"#989898"
+    },
+    dialog:{
+      marginBottom:"10px"
     },
     input:{
       color:"#989898",
@@ -40,13 +45,14 @@ export const Auth=({modalOpen,handleClose,form,submitHandler,changeHandler,formE
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
         >
-        <DialogTitle id="form-dialog-title">New project</DialogTitle>
-        <DialogContent>
+        <DialogTitle id="form-dialog-title">User Login</DialogTitle>
+        <DialogContent className={classes.dialog}>
           <DialogContentText>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam quis,
-            esse dolore quod
+            esse dolore quod.
           </DialogContentText>
           <TextField
+            style={{marginBottom:theme.spacing(2)}}
             required={true}
             onChange={changeHandler}
             autoFocus
@@ -60,6 +66,7 @@ export const Auth=({modalOpen,handleClose,form,submitHandler,changeHandler,formE
             helperText={formErrors["email"] ? formErrors["email"] : ""}
           />
           <TextField
+            className={classes.dialog}
             onChange={changeHandler}
             value={form.password}
             id="password"
@@ -70,6 +77,14 @@ export const Auth=({modalOpen,handleClose,form,submitHandler,changeHandler,formE
             error={!!formErrors["tag"]}
             helperText={formErrors["tag"] ? formErrors["tag"] : ""}
           />
+          <Link
+          component={NavLink}
+          variant="body2"
+          to="/register"
+          onClick={handleClose}
+          >
+            Register
+          </Link>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">
