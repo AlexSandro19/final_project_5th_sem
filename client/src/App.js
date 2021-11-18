@@ -49,7 +49,6 @@ function App() {
         <IconButton>
         <FacebookIcon/>
         </IconButton>
-       
         <IconButton> <InstagramIcon/></IconButton>
         <IconButton>  <LinkedInIcon/></IconButton>
       </footer>
