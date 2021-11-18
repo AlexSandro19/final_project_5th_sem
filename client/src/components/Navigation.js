@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
- const Navigation =(requesting,errors,loginRequest)=>{
+ const Navigation =({requesting,errors,loginRequest})=>{
     const classes = useStyles();
     const [modalOpen, setModalOpen] = useState(false);
     const handleClickOpen = () => {
