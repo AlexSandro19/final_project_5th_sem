@@ -4,9 +4,8 @@ import { connect } from "react-redux";
 import { Auth } from "../components/Auth";
 import { loginRequest } from "../redux/actions/auth";
 
-const AuthPage=({modalOpen,handleClose,loginRequest})=>{
+const AuthPage=({requesting,successful,modalOpen,handleClose,loginRequest})=>{
     const [formErrors, setFormErrors] = useState({});
-
     // useEffect(()=>{
     //   if(domain){
     //     setForm({
@@ -57,7 +56,8 @@ const AuthPage=({modalOpen,handleClose,loginRequest})=>{
 }
 const mapStateToProps = (state) => {
     return {
-      
+      requesting:state.auth.requesting,
+      successful:state.auth.successful
     }
 }
 export default connect(mapStateToProps,{loginRequest})(AuthPage)

@@ -8,6 +8,7 @@ const Routes=()=>{
         <Switch>
             <Route path="/" exact><HomePage/> </Route>
             <Route path="/allitems" exact></Route>
+            <Route path="/register" exact></Route>
             <Redirect to="/" ></Redirect>
         </Switch>
     )

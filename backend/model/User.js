@@ -24,7 +24,7 @@ const schema = new Schema(
       default: "USER",
       enum: ["USER", "ADMIN"],
     },
-    adress:{
+    address:{
         type:String,
         required:true
     },
@@ -36,6 +36,12 @@ const schema = new Schema(
         type:Boolean,
         default: false
     },
+    orders:[
+      {
+        type:Types.ObjectId,
+        ref:"Order"
+      }
+    ],
     cart:[
        { 
         type:Types.ObjectId,
