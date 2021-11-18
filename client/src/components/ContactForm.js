@@ -1,5 +1,4 @@
-import React from "react";
-import emailjs from "emailjs-com";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { TextField, Box, CardContent, CardMedia, Button, Typography } from '@mui/material';
@@ -20,49 +19,63 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const ContactForm = ({messageResponse, contactFormRequest}) => {
-    
+    const [form,setForm] = useState({
+        name:" ",
+        email:" ",
+        subject:" ",
+        message:" ",
+    })
+    const changeHandler = (event) => {
+        setForm({ ...form, [event.target.name]: event.target.value });
+      };
     const classes = useStyles();
-    const sendEmail = (name, email, subject, message) => {
-        /*contactFormRequest()*/
-        console.log(name)
-        console.log(email)
-        console.log(subject)
-        console.log("called")
+    const sendEmail = async (event) => {
+        event.preventDefault();
+        contactFormRequest(form)
+
     }
     return (
        
-                <form className = {classes.formEmail} >
-                <TextField
+        <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
+            <TextField
+            label="Name"
             required
             id = "outlined"
-            defaultValue="name"
+            value={form.name}
             name = "name"
+            onChange={changeHandler}
             />
-                <TextField
+            <TextField
+            label="Email"
             required
-            defaultValue="email"
+            onChange={changeHandler}
+            value={form.email}
             type="email" 
             name="email"
             />
             
             <TextField
+            label="Subject"
             required
-            defaultValue="subject"
+            onChange={changeHandler}
+            value={form.subject}
             type="text" 
             name="subject"
             />
-                <TextField
+            <TextField
+            label="Message"
             required
-            defaultValue="message"
+            value={form.message}
+            onChange={changeHandler}
             type="text" 
             name="message"
             multiline
             rows={5}
             />
-                <Button onClick={sendEmail}
+                <Button
             type="submit">Submit</Button> 
 
-                </form>
+        </form>
           
     )
 }

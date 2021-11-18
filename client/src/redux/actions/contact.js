@@ -1,10 +1,6 @@
 import { CONTACT_FORM_SENDING, CONTACT_FORM_SUCCESS } from "../constants/contact";
 
-export const contactFormRequest = ({ name, email, subject, message }) => {
-    console.log(name);
-    console.log(subject)
-    console.log(email);
-    console.log(message)
+export const contactFormRequest = ({ name, email, subject, message },form) => {
   return {
     type: CONTACT_FORM_SENDING,
     payload: { name, email, subject, message },
