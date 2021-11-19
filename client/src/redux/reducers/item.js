@@ -1,19 +1,33 @@
-import { USER_SET, USER_UNSET } from "../constants/user";
+import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS } from "../constants/item";
 
-const initialState = {
-  isAuthenticated: false,
-  hasWarranty: false, 
-};
+// const initialState = {
+
+//   id: null,
+//   name: "",
+//   hasWarranty: false,
+//   isPopular: false,
+//   price: 0,
+//   quantity: 0,
+//   stock: false,
+//   description: "",
+//   categoryArray: [],
+//   materialArray: [],
+
+// };
+
+const initialState = {items: []};
 
 const reducer = (state = initialState, action) => {
-  
+  console.log("In the Reducer", action.payload);
   switch (action.type) {
-    case USER_SET:
+    case REQUEST_ALL_ITEMS_SUCCESS:
       return {
-        isAuthenticated: true,
-        hasWarranty: true,
+          items: action.payload,
       };
-
+    case REQUEST_ALL_ITEMS:
+      return {
+        items: [],
+      };
     default:
       return state;
   }

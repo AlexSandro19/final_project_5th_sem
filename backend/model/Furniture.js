@@ -4,43 +4,43 @@ const schema = new Schema(
     {
       name: {
         type: String,
-        required: true,
+        //required: true,
         unique: true,
       },
       hasWarranty: {
         type: Boolean,
-        required: true,
+        //required: true,
       },
       isPopular:{
         type:Boolean,
-        required:true  
+        //required:true  
       },
       price: {
         type: Number,
-        required: true,
+        //required: true,
       },
       quantity: {
         type: Number,
-        required: true,
+        //required: true,
       },
       stock:{
           type:Boolean,
-          required:true,
+          //required:true,
       },
       description:{
           type:String,
-          required:true,
+          //required:true,
       },
       categories:[
         {
           type:String,
-          required:true,
+          //required:true,
         }
       ],
       materials:[
          { 
             type:String,
-            required:true,
+            //required:true,
           }
       ]
   
@@ -49,4 +49,4 @@ const schema = new Schema(
       timestamps: true,
     }
   );
-module.exports = model("Furniture", schema);
+module.exports = model("Furniture", schema, "furniture");
