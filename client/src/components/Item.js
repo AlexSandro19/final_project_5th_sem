@@ -1,7 +1,7 @@
 import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
-import {loginRequest} from "../redux/actions/auth";
+import {requestAllItems} from "../redux/actions/item"
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -21,7 +21,7 @@ const useStyles=makeStyles(()=>({
 
 })) 
 
-const Item =({requesting,errors,loginRequest})=>{
+const Item =({requesting,errors,requestAllItems})=>{
     const classes = useStyles();
     return(
         <>
@@ -48,4 +48,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { loginRequest })(Item);
+export default connect(mapStateToProps, { requestAllItems })(Item);

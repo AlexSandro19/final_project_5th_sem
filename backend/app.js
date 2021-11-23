@@ -25,7 +25,6 @@ const PORT = process.env.PORT || 5000;
 
 async function start() {
   try {
-    //console.log("first");
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -33,11 +32,6 @@ async function start() {
       useFindAndModify: false,
     });
     console.log("Connected to Mongo");
-    //console.log("second");
-    const candidate = await Furniture.find({});
-    furniture_test = new Furniture({name: "a"});
-    await furniture_test.save();
-    console.log(candidate);
     app.listen(PORT, () =>
       console.log(`App has been started on port ${PORT}...`)
     );
@@ -48,10 +42,10 @@ async function start() {
   mongoose.connection.on('error', err => {
     logError(err);
   });
-  mongoose.connection.on('disconnected', err => {
-    console.log("Disconnected from Mongo");
-    logError(err);
-  });
+  // mongoose.connection.on('disconnected', err => {
+  //   console.log("Disconnected from Mongo");
+  //   logError(err);
+  // });
 
 }
 

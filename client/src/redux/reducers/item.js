@@ -18,7 +18,7 @@ import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS } from "../constants/item"
 const initialState = {items: []};
 
 const reducer = (state = initialState, action) => {
-  console.log("In the Reducer", action.payload);
+  console.log("In the Reducer", action.type);
   switch (action.type) {
     case REQUEST_ALL_ITEMS_SUCCESS:
       return {

@@ -5,13 +5,12 @@ import { requestAllItemsSuccess } from "../actions/item";
 
 import { requestItems } from  "../../services/item.service";
 
-function* requestAllItemsFlow(action) {
+function* shoppingPageFlow(action) {
     
     try {
 
-      const { payload } = action.payload
-      const responseMessage = yield call(payload);
-  
+      const responseMessage = yield call(requestItems);
+        console.log(responseMessage)
       yield put(requestAllItemsSuccess(responseMessage));
   
     } catch (error) {
@@ -20,8 +19,10 @@ function* requestAllItemsFlow(action) {
     }
 }
 
-function* requestAllItemsWatcher() {
-    yield takeLatest(REQUEST_ALL_ITEMS, requestAllItemsFlow )
+function* shoppingPageWatcher() {
+    console.log("shoppingPageWarcher called");
+    yield takeLatest(REQUEST_ALL_ITEMS, shoppingPageFlow );
+    
 }
 
-export default requestAllItemsWatcher
+export default shoppingPageWatcher

@@ -1,7 +1,7 @@
 import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS } from "../constants/item";
 
 export const requestAllItemsSuccess = (data) => {
-    console.log("In the actions -- getAllItems");
+    console.log("In the actions -- requestAllItemsSuccess");
     return {
         type: REQUEST_ALL_ITEMS_SUCCESS,
         message: {

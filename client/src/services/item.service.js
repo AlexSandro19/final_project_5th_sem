@@ -18,9 +18,6 @@ export const requestItems = () => {
     console.log("In the service");
     return axios.get(requestItemsUrl)
                 .then((response) => response.data)
-                .then((data) => {
-                    console.log(data);
-                })
                 .catch((error) => {
                     console.log(error);
                     throw error.response.data;
