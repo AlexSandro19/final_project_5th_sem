@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const storageName = "allItems";
-const getItemsUrl = "/api/items";
+const requestItemsUrl = "/api/items";
 
 // export const getLocalAuthToken = () =>
 //   JSON.parse(localStorage.getItem(storageName));
@@ -14,9 +14,9 @@ const getItemsUrl = "/api/items";
 //   localStorage.removeItem(storageName);
 // };
 
-export const getItems = () => {
+export const requestItems = () => {
     console.log("In the service");
-    return axios.get(getItemsUrl)
+    return axios.get(requestItemsUrl)
                 .then((response) => response.data)
                 .then((data) => {
                     console.log(data);
