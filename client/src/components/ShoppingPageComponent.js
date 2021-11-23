@@ -24,16 +24,14 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-export const ShoppingPage=({store})=>{
+export const ShoppingPageComponent=(items)=>{
     const classes=useStyles();
-    console.log(store);
+    console.log(items);
     
     return (
         <div>
             
-            {store.map((item) => { 
-                console.log(item)
-            })}
+
             
         </div>
     )

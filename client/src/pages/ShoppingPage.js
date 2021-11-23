@@ -26,7 +26,7 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const ShoppingPage=({items = { data:[] }, requestAllItems})=> {
+const ShoppingPage=({items, requestAllItems})=> {
     const classes=useStyles();
     const fetchItems = useCallback(() => {requestAllItems()}, [])
     // requestAllItems();
@@ -36,20 +36,21 @@ const ShoppingPage=({items = { data:[] }, requestAllItems})=> {
         fetchItems();
         console.log("after getting data", items.data);
     }, [fetchItems])
-    
-    console.log(items.data);
+    const workArray=[]
+    for(let i in items.data){
+        console.log(items.data[i])
+        workArray.push(items.data[i])
+    }
+
     return (
-        
-        // !items.data.length ? <Loader /> : ( //if posts.length is 0 then is false, !false => true
-        //     <Grid  container alignItems="stretch" spacing={3}>
-        //          {items.map((item) => (
-        //             <Grid key={item._id} item xs={12} sm={6}>
-        //                 <Item item={item} />
-        //             </Grid>      
-        //          ))}
-        //     </Grid>
-        //)
-        <div>Hi</div>
+        <ShoppingPageComponent items={workArray}></ShoppingPageComponent>
+             //<Grid  container alignItems="stretch" spacing={3}>
+              /* {items.data.map((item) => (
+                     <Grid key={item._id} item xs={12} sm={6}>
+                        <Item item={item} />
+                    </Grid>      
+                  ))} */
+            //</Grid>
        
 
     )
@@ -57,7 +58,7 @@ const ShoppingPage=({items = { data:[] }, requestAllItems})=> {
 
 const mapStateToProps = (state) => {
     return {
-        items: state.item.items
+        items: state.items.items
     };
 };
     
