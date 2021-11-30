@@ -6,7 +6,8 @@ import {requestAllItems} from "../redux/actions/item"
 import {ShoppingPageComponent} from "../components/ShoppingPageComponent"
 import {Loader} from "../components/Loader"
 import Item from "../components/Item"; 
-
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -43,7 +44,8 @@ const ShoppingPage=({items, requestAllItems})=> {
     }
 
     return (
-        <ShoppingPageComponent items={workArray}></ShoppingPageComponent>
+        <ShoppingPageComponent items={workArray}>
+        </ShoppingPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
                      <Grid key={item._id} item xs={12} sm={6}>

@@ -1,4 +1,4 @@
-import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS } from "../constants/item";
+import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, ADD_ITEM_TO_BASKET } from "../constants/item";
 
 // const initialState = {
 
@@ -15,7 +15,8 @@ import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS } from "../constants/item"
 
 // };
 
-const initialState = {items: []};
+const initialState = {items: [], currentItem:{}, itemsInBasket: []};
+
 
 const reducer = (state = initialState, action) => {
   console.log("In the Reducer", action.type);
@@ -23,11 +24,24 @@ const reducer = (state = initialState, action) => {
     case REQUEST_ALL_ITEMS_SUCCESS:
       return {
           items: action.payload,
+          currentItem: {},
       };
     case REQUEST_ALL_ITEMS:
       return {
         items: [],
+        currentItem: {},
       };
+    case SET_CURRENT_ITEM:
+      return {
+        items: [],
+        currentItem: action.payload,
+      };
+    case ADD_ITEM_TO_BASKET:
+      return {
+        items: [],
+        itemsInBasket: [...initialState.itemsInBasket, action.payload],
+      };
+    
     default:
       return state;
   }

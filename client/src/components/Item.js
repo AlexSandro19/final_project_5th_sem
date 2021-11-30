@@ -1,7 +1,10 @@
-import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase } from "@mui/material";
+import { Card, CardActionArea, CardActions, CardContent, Grid, Box, Typography, ButtonBase, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
-import {requestAllItems} from "../redux/actions/item"
+import {requestAllItems, setCurrentItem,addItemToBasket} from "../redux/actions/item";
+import {Link} from "react-router-dom"
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -21,21 +24,30 @@ const useStyles=makeStyles(()=>({
 
 })) 
 
-const Item =({requesting,errors,requestAllItems})=>{
+const Item =({item,itemsInBasket, setCurrentItem,addItemToBasket})=>{
     const classes = useStyles();
+    console.log(itemsInBasket);
+    const addToCartPressed = (e) => {
+        e.preventDefault();
+        console.log(e);
+        addItemToBasket(item);
+    
+    }
+
     return(
         <>
-        <Grid item xs={6}>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
+            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(item)}}>
                 <CardContent>
-                    <Typography variant="h5">Dinning Chair</Typography>
-                    <Typography variant="body1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo egestas nunc faucibus risus sit quisque...</Typography>
+                    <Typography variant="h5">{item.name}</Typography>
+                    <Typography variant="body1">{item.description}</Typography>
+                    <Typography variant="body1">{item.price}</Typography>
                 </CardContent>
-            <CardActionArea style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
-                <Typography style={{textAlign:"center"}} variant="h6">CART</Typography>
             </CardActionArea>
+            <CardActions>
+                <Button onClick={addToCartPressed}><Typography style={{textAlign:"center"}} variant="h6">CART <AddShoppingCartIcon  fontSize="default"/></Typography></Button>
+            </CardActions>
             </Card>
-        </Grid>
         </>
     )
 
@@ -43,9 +55,8 @@ const Item =({requesting,errors,requestAllItems})=>{
 
 const mapStateToProps = (state) => {
     return {
-    requesting: state.auth.requesting,
-    errors: state.auth.errors,
+        itemsInBasket: state.items.itemsInBasket, 
     };
 };
 
-export default connect(mapStateToProps, { requestAllItems })(Item);
+export default connect(mapStateToProps, {setCurrentItem, addItemToBasket})(Item);

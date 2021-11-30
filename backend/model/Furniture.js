@@ -31,13 +31,13 @@ const schema = new Schema(
           type:String,
           //required:true,
       },
-      categories:[
+      categoryArray:[
         {
           type:String,
           //required:true,
         }
       ],
-      materials:[
+      materialArray:[
          { 
             type:String,
             //required:true,
