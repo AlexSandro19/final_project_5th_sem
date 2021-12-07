@@ -27,7 +27,7 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const ShoppingPage=({items, requestAllItems})=> {
+const ShoppingPage=({items, itemsInBasket, requestAllItems})=> {
     const classes=useStyles();
     const fetchItems = useCallback(() => {requestAllItems()}, [])
     // requestAllItems();
@@ -35,7 +35,7 @@ const ShoppingPage=({items, requestAllItems})=> {
         
         console.log("useEffect called");
         fetchItems();
-        console.log("after getting data", items.data);
+        console.log("after getting data", items);
     }, [fetchItems])
     const workArray=[]
     for(let i in items.data){
@@ -44,7 +44,7 @@ const ShoppingPage=({items, requestAllItems})=> {
     }
 
     return (
-        <ShoppingPageComponent items={workArray}>
+        <ShoppingPageComponent items={items} itemsInBasket={itemsInBasket}>
         </ShoppingPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
@@ -60,7 +60,8 @@ const ShoppingPage=({items, requestAllItems})=> {
 
 const mapStateToProps = (state) => {
     return {
-        items: state.items.items
+        items: state.items.items,
+        itemsInBasket: state.basket.itemsInBasket, 
     };
 };
     

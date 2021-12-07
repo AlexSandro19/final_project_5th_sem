@@ -1,4 +1,4 @@
-import { AppBar, ButtonBase } from "@mui/material";
+import { AppBar, ButtonBase, } from "@mui/material";
 import { Toolbar } from "@mui/material";
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -10,6 +10,13 @@ import { connect } from "react-redux";
 import {loginRequest} from "../redux/actions/auth";
 import { Loader } from "./Loader";
 import {unsetUser} from "../redux/actions/user"
+
+import AddIcon from '@mui/icons-material/Add';
+import InboxIcon from '@mui/icons-material/Inbox';
+import MailIcon from '@mui/icons-material/Mail';
+
+import { Card, CardActionArea, CardContent,ListItem, ListItemIcon,ListItemText, List, Drawer, Grid, Box, Badge, Divider } from "@mui/material";
+
 const useStyles = makeStyles((theme) => ({
     grow: {
       flexGrow: 1,
@@ -22,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   
 
  const Navigation =({requesting,successful,errors,loginRequest,unsetUser})=>{
+
+  const drawerWidth = 240;
+    
     const classes = useStyles();
     const [modalOpen, setModalOpen] = useState(false);
     console.log(successful);
@@ -41,8 +51,9 @@ const useStyles = makeStyles((theme) => ({
     }
     if(successful){
       return(<>
-        <AppBar position="sticky" style={{backgroundColor:"#C4C4C4"}}  className={classes.appBar}>
-            <Toolbar>
+        <AppBar position="sticky" style={{backgroundColor:"#C4C4C4"}}  className={classes.appBar}  sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            
+            <Toolbar >
       
             <Typography variant="h5" className={classes.grow}>
             <ButtonBase
@@ -89,7 +100,9 @@ const useStyles = makeStyles((theme) => ({
     }
     return(
         <>
-        <AppBar position="sticky" style={{backgroundColor:"#C4C4C4"}}  className={classes.appBar}>
+        <AppBar position="sticky" style={{backgroundColor:"#C4C4C4"}}  className={classes.appBar}  sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            
+            
             <Toolbar>
       
             <Typography variant="h5" className={classes.grow}>
@@ -124,6 +137,8 @@ const useStyles = makeStyles((theme) => ({
           </Button>
             </Toolbar>
         </AppBar>
+
+        
         <AuthPage modalOpen={modalOpen} handleClose={handleClose} ></AuthPage>
         </>
     )

@@ -1,7 +1,8 @@
 import { Card, CardActionArea, CardActions, CardContent, Grid, Box, Typography, ButtonBase, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
-import {requestAllItems, setCurrentItem,addItemToBasket} from "../redux/actions/item";
+import {requestAllItems, setCurrentItem} from "../redux/actions/item";
+import {addItemToBasket} from "../redux/actions/basket";
 import {Link} from "react-router-dom"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
@@ -27,10 +28,11 @@ const useStyles=makeStyles(()=>({
 const Item =({item,itemsInBasket, setCurrentItem,addItemToBasket})=>{
     const classes = useStyles();
     console.log(itemsInBasket);
+
     const addToCartPressed = (e) => {
         e.preventDefault();
-        console.log(e);
-        addItemToBasket(item);
+        itemsInBasket.push(item);
+        addItemToBasket(itemsInBasket);
     
     }
 
@@ -55,7 +57,7 @@ const Item =({item,itemsInBasket, setCurrentItem,addItemToBasket})=>{
 
 const mapStateToProps = (state) => {
     return {
-        itemsInBasket: state.items.itemsInBasket, 
+        itemsInBasket: state.basket.itemsInBasket, 
     };
 };
 

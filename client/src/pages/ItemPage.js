@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardContent, Grid, Box, Typography, Button, Butto
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import {requestAllItems, getCurrentItem} from "../redux/actions/item"
-import {ShoppingPageComponent} from "../components/ShoppingPageComponent"
+import ShoppingPageComponent from "../components/ShoppingPageComponent"
 import {Loader} from "../components/Loader"
 import Item from "../components/Item"; 
 import {useLocation} from "react-router-dom"
@@ -32,6 +32,7 @@ const ItemPage=({items, currentItem})=> {
 
     const addItemToCart = (item) => {
         console.log(item);
+
     }
 
     console.log("In the ItemPage");

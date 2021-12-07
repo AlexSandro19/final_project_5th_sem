@@ -1,4 +1,4 @@
-import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, ADD_ITEM_TO_BASKET } from "../constants/item";
+import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS } from "../constants/item";
 
 // const initialState = {
 
@@ -15,11 +15,11 @@ import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, ADD_ITE
 
 // };
 
-const initialState = {items: [], currentItem:{}, itemsInBasket: []};
+const initialState = {items: [], currentItem:{}, filteredItems:[] };
 
 
 const reducer = (state = initialState, action) => {
-  console.log("In the Reducer", action.type);
+  console.log("In the Item Reducer", action.type);
   switch (action.type) {
     case REQUEST_ALL_ITEMS_SUCCESS:
       return {
@@ -36,10 +36,10 @@ const reducer = (state = initialState, action) => {
         items: [],
         currentItem: action.payload,
       };
-    case ADD_ITEM_TO_BASKET:
+    
+    case SET_FILTERED_ITEMS:
       return {
-        items: [],
-        itemsInBasket: [...initialState.itemsInBasket, action.payload],
+        filteredItems: action.payload,
       };
     
     default:
