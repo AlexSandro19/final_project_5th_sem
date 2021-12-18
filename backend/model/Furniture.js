@@ -42,8 +42,14 @@ const schema = new Schema(
             type:String,
             //required:true,
           }
-      ]
-  
+      ],
+      ratings:{
+        ratingsArray:[{
+          userId:Types.ObjectId,
+          rating:Number
+        }],
+        medianValueRating:Number
+      }
     },
     {
       timestamps: true,

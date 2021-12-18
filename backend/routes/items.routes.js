@@ -22,7 +22,7 @@ router.get("/items",
         if (allItems.length === 0) {
           return res.status(404).json({ message: "No data available" });
         }
-        return res.status(200).json({ data: allItems });
+        return res.status(200).json( allItems );
       } catch(error) {
           return res.status(404).json({ message: error });
       }

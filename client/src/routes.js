@@ -4,18 +4,19 @@ import HomePage  from "./pages/HomePage";
 import { connect } from "react-redux";
 import ShoppingPage from "./pages/ShoppingPage";
 import ItemPage from "./pages/ItemPage";
-
+import RegistrationPage from "./pages/RegistrationPage";
+import ProfilePage from "./pages/ProfilePage";
 const Routes=({currentItem})=>{
     
     return(
         <Switch>
             <Route path="/" exact><HomePage/> </Route>
             <Route path="/allitems" exact><ShoppingPage/> </Route>
-            <Route path="/register" exact></Route>
             <Route path="/addToCart" exact></Route>
             <Route path="/item" exact><ItemPage currentItem={currentItem}/></Route>
-
-
+            <Route path="/register" exact><RegistrationPage /></Route>
+            <Route path="/profile" exact><ProfilePage /></Route>
+            
             <Redirect to="/" ></Redirect>
         </Switch>
     )

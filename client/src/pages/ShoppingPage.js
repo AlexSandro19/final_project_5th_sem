@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from "react";
 import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
-import {requestAllItems} from "../redux/actions/item"
+import {requestAllItems} from "../redux/actions/item";
 import {ShoppingPageComponent} from "../components/ShoppingPageComponent"
 import {Loader} from "../components/Loader"
 import Item from "../components/Item"; 
