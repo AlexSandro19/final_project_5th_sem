@@ -8,6 +8,7 @@ import RegistrationPage from "./pages/RegistrationPage";
 import ProfilePage from "./pages/ProfilePage";
 const Routes=({currentItem})=>{
     
+import ContactForm from "./components/ContactForm";
     return(
         <Switch>
             <Route path="/" exact><HomePage/> </Route>
@@ -17,6 +18,7 @@ const Routes=({currentItem})=>{
             <Route path="/register" exact><RegistrationPage /></Route>
             <Route path="/profile" exact><ProfilePage /></Route>
             
+            <Route path="/contact" exact><ContactForm/> </Route>
             <Redirect to="/" ></Redirect>
         </Switch>
     )
