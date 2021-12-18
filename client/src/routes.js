@@ -4,6 +4,8 @@ import HomePage  from "./pages/HomePage";
 import { connect } from "react-redux";
 import ShoppingPage from "./pages/ShoppingPage";
 import ItemPage from "./pages/ItemPage";
+import BasketPage from "./pages/BasketPage";
+import FormPage from "./pages/FormPage";
 
 const Routes=({currentItem})=>{
     
@@ -14,6 +16,8 @@ const Routes=({currentItem})=>{
             <Route path="/register" exact></Route>
             <Route path="/addToCart" exact></Route>
             <Route path="/item" exact><ItemPage currentItem={currentItem}/></Route>
+            <Route path="/basket" exact><BasketPage/></Route>
+            <Route path="/updateItem" exact><FormPage/></Route>
 
 
             <Redirect to="/" ></Redirect>

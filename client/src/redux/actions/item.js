@@ -1,4 +1,4 @@
-import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS } from "../constants/item";
+import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS, CREATE_ITEM, UPDATE_ITEM } from "../constants/item";
 
 export const requestAllItemsSuccess = (data) => {
     console.log("In the actions -- requestAllItemsSuccess");
@@ -32,6 +32,22 @@ export const setFilteredItems = (filteredItems) => {
     return {
         type: SET_FILTERED_ITEMS,
         payload: filteredItems
+    }
+} 
+
+export const createItem = (newItem) => {
+    console.log("In the actions - createItem");
+    return {
+        type: CREATE_ITEM,
+        payload: newItem
+    }
+} 
+
+export const updateItem = (updatedItem) => {
+    console.log("In the actions - updateItem", updatedItem);
+    return {
+        type: UPDATE_ITEM,
+        payload: {updatedItem}
     }
 } 
 

@@ -27,7 +27,7 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const ItemPage=({items, currentItem})=> {
+const ItemPage=({items, currentItem, userIsAuthenticated})=> {
     const classes=useStyles();
 
     const addItemToCart = (item) => {
@@ -40,6 +40,7 @@ const ItemPage=({items, currentItem})=> {
     console.log(currentItem);
     console.log(currentItem.materials);
     console.log(currentItem.materialArray);
+    console.log("userIsAuthenticated: ", userIsAuthenticated);
     return (
         <Paper width="90%">
             <Typography variant="h1">{currentItem.name}</Typography>
@@ -49,7 +50,11 @@ const ItemPage=({items, currentItem})=> {
             <Typography variant="body2">Materials for: {currentItem.materials.join(', ')}</Typography> */}
             <Typography variant="body2">Warranty: {currentItem.hasWarranty ? "Yes" : "No"}</Typography>
             <Typography variant="h5">Price: {currentItem.price}</Typography>
-            <Button onClick={() => {addItemToCart(currentItem)}}><Typography style={{textAlign:"center"}} variant="h6">CART <AddShoppingCartIcon fontSize="default"/></Typography></Button>
+            {userIsAuthenticated ? 
+                <Button onClick={() => {addItemToCart(currentItem)}}><Typography style={{textAlign:"center"}} variant="h6">CART <AddShoppingCartIcon fontSize="default"/></Typography></Button>
+              : <></>
+            }
+
        
             </Paper>
          
@@ -60,7 +65,7 @@ const mapStateToProps = (state) => {
     return {
         items: state.items.items,
         currentItem: state.items.currentItem,
-        itemsInBasket: state.items.itemsInBasket, 
+        userIsAuthenticated: state.user.isAuthenticated,
     };
 };
     

@@ -27,7 +27,7 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const ShoppingPage=({items, itemsInBasket, requestAllItems})=> {
+const ShoppingPage=({items, itemsInBasket, userIsAuthenticated, requestAllItems})=> {
     const classes=useStyles();
     const fetchItems = useCallback(() => {requestAllItems()}, [])
     // requestAllItems();
@@ -37,14 +37,9 @@ const ShoppingPage=({items, itemsInBasket, requestAllItems})=> {
         fetchItems();
         console.log("after getting data", items);
     }, [fetchItems])
-    const workArray=[]
-    for(let i in items.data){
-        console.log(items.data[i])
-        workArray.push(items.data[i])
-    }
 
     return (
-        <ShoppingPageComponent items={items} itemsInBasket={itemsInBasket}>
+        <ShoppingPageComponent items={items} itemsInBasket={itemsInBasket} userIsAuthenticated={userIsAuthenticated}>
         </ShoppingPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
@@ -62,6 +57,7 @@ const mapStateToProps = (state) => {
     return {
         items: state.items.items,
         itemsInBasket: state.basket.itemsInBasket, 
+        userIsAuthenticated: state.user.isAuthenticated,
     };
 };
     
