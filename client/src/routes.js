@@ -2,19 +2,30 @@ import { Switch } from "react-router-dom";
 import { Redirect, Route } from "react-router-dom";
 import HomePage  from "./pages/HomePage";
 import { connect } from "react-redux";
-const Routes=()=>{
+import ShoppingPage from "./pages/ShoppingPage";
+import ItemPage from "./pages/ItemPage";
+import BasketPage from "./pages/BasketPage";
+import FormPage from "./pages/FormPage";
 
+const Routes=({currentItem})=>{
+    
     return(
         <Switch>
             <Route path="/" exact><HomePage/> </Route>
-            <Route path="/allitems" exact></Route>
+            <Route path="/allitems" exact><ShoppingPage/> </Route>
             <Route path="/register" exact></Route>
+            <Route path="/addToCart" exact></Route>
+            <Route path="/item" exact><ItemPage currentItem={currentItem}/></Route>
+            <Route path="/basket" exact><BasketPage/></Route>
+            <Route path="/updateItem" exact><FormPage/></Route>
+
+
             <Redirect to="/" ></Redirect>
         </Switch>
     )
 }
 const mapStateToProps = (state) => ({
-    
+    currentItem: state.currentItem
   });
   
  export default connect(mapStateToProps)(Routes);

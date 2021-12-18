@@ -1,6 +1,8 @@
 import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -65,12 +67,12 @@ return(
                 <Typography variant="h5">Dinning Chair</Typography>
                 <Typography variant="body1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo egestas nunc faucibus risus sit quisque...</Typography>
             </CardContent>
-        <CardActionArea   style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
+        <CardActionArea style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
         <Typography style={{textAlign:"center"}} variant="h6">CART</Typography>
         </CardActionArea>
         </Card>
         </Grid></Grid></Box>
-        <Grid item xs={6}> <Box style={{height:"300px"}}   className={classes.back}></Box></Grid>
+        <Grid item xs={6}> <Box style={{height:"300px"}} className={classes.back}></Box></Grid>
         
         </Grid>
         </Grid>
