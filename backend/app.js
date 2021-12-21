@@ -7,8 +7,8 @@ const User = require("./model/User")
 const Furniture = require("./model/Furniture")
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "30mb", extended: true }));
+app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api", require("./routes/items.routes"));

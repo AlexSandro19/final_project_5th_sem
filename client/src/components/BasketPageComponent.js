@@ -37,8 +37,8 @@ const useStyles=makeStyles(()=>({
 
 export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
 
-    // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
-    let noMoreItemsToAdd = false;
+    const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
+    // let noMoreItemsToAdd = false;
     
     const itemsToDisplay = [...new Set(itemsInBasket)];
     console.log("Items to display", itemsToDisplay);
@@ -82,7 +82,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
         const countItemOccurences = countSameItems(itemToCheck);
         
         if (countItemOccurences >= itemToCheck.quantity){
-            noMoreItemsToAdd = true;
+            setNoMoreItemsToAdd(true);
             return true;
         }else{
             return false;
@@ -158,13 +158,11 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
         </TableBody>
       </Table>
     </TableContainer>
-
-    {(noMoreItemsToAdd) 
-                    ?   <Snackbar
+<Snackbar
                             open={noMoreItemsToAdd}
                             anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
                             autoHideDuration={2000}
-                            onClose={() => {noMoreItemsToAdd = false}}
+                            onClose={() => {setNoMoreItemsToAdd(false)}}
                             // message={`${item.name} item was added to Basket!`}
                             // action={action}
                         >
@@ -172,9 +170,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
                                 <b>You reached the quantity limit for this item.</b>
                             </Alert>
                         </Snackbar>
-                    :   (<> </>)
-
-    }
+   
             </>
     ))
 }
