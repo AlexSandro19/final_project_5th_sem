@@ -1,9 +1,9 @@
-import React, { useEffect, useCallback } from "react";
+import React from "react";
 import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
-import {requestAllItems} from "../redux/actions/item";
-import {ShoppingPageComponent} from "../components/ShoppingPageComponent"
+import {requestAllItems} from "../redux/actions/item"
+import BasketPageComponent from "../components/BasketPageComponent"
 import {Loader} from "../components/Loader"
 import Item from "../components/Item"; 
 import Fab from '@mui/material/Fab';
@@ -27,20 +27,11 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const ShoppingPage=({items, itemsInBasket, userIsAuthenticated, requestAllItems})=> {
+const BasketPage=({itemsInBasket, items})=> {
     const classes=useStyles();
-    const fetchItems = useCallback(() => {requestAllItems()}, [])
-    // requestAllItems();
-    useEffect( () => {
-        
-        console.log("useEffect called");
-        fetchItems();
-        console.log("after getting data", items);
-    }, [fetchItems])
-
     return (
-        <ShoppingPageComponent items={items} itemsInBasket={itemsInBasket} userIsAuthenticated={userIsAuthenticated}>
-        </ShoppingPageComponent>
+        <BasketPageComponent itemsInBasket={itemsInBasket} items={items}>
+        </BasketPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
                      <Grid key={item._id} item xs={12} sm={6}>
@@ -55,10 +46,9 @@ const ShoppingPage=({items, itemsInBasket, userIsAuthenticated, requestAllItems}
 
 const mapStateToProps = (state) => {
     return {
-        items: state.items.items,
         itemsInBasket: state.basket.itemsInBasket, 
-        userIsAuthenticated: state.user.isAuthenticated,
+        items: state.items.items,
     };
 };
     
-export default connect(mapStateToProps,{requestAllItems})(ShoppingPage)
+export default connect(mapStateToProps,{})(BasketPage)

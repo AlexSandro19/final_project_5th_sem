@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardContent, Grid, Box, Typography, Button, Butto
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import {requestAllItems, getCurrentItem} from "../redux/actions/item"
-import {ShoppingPageComponent} from "../components/ShoppingPageComponent"
+import ShoppingPageComponent from "../components/ShoppingPageComponent"
 import {Loader} from "../components/Loader"
 import Item from "../components/Item"; 
 import {useLocation} from "react-router-dom"
@@ -27,11 +27,12 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const ItemPage=({items, currentItem})=> {
+const ItemPage=({items, currentItem, userIsAuthenticated})=> {
     const classes=useStyles();
 
     const addItemToCart = (item) => {
         console.log(item);
+
     }
 
     console.log("In the ItemPage");
@@ -39,6 +40,7 @@ const ItemPage=({items, currentItem})=> {
     console.log(currentItem);
     console.log(currentItem.materials);
     console.log(currentItem.materialArray);
+    console.log("userIsAuthenticated: ", userIsAuthenticated);
     return (
         <Paper width="90%">
             <Typography variant="h1">{currentItem.name}</Typography>
@@ -48,7 +50,11 @@ const ItemPage=({items, currentItem})=> {
             <Typography variant="body2">Materials for: {currentItem.materials.join(', ')}</Typography> */}
             <Typography variant="body2">Warranty: {currentItem.hasWarranty ? "Yes" : "No"}</Typography>
             <Typography variant="h5">Price: {currentItem.price}</Typography>
-            <Button onClick={() => {addItemToCart(currentItem)}}><Typography style={{textAlign:"center"}} variant="h6">CART <AddShoppingCartIcon fontSize="default"/></Typography></Button>
+            {userIsAuthenticated ? 
+                <Button onClick={() => {addItemToCart(currentItem)}}><Typography style={{textAlign:"center"}} variant="h6">CART <AddShoppingCartIcon fontSize="default"/></Typography></Button>
+              : <></>
+            }
+
        
             </Paper>
          
@@ -59,7 +65,7 @@ const mapStateToProps = (state) => {
     return {
         items: state.items.items,
         currentItem: state.items.currentItem,
-        itemsInBasket: state.items.itemsInBasket, 
+        userIsAuthenticated: state.user.isAuthenticated,
     };
 };
     

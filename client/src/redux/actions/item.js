@@ -1,4 +1,4 @@
-import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, ADD_ITEM_TO_BASKET } from "../constants/item";
+import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS, CREATE_ITEM, UPDATE_ITEM } from "../constants/item";
 
 export const requestAllItemsSuccess = (data) => {
     console.log("In the actions -- requestAllItemsSuccess");
@@ -28,11 +28,28 @@ export const setCurrentItem = (item) => {
     }
 } 
 
-export const addItemToBasket = (item) => {
-    console.log("In the actions - addItemToBasket", item);
+export const setFilteredItems = (filteredItems) => {
+    console.log("In the actions - setFilteredItems");
     return {
-        type: ADD_ITEM_TO_BASKET,
-        payload: item
+        type: SET_FILTERED_ITEMS,
+        payload: filteredItems
     }
-}
+} 
+
+export const createItem = (newItem) => {
+    console.log("In the actions - createItem");
+    return {
+        type: CREATE_ITEM,
+        payload: newItem
+    }
+} 
+
+export const updateItem = (updatedItem) => {
+    console.log("In the actions - updateItem", updatedItem);
+    return {
+        type: UPDATE_ITEM,
+        payload: {updatedItem}
+    }
+} 
+
 

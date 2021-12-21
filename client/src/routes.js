@@ -8,6 +8,9 @@ import RegistrationPage from "./pages/RegistrationPage";
 import ProfilePage from "./pages/ProfilePage";
 import ContactForm from "./components/ContactForm";
 import EditItemPage from "./pages/EditItemPage";
+import BasketPage from "./pages/BasketPage";
+import FormPage from "./pages/FormPage";
+
 const Routes=({currentItem})=>{
     return(
         <Switch>
@@ -21,6 +24,10 @@ const Routes=({currentItem})=>{
             <Route path="/editOrder/" exact></Route>
             <Route path="/viewOrder/" exact></Route>
             <Route path="/contact" exact><ContactForm/> </Route>
+            <Route path="/basket" exact><BasketPage/></Route>
+            <Route path="/updateItem" exact><FormPage/></Route>
+
+
             <Redirect to="/" ></Redirect>
         </Switch>
     )
