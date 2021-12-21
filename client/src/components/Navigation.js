@@ -77,9 +77,10 @@ const useStyles = makeStyles((theme) => ({
           </Button>
             <Button
             className={classes.button}
+            component={NavLink}
             color="inherit"
-            onClick={handleClickOpen}
             activeClassName="active"
+            to="/profile"
           >
             Profile
           </Button>
