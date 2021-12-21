@@ -21,6 +21,7 @@ export const requestAllItems = () => {
 
 export const setCurrentItem = (item) => {
     console.log("In the actions - setCurrentItem");
+    console.log(item);
     return {
         type: SET_CURRENT_ITEM,
         payload: item

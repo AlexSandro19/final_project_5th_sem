@@ -6,9 +6,9 @@ import ShoppingPage from "./pages/ShoppingPage";
 import ItemPage from "./pages/ItemPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import ProfilePage from "./pages/ProfilePage";
-const Routes=({currentItem})=>{
-    
 import ContactForm from "./components/ContactForm";
+import EditItemPage from "./pages/EditItemPage";
+const Routes=({currentItem})=>{
     return(
         <Switch>
             <Route path="/" exact><HomePage/> </Route>
@@ -17,14 +17,16 @@ import ContactForm from "./components/ContactForm";
             <Route path="/item" exact><ItemPage currentItem={currentItem}/></Route>
             <Route path="/register" exact><RegistrationPage /></Route>
             <Route path="/profile" exact><ProfilePage /></Route>
-            
+            <Route path="/editItem/" exact><EditItemPage ></EditItemPage></Route>
+            <Route path="/editOrder/" exact></Route>
+            <Route path="/viewOrder/" exact></Route>
             <Route path="/contact" exact><ContactForm/> </Route>
             <Redirect to="/" ></Redirect>
         </Switch>
     )
 }
 const mapStateToProps = (state) => ({
-    currentItem: state.currentItem
+    currentItem: state.items.currentItem
   });
   
  export default connect(mapStateToProps)(Routes);
