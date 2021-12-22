@@ -1,8 +1,11 @@
 import { combineReducers } from "redux";
 
 import contact from "./contact";
+import items from "./item";
+import basket from "./basket";
 import auth from "./auth";
 import user from "./user";
+import message from "./message";
 export default combineReducers({
-  auth,user,contact
+  auth,user,items, basket,message,contact
   });

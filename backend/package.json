@@ -30,8 +30,7 @@
     "nodemailer": "6.7.1",
     "puppeteer": "^5.3.0",
     "react-table": "^7.5.0",
-    "three": "^0.108.0",
-    "three.interaction-fixed": "^0.2.3"
+    "three": "^0.108.0"
   },
   "devDependencies": {
     "concurrently": "5.3.0",
