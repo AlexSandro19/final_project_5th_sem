@@ -1,7 +1,8 @@
-import React from "react";
-import emailjs from "emailjs-com";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { TextField, Box, CardContent, CardMedia, Button, Typography } from '@mui/material';
+import { contactFormRequest } from "../redux/actions/contact";
 
 const useStyles = makeStyles((theme) => ({
    
@@ -17,66 +18,70 @@ const useStyles = makeStyles((theme) => ({
    
   }));
 
-const ContactForm = () => {
-    
+const ContactForm = ({messageResponse, contactFormRequest}) => {
+    const [form,setForm] = useState({
+        name:" ",
+        email:" ",
+        subject:" ",
+        message:" ",
+    })
+    const changeHandler = (event) => {
+        setForm({ ...form, [event.target.name]: event.target.value });
+      };
     const classes = useStyles();
-    
-    function sendEmail(e){
-        e.preventDefault();
-        emailjs.sendForm('service_hysszfa', 'template_yesofn7', e.target, 'user_JRQFq2IyPmOHEaFKZB6Ta')
-            .then((result) => {
-                console.log(result);
-            }, (error) => {
-                console.log(error);
-            });
-        e.target.reset();
+    const sendEmail = async (event) => {
+        event.preventDefault();
+        contactFormRequest(form)
+
     }
-    
     return (
-        <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 2, width: '40ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-            <div>
-                <form className = {classes.formEmail} onSubmit={sendEmail}>
-                <TextField
+       
+        <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
+            <TextField
+            label="Name"
             required
             id = "outlined"
-            defaultValue="name"
+            value={form.name}
+            name = "name"
+            onChange={changeHandler}
             />
-                <TextField
+            <TextField
+            label="Email"
             required
-            defaultValue="email"
+            onChange={changeHandler}
+            value={form.email}
             type="email" 
             name="email"
             />
             
             <TextField
+            label="Subject"
             required
-            defaultValue="subject"
+            onChange={changeHandler}
+            value={form.subject}
             type="text" 
             name="subject"
             />
-                <TextField
+            <TextField
+            label="Message"
             required
-            defaultValue="message"
+            value={form.message}
+            onChange={changeHandler}
             type="text" 
             name="message"
             multiline
             rows={5}
             />
-                <TextField
-            type="submit" 
-            value="Send"
-            />
-                </form>
-            </div>
-        </Box>
+                <Button
+            type="submit">Submit</Button> 
+
+        </form>
+          
     )
 }
 
-export default ContactForm
+const mapStateToProps = (state) => {
+    return { messageResponse: state.contact.message }
+}
+
+export default connect(mapStateToProps, { contactFormRequest })(ContactForm)
