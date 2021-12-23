@@ -7,9 +7,10 @@ import ItemPage from "./pages/ItemPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import ProfilePage from "./pages/ProfilePage";
 import ContactForm from "./components/ContactForm";
-import EditItemPage from "./pages/EditItemPage";
+import EditItemPage from "./pages/EditOrderPage";
 import BasketPage from "./pages/BasketPage";
 import FormPage from "./pages/FormPage";
+import EditOrderPage from "./pages/EditOrderPage";
 
 const Routes=({currentItem})=>{
     return(
@@ -20,8 +21,8 @@ const Routes=({currentItem})=>{
             <Route path="/item" exact><ItemPage currentItem={currentItem}/></Route>
             <Route path="/register" exact><RegistrationPage /></Route>
             <Route path="/profile" exact><ProfilePage /></Route>
-            <Route path="/editItem/" exact><EditItemPage ></EditItemPage></Route>
-            <Route path="/editOrder/" exact></Route>
+            <Route path="/editItem/" exact><FormPage/></Route>
+            <Route path="/editOrder/" exact><EditOrderPage></EditOrderPage></Route>
             <Route path="/viewOrder/" exact></Route>
             <Route path="/contact" exact><ContactForm/> </Route>
             <Route path="/basket" exact><BasketPage/></Route>

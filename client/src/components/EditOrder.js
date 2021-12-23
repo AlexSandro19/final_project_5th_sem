@@ -1,4 +1,4 @@
-export const EditItem=({currentItem})=>{
+export const EditOrder=({currentItem})=>{
 
     return(
 

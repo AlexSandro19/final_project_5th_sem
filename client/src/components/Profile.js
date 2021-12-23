@@ -104,7 +104,7 @@ if(user.role === "ADMIN"){
                                 <TableCell>{item.price} DKK</TableCell>
                                 <TableCell>{item.quantity}</TableCell>
                                 {item.stock ?(<TableCell>YES</TableCell>):(<TableCell>NO</TableCell>)}
-                                {item.popular ?(<TableCell>YES</TableCell>):(<TableCell>NO</TableCell>)}
+                                {item.isPopular ?(<TableCell>YES</TableCell>):(<TableCell>NO</TableCell>)}
                                 <TableCell>{item.ratings.medianValueRating}</TableCell>
                                 <TableCell>
                                   <Button component={NavLink} to={"/editItem"} onClick={()=>setItem(item)}  style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"3%"}}>Edit Item</Button>

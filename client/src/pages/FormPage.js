@@ -30,7 +30,7 @@ const useStyles=makeStyles(()=>({
 const FormPage=({currentItem})=> {
     const classes=useStyles();
     return (
-        <FormPageComponent currentItem={currentItem}>
+        <FormPageComponent functionUse={true} currentItem={currentItem}>
         </FormPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
