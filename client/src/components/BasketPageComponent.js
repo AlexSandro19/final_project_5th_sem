@@ -37,8 +37,8 @@ const useStyles=makeStyles(()=>({
 
 export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
 
-    const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
-    // let noMoreItemsToAdd = false;
+    // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
+    let noMoreItemsToAdd = false;
     
     const itemsToDisplay = [...new Set(itemsInBasket)];
     console.log("Items to display", itemsToDisplay);
@@ -82,7 +82,8 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
         const countItemOccurences = countSameItems(itemToCheck);
         
         if (countItemOccurences >= itemToCheck.quantity){
-            setNoMoreItemsToAdd(true);
+            // setNoMoreItemsToAdd(true);
+            noMoreItemsToAdd = true;
             return true;
         }else{
             return false;
@@ -103,7 +104,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
         !itemsToDisplay.length ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
             <>
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }} aria-label="items-table">
         <TableHead>
           <TableRow>
             <TableCell>Item</TableCell>
@@ -162,7 +163,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
                             open={noMoreItemsToAdd}
                             anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
                             autoHideDuration={2000}
-                            onClose={() => {setNoMoreItemsToAdd(false)}}
+                            onClose={() => {noMoreItemsToAdd = false}}
                             // message={`${item.name} item was added to Basket!`}
                             // action={action}
                         >
