@@ -1,12 +1,18 @@
 import React, { Fragment, useEffect, useCallback, useState } from "react";
-import { Card, CardActionArea, CardActions, CardContent, Grid, Box, Typography, ButtonBase, Button, Snackbar, Alert } from "@mui/material";
+import FileBase from 'react-file-base64';
+import { Card, CardActionArea, CardActions, CardContent, Grid, Box, Typography, ButtonBase, Button, Snackbar, Alert, Tooltip, CardMedia } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import {requestAllItems, setCurrentItem} from "../redux/actions/item";
-import {addItemToBasket} from "../redux/actions/basket";
+import {addItemToBasket, updateItemsBasket} from "../redux/actions/basket";
 import {Link} from "react-router-dom"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+
+import {Image} from 'mui-image'
+
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -26,11 +32,23 @@ const useStyles=makeStyles(()=>({
 
 })) 
 
-const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToBasket})=>{
+const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToBasket, updateItemsBasket})=>{
+
+    const [isItemInBasket, setIsItemInBasket] = useState(false);
+
+    useEffect( () => {
+        console.log("In use effect")
+        const returnedValue = checkIfItemInBasket()
+        console.log("returned value ", returnedValue)
+
+        setIsItemInBasket(returnedValue);
+    }, [])
+
     const classes = useStyles();
     console.log(itemsInBasket);
 
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    
 
     const addToCartPressed = (e) => {
         e.preventDefault();
@@ -42,7 +60,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
         }
         addItemToBasket(itemsInBasket);
         setOpenSnackbar(true);
-    
+        setIsItemInBasket(true);
     }
 
     const capitalizeString = (initialStr) => {
@@ -53,9 +71,30 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
           .join(' ');
     };
 
+    const checkIfItemInBasket = () => {
+        
+        const isItemInArray = itemsInBasket.filter(itemInBasket => itemInBasket._id === item._id);
+        console.log("In the checkIfItemInBasket, index -- ", isItemInArray.length)
+        console.log("In the checkIfItemInBasket, itemsInBasket -- ", itemsInBasket)
+        if (isItemInArray.length !== 0){
+            return true;
+        }else{
+           return false;
+        } 
+    }
+
+    const removeItem = () => {
+        const updatedItemsInBasket = itemsInBasket.filter(itemFromBasket => item._id !== itemFromBasket._id);
+        console.log("updatedItemsInBasket", updatedItemsInBasket)
+        updateItemsBasket(updatedItemsInBasket); 
+        console.log("Delete: ", item);
+        setIsItemInBasket(false);
+    }
+
     return(
         <>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
+            <Image src={item.picturesArray[0]} /> 
             <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(item)}}>
                 <CardContent>
                     <div>
@@ -70,12 +109,31 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
                 </CardContent>
             </CardActionArea>
             <CardActions>
-            {/* {userIsAuthenticated ? 
-                <Button onClick={addToCartPressed}><Typography style={{textAlign:"center"}} variant="h6">CART <AddShoppingCartIcon  fontSize="default"/></Typography></Button>
+            {userIsAuthenticated && !isItemInBasket? 
+                
+                <Button onClick={addToCartPressed}><Typography style={{textAlign:"center"}} variant="h6">ADD <AddShoppingCartIcon  fontSize="default"/></Typography></Button>
                 : <></>
+            }
+            {userIsAuthenticated && isItemInBasket? 
+                <>
+                <Button disabled><Typography style={{textAlign:"center"}} variant="h6">ADDED <DoneOutlineIcon  fontSize="default"/></Typography></Button>
+                <Tooltip title="Remove Item from Basket" arrow>
+                    <Button onClick={() => removeItem() }><RemoveShoppingCartIcon/></Button>
+                </Tooltip>
+                </>
+                : <></>
+            }
+            {/* {
+                isItemInBasket ? 
+                <>
+                <Button onClick={addToCartPressed}><Typography style={{textAlign:"center"}} variant="h6">ADD <AddShoppingCartIcon  fontSize="default"/></Typography></Button>
+                
+                </>
+
             } */}
-             <Button onClick={addToCartPressed}><Typography style={{textAlign:"center"}} variant="h6">CART <AddShoppingCartIcon  fontSize="default"/></Typography></Button>
+            
                 </CardActions>
+            
             </Card>
             <Snackbar
                 open={openSnackbar}
@@ -100,4 +158,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {setCurrentItem, addItemToBasket})(Item);
+export default connect(mapStateToProps, {setCurrentItem, addItemToBasket, updateItemsBasket})(Item);

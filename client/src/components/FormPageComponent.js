@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import {requestAllItems, setCurrentItem} from "../redux/actions/item";
-import { TextField, Button, Typography,Box, Paper, InputLabel, Select,MenuItem } from "@mui/material";
-// import FileBase from 'react-file-base64';
+import { TextField, Button, Typography, Paper, InputLabel, Select,MenuItem } from "@mui/material";
+import FileBase from 'react-file-base64';
 import {updateItem, createItem} from "../redux/actions/item";
 
-const FormPageComponent = ({ functionUse,currentItem, setCurrentItem, updateItem }) => {
-const [form, setForm] = useState({name: ""});
+const FormPageComponent = ({ currentItem, items, setCurrentItem, updateItem }) => {
+const [form, setForm] = useState({...currentItem});
 
     // const [postData, setPostData] = useState({creator:'', title:'', message:'', tags:'', selectedFile:''});
 
@@ -18,7 +18,7 @@ const [form, setForm] = useState({name: ""});
     // }, [post])
 
     const handleSubmit = (e) => { // e = event
-        updateItem(currentItem);
+        updateItem({...form});
         e.preventDefault();
 
 
@@ -37,83 +37,89 @@ const [form, setForm] = useState({name: ""});
         // setCurrentId(null);
         // setPostData({creator:'', title:'', message:'', tags:'', selectedFile:''});
     }
-    const updateCurrentItem = (item) => {
-        // console.log("updated item: ", item);
-        setCurrentItem(item);
+
+    const cancel = () => {
+        setForm({...currentItem})
     }
+
+    // const updateCurrentItem = (item) => {
+    //     // console.log("updated item: ", item);
+    //     setCurrentItem(item);
+    // }
 
 
     return (
         <Box>
             <form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                <Typography variant="h6">{functionUse ? 'Editing' : 'Creating'} an Item</Typography>
-                <TextField name="name"
-                           label="Name" fullWidth value={currentItem.name} 
-                           onChange={(e) => updateCurrentItem({ ...currentItem, name: e.target.value })} />
-                                <TextField multiline variant="outlined" name="description"
-                           label="Description" fullWidth value={currentItem.description} 
-                           onChange={(e) => updateCurrentItem({ ...currentItem, description: e.target.value })} ></TextField>
+                <Typography variant="h6">{false ? 'Editing' : 'Creating'} an Item</Typography>
+                <TextField name="name" variant="outlined" 
+                           label="Name" fullWidth value={form.name} 
+                           onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                <TextField name="description" variant="outlined" 
+                           label="Description" fullWidth value={currentItem.description} multiline
+                           onChange={(e) => setForm({ ...form, description: e.target.value })} />
                 <TextField name="price" variant="outlined" 
-                           label="Price" fullWidth value={currentItem.price} 
-                           onChange={(e) => updateCurrentItem({ ...currentItem, price: e.target.value })} />
+                           label="Price" fullWidth value={form.price} 
+                           onChange={(e) => setForm({ ...form, price: e.target.value })} />
                 <TextField name="quantity" variant="outlined" 
-                           label="Quantity" fullWidth value={currentItem.quantity} 
-                           onChange={(e) => updateCurrentItem({ ...currentItem, quantity: e.target.value })} />
+                           label="Quantity" fullWidth value={form.quantity} 
+                           onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
                 <TextField name="categoryArray" variant="outlined" 
-                           label="Category Array" fullWidth value={currentItem.categoryArray} 
-                           onChange={(e) => updateCurrentItem({ ...currentItem, categoryArray: e.target.value.split(',') })} />
-                 <TextField name="materialArray" variant="outlined" 
-                           label="Material Array" fullWidth value={currentItem.materialArray} 
-                           onChange={(e) => updateCurrentItem({ ...currentItem, materialArray: e.target.value.split(',') })} />
-                <InputLabel id="demo-simple-select-label">Warranty</InputLabel>
+                           label="Categories (put ',' between them)" fullWidth value={form.categoryArray} 
+                           onChange={(e) => setForm({ ...form, categoryArray: e.target.value.split(',') })} />
+                <TextField name="materialArray" variant="outlined" 
+                           label="Materials  (put ',' between them)" fullWidth value={form.materialArray} 
+                           onChange={(e) => setForm({ ...form, materialArray: e.target.value.split(',') })} />
+
+                <InputLabel id="has-warranty">Warranty</InputLabel>
                 <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        name="hasWarranty"
-                        value={currentItem.hasWarranty}
-                        // defaultValue={currentItem.hasWarranty}
-                        label="Warranty"
-                         onChange={(e)=>{updateCurrentItem({...currentItem,hasWarranty:e.target.value})}}
+                    labelId="has-warranty"
+                    id="has-warranty-option"
+                    value={form.hasWarranty}
+                    // defaultValue={currentItem.hasWarranty}
+                    label="Warranty"
+                    onChange={(e) => setForm({ ...form, hasWarranty: e.target.value })}
                 >
-                        <MenuItem value={true}>Yes</MenuItem>
-                        <MenuItem value={false}>No</MenuItem>
-                    </Select>
-                    <InputLabel id="demo-simple-select-label">Popular</InputLabel>
-                <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        name="isPopular"
-                        value={currentItem.isPopular}
-                        // defaultValue={currentItem.hasWarranty}
-                        label="Popular"
-                         onChange={(e)=>{updateCurrentItem({...currentItem,isPopular:e.target.value})}}
-                >
-                        <MenuItem value={true}>Yes</MenuItem>
-                        <MenuItem value={false}>No</MenuItem>
+                    <MenuItem value={true}>Yes</MenuItem>
+                    <MenuItem value={false}>No</MenuItem>
                 </Select>
-                <InputLabel id="demo-simple-select-label">Stock</InputLabel>
+                <InputLabel id="is-popular">Popular</InputLabel>
                 <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        name="stock"
-                        value={currentItem.stock}
-                        // defaultValue={currentItem.hasWarranty}
-                        label="Stock"
-                         onChange={(e)=>{updateCurrentItem({...currentItem,stock:e.target.value})}}
+                    labelId="is-popular"
+                    id="is-popular-option"
+                    value={form.isPopular}
+                    // defaultValue={currentItem.hasWarranty}
+                    label="Popular"
+                    onChange={(e) => setForm({ ...form, isPopular: e.target.value })}
                 >
-                        <MenuItem value={true}>Yes</MenuItem>
-                        <MenuItem value={false}>No</MenuItem>
+                    <MenuItem value={true}>Yes</MenuItem>
+                    <MenuItem value={false}>No</MenuItem>
+                </Select>
+                <InputLabel id="in-stock">In Stock</InputLabel>
+                <Select
+                    labelId="in-stock"
+                    id="in-stock-option"
+                    value={form.stock}
+                    // defaultValue={currentItem.hasWarranty}
+                    label="In Stock"
+                    onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                >
+                    <MenuItem value={true}>Yes</MenuItem>
+                    <MenuItem value={false}>No</MenuItem>
                 </Select>
 
-                {/* <div className={classes.fileInput}>
+          
                 <FileBase 
-                type="file"
-                multiple={false}
-                onDone={({base64}) => updateCurrentItem({ ...currentItem, selectedFile:base64 })}
+                    type="file"
+                    multiple={true}
+                    onDone={(receivedPics) => {
+                            const picturesArray = receivedPics.map(pic => pic.base64); 
+                            setForm({ ...form, picturesArray });
+                            }}
                 />
-                </div>            */}
+                           
                 <Button  variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-                <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
+                <Button variant="contained" color="secondary" size="small" onClick={cancel} fullWidth>Cancel</Button>
             </form>
         </Box>
     );

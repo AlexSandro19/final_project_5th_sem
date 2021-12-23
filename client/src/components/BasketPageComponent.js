@@ -82,6 +82,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
         const countItemOccurences = countSameItems(itemToCheck);
         
         if (countItemOccurences >= itemToCheck.quantity){
+            // setNoMoreItemsToAdd(true);
             noMoreItemsToAdd = true;
             return true;
         }else{
@@ -103,7 +104,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
         !itemsToDisplay.length ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
             <>
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }} aria-label="items-table">
         <TableHead>
           <TableRow>
             <TableCell>Item</TableCell>
@@ -158,9 +159,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
         </TableBody>
       </Table>
     </TableContainer>
-
-    {(noMoreItemsToAdd) 
-                    ?   <Snackbar
+<Snackbar
                             open={noMoreItemsToAdd}
                             anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
                             autoHideDuration={2000}
@@ -172,9 +171,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
                                 <b>You reached the quantity limit for this item.</b>
                             </Alert>
                         </Snackbar>
-                    :   (<> </>)
-
-    }
+   
             </>
     ))
 }
