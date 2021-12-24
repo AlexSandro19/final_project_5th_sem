@@ -3,16 +3,22 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { check, validationResult } = require("express-validator");
 const User = require("../model/User");
+const Order = require("../model/Order");
+const Furniture = require("../model/Furniture");
 const auth = require("../middleware/auth.middleware");
 //const { grantAccess } = require("../middleware/authorization.middleware");
 
 require("dotenv").config();
 
 const router = Router();
+//POST /api/auth/message
+router.post("/message",async(req,res)=>{
 
-// POST /api/auth/users
+  return res.status(201).json({ message: "User account created" });
+})
+// POST /api/auth/register
  router.post(
-   "/users",
+   "/register",
    [
     check("email","Enter valid email").normalizeEmail().isEmail(),
     check("password","Enter a valid password").exists(),
@@ -77,8 +83,8 @@ router.post(
 
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email });
-
+      const user = await User.findOne({ email }).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).exec();
+      console.log(user.populated("items"));
       if (!user) {
         return res.status(400).json({
           message: "Invalid authorization data",
@@ -102,7 +108,7 @@ router.post(
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
-      res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,name:user.name,cart:user.cart,phone:user.phone,address:user.address});
+      res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,name:user.name,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
     } catch (e) {
       console.log(e);
       res.status(500).json({ message: "Something went wrong, try again" });
