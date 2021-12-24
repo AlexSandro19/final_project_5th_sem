@@ -56,7 +56,7 @@ const [form, setForm] = useState({...currentItem});
                            label="Name" fullWidth value={form.name} 
                            onChange={(e) => setForm({ ...form, name: e.target.value })} />
                 <TextField name="description" variant="outlined" 
-                           label="Description" fullWidth value={currentItem.description} multiline
+                           label="Description" fullWidth value={form.description} multiline
                            onChange={(e) => setForm({ ...form, description: e.target.value })} />
                 <TextField name="price" variant="outlined" 
                            label="Price" fullWidth value={form.price} 

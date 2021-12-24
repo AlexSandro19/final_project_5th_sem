@@ -6,6 +6,7 @@ import ShoppingPage from "./pages/ShoppingPage";
 import ItemPage from "./pages/ItemPage";
 import BasketPage from "./pages/BasketPage";
 import FormPage from "./pages/FormPage";
+import OrderDetails from "./pages/OrderDetails";
 
 const Routes=({currentItem})=>{
     
@@ -18,6 +19,7 @@ const Routes=({currentItem})=>{
             <Route path="/item" exact><ItemPage currentItem={currentItem}/></Route>
             <Route path="/basket" exact><BasketPage/></Route>
             <Route path="/updateItem" exact><FormPage/></Route>
+            <Route path="/orderDetails" exact><OrderDetails/></Route>
 
 
             <Redirect to="/" ></Redirect>

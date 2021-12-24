@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import InboxIcon from '@mui/icons-material/Inbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import {Link} from "react-router-dom";
 
 import Item from "../components/Item"; 
 
@@ -100,6 +101,8 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
 
     }
 
+    
+
     return (
         !itemsToDisplay.length ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
             <>
@@ -110,7 +113,8 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
             <TableCell>Item</TableCell>
             <TableCell align="right">Description</TableCell>
             <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Price per Item</TableCell>
+            <TableCell align="right">Unit Price</TableCell>
+            <TableCell align="right">Total Price</TableCell>
             <TableCell align="right">Change Quantity</TableCell>
             <TableCell align="right">Delete Item</TableCell>
           </TableRow>
@@ -127,6 +131,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
               <TableCell align="right">{item.description}</TableCell>
               <TableCell align="right">{countSameItems(item)}</TableCell>
               <TableCell align="right">{item.price}</TableCell>
+              <TableCell align="right">{item.price * countSameItems(item)}</TableCell>
               <TableCell align="right">
               <ButtonGroup>
           <Button
@@ -156,6 +161,13 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
               </TableCell>
             </TableRow>
           ))}
+          {/* <TableRow>
+            <TableCell colspan="7">&nbsp;</TableCell>
+          </TableRow>
+          <TableRow> 
+            <TableCell >&nbsp;</TableCell>
+            <TableCell>Toal: </TableCell>
+          </TableRow> */}
         </TableBody>
       </Table>
     </TableContainer>
@@ -171,10 +183,13 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
                                 <b>You reached the quantity limit for this item.</b>
                             </Alert>
                         </Snackbar>
+                
+                <Button component={Link} to="/orderDetails">Proceed to Checkout</Button>
    
             </>
     ))
 }
+
 
 const mapStateToProps = (state) => {
     return {

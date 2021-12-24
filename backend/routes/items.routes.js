@@ -10,6 +10,67 @@ require("dotenv").config();
 
 const router = Router();
 
+const storedItems = [
+  {
+    picturesArray: [],
+    categoryArray: [ 'living room', 'bedroom' ],
+    materialArray: [ 'oakwood', 'plywood' ],
+    _id: "6188f2447bfae277ce60e9f3",
+    name: 'Closet',
+    hasWarranty: true,
+    isPopular: true,
+    price: 3100,
+    quantity: 30,
+    stock: true,
+    description: 'Small simple closet for living room',
+    ratings: { ratingsArray: [Array], medianValueRating: 3.6 },
+    updatedAt: "2021-12-19T19:01:50.753Z"
+  },
+  {
+    picturesArray: [],
+    categoryArray: [ 'kitchen' ],
+    materialArray: [ 'oakwood', 'plywood' ],
+    _id: "619637eeba71df9cdb00163d",
+    name: 'Kitchen',
+    hasWarranty: true,
+    isPopular: true,
+    price: 7000,
+    quantity: 3,
+    stock: true,
+    description: 'Full kitchen (sink, washing machine etc)',
+    ratings: { ratingsArray: [Array], medianValueRating: 3.5 },
+    updatedAt: "2021-12-19T13:19:32.240Z"
+  },
+  {
+    picturesArray: [],
+    categoryArray: [ 'dinning room', 'bedroom' ],
+    materialArray: [ 'oakwood', 'plywood' ],
+    _id: "619637f2ba71df9cdb00163e",
+    name: 'Bed',
+    hasWarranty: true,
+    isPopular: false,
+    price: 1500,
+    quantity: 13,
+    stock: true,
+    description: 'Single bed with matras',
+    ratings: { ratingsArray: [Array], medianValueRating: 3.5 }
+  },
+  {
+    picturesArray: [],
+    categoryArray: [ 'dinning room', 'bedroom' ],
+    materialArray: [ 'oakwood', 'plywood' ],
+    _id: "619637f8ba71df9cdb00163f",
+    name: 'Scarpiera',
+    hasWarranty: true,
+    isPopular: false,
+    price: 700,
+    quantity: 300,
+    stock: true,
+    description: 'Small simple closet for to keep your shoes in',
+    ratings: { ratingsArray: [Array], medianValueRating: 4 }
+  }
+]
+
 
 // GET /api/items
 router.get("/items",
