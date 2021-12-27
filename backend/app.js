@@ -11,6 +11,7 @@ app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/orders", require("./routes/orders.routes"));
 app.use("/api", require("./routes/contact.routes"));
 app.use("/api", require("./routes/items.routes"));
 

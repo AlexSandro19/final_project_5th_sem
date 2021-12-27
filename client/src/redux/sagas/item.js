@@ -1,17 +1,23 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, UPDATE_ITEM } from "../constants/item";
-
+import {LOGIN_SUCCESS} from "../constants/auth";
+import {refreshUser} from "../../services/auth.service";
 import { requestAllItemsSuccess, setCurrentItem } from "../actions/item";
-
+import {setUser} from "../actions/user";
 import { requestItems, updateItem } from  "../../services/item.service";
 
 function* updateItemFlow(action) {
     try {
-      console.log("In saga -- updateItemFlow")
       const item = action.payload.updatedItem;
+      const user= action.user;
       const updatedItem = yield call(updateItem, item)
-      yield put(setCurrentItem(updatedItem))
-
+      const payload=yield call(refreshUser,user);
+      //console.log(payload);
+      yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.name,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
+      yield put({
+        type: LOGIN_SUCCESS,
+      });
+      yield put({type:REQUEST_ALL_ITEMS})
     }catch (error) {
       console.log(error.message);
       console.log(error);

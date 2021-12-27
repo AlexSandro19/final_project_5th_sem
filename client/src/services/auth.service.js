@@ -2,10 +2,19 @@ import axios from "axios";
 
 const storageName = "userData";
 const loginUrl = "/api/auth/login";
+const refreshUrl = "/api/auth/refreshUser";
 const registerUrl = "/api/auth/register"
 export const loginApi = (email, password) => {
   return axios
     .post(loginUrl, { email, password })
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error.response.data;
+    });
+};
+export const refreshUser = (user) => {
+  return axios
+    .post(refreshUrl, { email:user.email, userId:user.id })
     .then((response) => response.data)
     .catch((error) => {
       throw error.response.data;

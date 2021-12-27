@@ -11,7 +11,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
-import {Image} from 'mui-image'
 
 
 const useStyles=makeStyles(()=>({
@@ -94,7 +93,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
     return(
         <>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
-            <Image src={item.picturesArray[0]} /> 
+            <img src={item.picturesArray[0]} alt=""></img> 
             <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(item)}}>
                 <CardContent>
                     <div>

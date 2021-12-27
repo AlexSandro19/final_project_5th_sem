@@ -9,6 +9,8 @@ import { IconButton } from "@mui/material";
 import MessagePage from "./pages/MessagePage"
 import Routes from "./routes";
 import Navigation  from "./components/Navigation";
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 const theme = createTheme()
 const useStyles = makeStyles(() => ({
  
@@ -37,7 +39,7 @@ function App() {
 
   const classes = useStyles();
   return (
-
+    <LocalizationProvider dateAdapter={DateAdapter}>
     <Router>
     <div className={classes.root}>
       <CssBaseline />
@@ -55,6 +57,7 @@ function App() {
       </footer>
     </div>
     </Router>
+    </LocalizationProvider>
   );
 }
 

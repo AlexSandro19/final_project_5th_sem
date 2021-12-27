@@ -115,5 +115,29 @@ router.post(
     }
   }
 );
+router.post("/refreshUser",async(req,res)=>{
 
+  try{
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+        message: "Invalid authorization data",
+      });
+    }
+    const {email,userId} = req.body;
+    console.log(userId);
+    console.log(email);
+    const user= await User.findById(userId).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).exec();
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,name:user.name,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
+  }catch(error){
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong, try again" });
+  }
+
+})
 module.exports = router;

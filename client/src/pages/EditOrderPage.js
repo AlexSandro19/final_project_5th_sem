@@ -1,11 +1,19 @@
 import { connect } from "react-redux";
 import {useState} from "react";
 import { EditOrder } from "../components/EditOrder";
+import {Loader} from "../components/Loader";
+import {updateOrder} from "../redux/actions/order";
+const EditOrderPage=({user,currentOrder,updateOrder})=>{
+    console.log(currentOrder)
 
-const EditOrderPage=({currentItem,currentOrder})=>{
-    console.log(currentItem)
+   
+    if(currentOrder === null){
+        return(
+            <Loader></Loader>
+        )
+    }
     return(
-        <EditOrder currentItem={currentItem}>
+        <EditOrder user={user} updateOrder={updateOrder} currentOrder={currentOrder}>
         </EditOrder>
     )
 
@@ -14,9 +22,9 @@ const EditOrderPage=({currentItem,currentOrder})=>{
 
 const mapStateToProps = (state) => {
     return {
-        currentItem:state.items.currentItem,
-        currentOrder:state.order
+        currentOrder:state.order.currentOrder,
+        user:state.user
     };
   };
   
-export default connect(mapStateToProps,{})(EditOrderPage)
+export default connect(mapStateToProps,{updateOrder})(EditOrderPage)

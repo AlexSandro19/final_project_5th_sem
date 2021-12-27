@@ -4,6 +4,7 @@ import { useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import { TextField,ButtonBase,Grid,Divider, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, Tab } from "@mui/material";
 import { NavLink } from "react-router-dom";
+
 const useStyles=makeStyles(()=>({
     back:{
         margin:"1%",
@@ -30,12 +31,10 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-export const Profile=({setCurrentItem,handleDeleteOrderOpen,handleDeleteItemOpen,user,form,sendProfileUpdateForm,changeHandler,items})=>{
+export const Profile=({getCurrentOrder,setCurrentItem,handleDeleteOrderOpen,handleDeleteItemOpen,user,form,sendProfileUpdateForm,changeHandler,items})=>{
 const classes=useStyles();
-console.log(user.orders)
 const orderList=[...user.orders];
-console.log(orderList);
-console.log(items);
+console.log(items)
 const [page,setPage]=useState(0);
 const [rowsPerPage,setRowsPerPage]=useState(5);
 const handlePageChange=(event,newPage)=>{
@@ -49,6 +48,11 @@ const setItem=(item)=>{
     console.log("ADADAEFAEFGF00",item);
     console.log(item)
     setCurrentItem(item)
+}
+
+const setOrder=(orderId)=>{
+    console.log(orderId);
+    getCurrentOrder(orderId);
 }
 const emptyRows=rowsPerPage - Math.min(rowsPerPage,items.length-page*rowsPerPage);
 if(user.role === "ADMIN"){
@@ -159,8 +163,8 @@ if(user.role === "ADMIN"){
                                 <TableCell>{order.totalValue}</TableCell>
                               { order.message === "" ?(<TableCell>No message provided</TableCell>):(<TableCell>{order.message}</TableCell>)}
                               <TableCell>
-                                  <Button component={NavLink} to={"/viewOrder"} style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"2%"}}>View Items</Button>
-                                  <Button component={NavLink} to={"/editOrder"} style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"2%"}}>Edit Order</Button>
+                                  <Button onClick={()=>setOrder(order._id)} component={NavLink} to={"/viewOrder"} style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"2%"}}>View Items</Button>
+                                  <Button onClick={()=>setOrder(order._id)} component={NavLink} to={"/editOrder"} style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"2%"}}>Edit Order</Button>
                                   <Button onClick={handleDeleteOrderOpen} style={{color:"black",backgroundColor:"#FD6464",borderRadius: "6px",marginRight:"2%"}}>Delete Order</Button>
                             </TableCell>
                             </TableRow>
@@ -244,7 +248,7 @@ return(
                             <TableCell>{order.totalValue}</TableCell>
                           { order.message === "" ?(<TableCell>No message provided</TableCell>):(<TableCell>{order.message}</TableCell>)}
                           <TableCell>
-                              <Button style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px"}}>View Items</Button>
+                              <Button onClick={()=>setOrder(order._id)} component={NavLink} to={"/viewOrder"}  style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px"}}>View Items</Button>
                         </TableCell>
                         </TableRow>
                     )

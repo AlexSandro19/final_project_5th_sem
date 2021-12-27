@@ -4,8 +4,8 @@ import { useHistory } from "react-router-dom";
 import {useState} from "react";
 import { DeleteDialog } from "../components/DeleteDialog";
 import {setCurrentItem} from "../redux/actions/item"
-
-const ProfilePage=({user,items,setCurrentItem})=>{
+import { getCurrentOrder } from "../redux/actions/order";
+const ProfilePage=({user,items,setCurrentItem,getCurrentOrder})=>{
     const history = useHistory();
     const [form, setForm] = useState({
       email: user.email,
@@ -40,7 +40,7 @@ const ProfilePage=({user,items,setCurrentItem})=>{
       console.log(deleteOrderOpen);
     return(
         <div>
-        <Profile setCurrentItem={setCurrentItem} handleDeleteOrderOpen={handleDeleteOrderOpen}  handleDeleteItemOpen={handleDeleteItemOpen} items={items} user={user} form={form} sendProfileUpdateForm={sendProfileUpdateForm} changeHandler={changeHandler}>
+        <Profile getCurrentOrder={getCurrentOrder} setCurrentItem={setCurrentItem} handleDeleteOrderOpen={handleDeleteOrderOpen}  handleDeleteItemOpen={handleDeleteItemOpen} items={items} user={user} form={form} sendProfileUpdateForm={sendProfileUpdateForm} changeHandler={changeHandler}>
         
         </Profile>
       
@@ -60,4 +60,4 @@ const mapStateToProps = (state) => {
     };
   };
   
-export default connect(mapStateToProps,{setCurrentItem})(ProfilePage)
+export default connect(mapStateToProps,{setCurrentItem,getCurrentOrder})(ProfilePage)

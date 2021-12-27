@@ -44,11 +44,12 @@ export const createItem = (newItem) => {
     }
 } 
 
-export const updateItem = (updatedItem) => {
+export const updateItem = (user,updatedItem) => {
     console.log("In the actions - updateItem", updatedItem);
     return {
         type: UPDATE_ITEM,
-        payload: {updatedItem}
+        payload: {updatedItem},
+        user
     }
 } 
 

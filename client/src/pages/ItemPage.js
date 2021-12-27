@@ -9,8 +9,6 @@ import Item from "../components/Item";
 import {useLocation} from "react-router-dom"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
-import {Image} from 'mui-image'
-
 const useStyles=makeStyles(()=>({
     back:{
         margin:"2%",
@@ -45,7 +43,7 @@ const ItemPage=({items, currentItem, userIsAuthenticated})=> {
     console.log("userIsAuthenticated: ", userIsAuthenticated);
     return (
         <Paper width="90%">
-            <Image src={currentItem.picturesArray[0]} />
+            <img src={currentItem.picturesArray[0]} alt=""></img>
             <Typography variant="h1">{currentItem.name}</Typography>
             <Typography variant="subtitle1">{currentItem.description}</Typography>
             <Typography variant="body2">Color: ADD COLOR TO FURNITURE</Typography>

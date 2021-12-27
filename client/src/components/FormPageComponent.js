@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
+import { useHistory } from 'react-router-dom';
 import {requestAllItems, setCurrentItem} from "../redux/actions/item";
-import { TextField, Button, Typography, Paper, InputLabel, Select,MenuItem } from "@mui/material";
+import { TextField, Button,Box, Typography, Paper, InputLabel, Select,MenuItem } from "@mui/material";
 import FileBase from 'react-file-base64';
 import {updateItem, createItem} from "../redux/actions/item";
 
-const FormPageComponent = ({ currentItem, items, setCurrentItem, updateItem }) => {
+const FormPageComponent = ({ user,currentItem, items, setCurrentItem, updateItem }) => {
+const history = useHistory();
 const [form, setForm] = useState({...currentItem});
-
     // const [postData, setPostData] = useState({creator:'', title:'', message:'', tags:'', selectedFile:''});
 
     // const post = useSelector( (state) => currentId ? state.posts.find((p) => p._id === currentId) : null); 
@@ -18,9 +19,9 @@ const [form, setForm] = useState({...currentItem});
     // }, [post])
 
     const handleSubmit = (e) => { // e = event
-        updateItem({...form});
+        updateItem(user,form);
         e.preventDefault();
-
+        history.push("/profile");
 
         // console.log(currentId, postData);
         
@@ -56,7 +57,7 @@ const [form, setForm] = useState({...currentItem});
                            label="Name" fullWidth value={form.name} 
                            onChange={(e) => setForm({ ...form, name: e.target.value })} />
                 <TextField name="description" variant="outlined" 
-                           label="Description" fullWidth value={currentItem.description} multiline
+                           label="Description" fullWidth value={form.description} multiline
                            onChange={(e) => setForm({ ...form, description: e.target.value })} />
                 <TextField name="price" variant="outlined" 
                            label="Price" fullWidth value={form.price} 
@@ -127,6 +128,7 @@ const [form, setForm] = useState({...currentItem});
 
 const mapStateToProps = (state) => {
     return {
+        user:state.user,
         itemsInBasket: state.basket.itemsInBasket, 
         userIsAuthenticated: state.user.isAuthenticated,
     };
