@@ -47,10 +47,27 @@ const schema = new Schema(
       }
     ],
     cart:[
-       { 
-        type:Types.ObjectId,
-        ref:"Furniture"
+      {
+        itemObject:{ 
+          type:Types.ObjectId,
+          ref:"Furniture"
+        }, 
+        itemName:{ 
+          type:String,
+        }, 
+        itemPrice:{
+          type: Number,
+          //required: true,
+        }, 
+        quantityInCart:{
+          type: Number,
+          //required: true,
+        }, 
+        totalPerItem:{
+          type: Number,
+          //required: true,
         }
+      }
     ]
 
   },
