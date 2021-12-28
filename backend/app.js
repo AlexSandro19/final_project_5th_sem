@@ -13,6 +13,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api", require("./routes/contact.routes"));
 app.use("/api", require("./routes/items.routes"));
+app.use("/api", require("./routes/order.routes"));
 
 if (process.env.NODE_ENV === "production") {
   app.use("/", express.static(path.join(__dirname, "client", "build")));

@@ -14,6 +14,14 @@ export const loginApi = (email, password) => {
     });
 };
 
+export const refreshUser = (user) => {
+  return axios
+    .post(refreshUrl, { email:user.email, userId:user.id })
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error.response.data;
+    });
+};
 
 export const registerApi = (firstName,lastName,email,username,password,phone,address) =>{
   return axios.post(registerUrl,{firstName,lastName,email,username,password,phone,address}).then((response)=>response.data).catch((error)=>{
