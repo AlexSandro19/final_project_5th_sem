@@ -11,6 +11,7 @@ import EditItemPage from "./pages/EditOrderPage";
 import BasketPage from "./pages/BasketPage";
 import FormPage from "./pages/FormPage";
 import EditOrderPage from "./pages/EditOrderPage";
+import ViewOrderPage from "./pages/ViewOrderPage";
 
 const Routes=({currentItem})=>{
     return(
@@ -23,7 +24,7 @@ const Routes=({currentItem})=>{
             <Route path="/profile" exact><ProfilePage /></Route>
             <Route path="/editItem/" exact><FormPage/></Route>
             <Route path="/editOrder/" exact><EditOrderPage></EditOrderPage></Route>
-            <Route path="/viewOrder/" exact></Route>
+            <Route path="/viewOrder/" exact><ViewOrderPage></ViewOrderPage></Route>
             <Route path="/contact" exact><ContactForm/> </Route>
             <Route path="/basket" exact><BasketPage/></Route>
             <Route path="/updateItem" exact><FormPage/></Route>

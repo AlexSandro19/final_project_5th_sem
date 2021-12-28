@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import {useState} from "react";
-import { ViewOrder } from "../components/EditOrder";
+import { ViewOrder } from "../components/ViewOrder";
 import {Loader} from "../components/Loader";
 const ViewOrderPage=({currentOrder})=>{
     console.log(currentOrder)
