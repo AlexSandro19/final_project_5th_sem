@@ -1,4 +1,4 @@
-import { CREATE_ORDER, SAVE_ORDER } from "../constants/order";
+import { CREATE_ORDER, SAVE_ORDER, SAVE_CART } from "../constants/order";
 
 const initialState = {order: {}};
 

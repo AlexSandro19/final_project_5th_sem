@@ -27,10 +27,11 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const BasketPage=({itemsInBasket, items})=> {
+const BasketPage=({itemsInBasket, items, user})=> {
+
     const classes=useStyles();
     return (
-        <BasketPageComponent itemsInBasket={itemsInBasket} items={items}>
+        <BasketPageComponent itemsInBasket={itemsInBasket} items={items} user={user}>
         </BasketPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
@@ -48,6 +49,7 @@ const mapStateToProps = (state) => {
     return {
         itemsInBasket: state.basket.itemsInBasket, 
         items: state.items.items,
+        user: state.user
     };
 };
     

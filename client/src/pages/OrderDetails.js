@@ -29,20 +29,21 @@ const useStyles=makeStyles(()=>({
 
 const OrderDetails=({items, itemsInBasket, user})=> {
     const classes=useStyles();
+    console.log("User in OrderDetails", user)
+    let itemsInCart = 0
+
+    ///////// !!!!!!!!!!!!!!!!!!!!!!!!! HAS TO BE REDONE !!!!!!!!!!!!!!!!!!!!!!
+    if (typeof user.cart !== "undefined"){
+        itemsInCart = user.cart.reduce((sum, item) => sum + item.quantityInCart, 0)
+    }
 
     return (
-        <OrderDetailsComponent itemsInBasket={itemsInBasket} user={user}>
+        (itemsInCart !== itemsInBasket.length) ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
+            <>
+        <OrderDetailsComponent user={user}>
         </OrderDetailsComponent>
-             //<Grid  container alignItems="stretch" spacing={3}>
-              /* {items.data.map((item) => (
-                     <Grid key={item._id} item xs={12} sm={6}>
-                        <Item item={item} />
-                    </Grid>      
-                  ))} */
-            //</Grid>
-       
-
-    )
+        </>
+    ))
 }
 
 const mapStateToProps = (state) => {
