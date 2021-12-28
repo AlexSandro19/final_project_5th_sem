@@ -10,7 +10,8 @@ const ProfilePage=({user,items,setCurrentItem})=>{
     const [form, setForm] = useState({
       email: user.email,
       username:user.username,
-      name:user.name,
+      firstName:user.firstName,
+      lastName:user.lastName,
       password:"",
       phone:user.phone,
       address:user.address,  

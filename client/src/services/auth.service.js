@@ -2,7 +2,9 @@ import axios from "axios";
 
 const storageName = "userData";
 const loginUrl = "/api/auth/login";
-const registerUrl = "/api/auth/register"
+const registerUrl = "/api/auth/register";
+const refreshUrl = "/api/auth/refreshUser";
+
 export const loginApi = (email, password) => {
   return axios
     .post(loginUrl, { email, password })
@@ -11,8 +13,10 @@ export const loginApi = (email, password) => {
       throw error.response.data;
     });
 };
-export const registerApi = (name,email,username,password,phone,address) =>{
-  return axios.post(registerUrl,{name,email,username,password,phone,address}).then((response)=>response.data).catch((error)=>{
+
+
+export const registerApi = (firstName,lastName,email,username,password,phone,address) =>{
+  return axios.post(registerUrl,{firstName,lastName,email,username,password,phone,address}).then((response)=>response.data).catch((error)=>{
     throw error.response.data;
   })
 }

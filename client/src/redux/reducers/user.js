@@ -5,7 +5,8 @@ const initialState = {
   id: null,
   token: null,
   email:null,
-  name:null,
+  firstName:null,
+  lastame:null,
   username:null,
   address:null,
   phone:null,
@@ -17,7 +18,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  
+  console.log("In the reducer, user", action.payload)
   switch (action.type) {
     case USER_SET:
       return {
@@ -25,7 +26,8 @@ const reducer = (state = initialState, action) => {
         id: action.payload.userId,
         token: action.payload.token,
         email:action.payload.email,
-        name:action.payload.name,
+        firstName:action.payload.firstName,
+        lastName:action.payload.lastName,
         username:action.payload.username,
         address:action.payload.address,
         phone:action.payload.phone,
