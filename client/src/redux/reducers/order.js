@@ -1,4 +1,4 @@
-import {GET_CURRENT_ORDER,GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER} from "../constants/order"
+import {GET_CURRENT_ORDER,GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,DELETE_ORDER} from "../constants/order"
 const initialState={
     currentOrder:{}
 }
@@ -15,6 +15,11 @@ const reducer=(state=initialState,action)=>{
         case UPDATE_ORDER:
             return{
                 currentOrder:action.payload
+            }
+        case DELETE_ORDER:
+            return{
+                currentOrder:null,
+
             }
         default: 
         return state;

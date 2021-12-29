@@ -47,7 +47,7 @@ const handleChangeRowsPerPage=(event)=>{
 const setItem=(item)=>{
     console.log("ADADAEFAEFGF00",item);
     console.log(item)
-    setCurrentItem(item)
+    setCurrentItem(items,item)
 }
 
 const setOrder=(orderId)=>{
@@ -66,9 +66,11 @@ if(user.role === "ADMIN"){
                <div>
                <Grid container spacing={4}>
                 <Grid item xs={12}><Typography style={{width:"100%",textAlign:"center"}} variant="h2">Items</Typography></Grid>
+                <Grid item xs={12}> <Button component={NavLink} to={"/createItem"} style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginLeft:"90%"}}>Add Item</Button></Grid>
                 <Grid item xs={12}>
                     <Table>
                         <TableHead>
+                        <TableRow></TableRow>
                         <TableRow>
                             <TableCell>ID</TableCell>
                             <TableCell>NAME</TableCell>
@@ -87,9 +89,9 @@ if(user.role === "ADMIN"){
                         <TableBody>
                         {items.slice(page*rowsPerPage,page*rowsPerPage+rowsPerPage).map((item,index)=>{
                             return(
-                                <TableRow key={index}>
+                                <TableRow key={index+1}>
                                     <TableCell>
-                                        {index}
+                                        {index+1}
                                     </TableCell>
                                     <TableCell>
                                         {item.name}
@@ -112,7 +114,7 @@ if(user.role === "ADMIN"){
                                 <TableCell>{item.ratings.medianValueRating}</TableCell>
                                 <TableCell>
                                   <Button component={NavLink} to={"/editItem"} onClick={()=>setItem(item)}  style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"3%"}}>Edit Item</Button>
-                                  <Button onClick={handleDeleteItemOpen}  style={{color:"black",backgroundColor:"#FD6464",borderRadius: "6px",marginRight:"3%"}}>Remove Item</Button>
+                                  <Button onClick={()=>handleDeleteItemOpen(item)}  style={{color:"black",backgroundColor:"#FD6464",borderRadius: "6px",marginRight:"3%"}}>Remove Item</Button>
                             </TableCell>
                                 </TableRow>
                             )
@@ -129,7 +131,13 @@ if(user.role === "ADMIN"){
                                 count={items.length}
                                 onPageChange={handlePageChange}
                                 onRowsPerPageChange={handleChangeRowsPerPage}
-                                ></TablePagination>
+                                >
+                                    
+                                </TablePagination>
+                                
+                            </TableRow>
+                            <TableRow>
+                           
                             </TableRow>
                         </TableFooter>
                     </Table>
@@ -165,7 +173,7 @@ if(user.role === "ADMIN"){
                               <TableCell>
                                   <Button onClick={()=>setOrder(order._id)} component={NavLink} to={"/viewOrder"} style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"2%"}}>View Items</Button>
                                   <Button onClick={()=>setOrder(order._id)} component={NavLink} to={"/editOrder"} style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"2%"}}>Edit Order</Button>
-                                  <Button onClick={handleDeleteOrderOpen} style={{color:"black",backgroundColor:"#FD6464",borderRadius: "6px",marginRight:"2%"}}>Delete Order</Button>
+                                  <Button onClick={()=>handleDeleteOrderOpen(order._id)} style={{color:"black",backgroundColor:"#FD6464",borderRadius: "6px",marginRight:"2%"}}>Delete Order</Button>
                             </TableCell>
                             </TableRow>
                         )

@@ -1,4 +1,4 @@
-import {GET_CURRENT_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER} from "../constants/order"
+import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER} from "../constants/order"
 export const setCurrentOrder = (order) => {
     // console.log("In the actions - setCurrentItem");
     // console.log(order);
@@ -21,5 +21,11 @@ export const updateOrder = (user,order) =>{
         type:UPDATE_ORDER,
         payload:order,
         user
+    }
+}
+export const deleteOrder = (order) =>{
+    return{
+        type:DELETE_ORDER,
+        payload:order,
     }
 }

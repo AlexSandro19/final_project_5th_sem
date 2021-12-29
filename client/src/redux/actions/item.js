@@ -1,4 +1,4 @@
-import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS, CREATE_ITEM, UPDATE_ITEM } from "../constants/item";
+import { REQUEST_ALL_ITEMS,DELETE_ITEM, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS, CREATE_ITEM, UPDATE_ITEM } from "../constants/item";
 
 export const requestAllItemsSuccess = (data) => {
     console.log("In the actions -- requestAllItemsSuccess");
@@ -19,15 +19,15 @@ export const requestAllItems = () => {
     };
 };
 
-export const setCurrentItem = (item) => {
+export const setCurrentItem = (items,item) => {
     console.log("In the actions - setCurrentItem");
     console.log(item);
     return {
         type: SET_CURRENT_ITEM,
-        payload: item
+        payload: item,
+        items: items
     }
 } 
-
 export const setFilteredItems = (filteredItems) => {
     console.log("In the actions - setFilteredItems");
     return {
@@ -36,14 +36,20 @@ export const setFilteredItems = (filteredItems) => {
     }
 } 
 
-export const createItem = (newItem) => {
+export const createItem = (items,newItem) => {
     console.log("In the actions - createItem");
     return {
         type: CREATE_ITEM,
-        payload: newItem
+        payload: {items:items,newItem:newItem}
     }
 } 
-
+export const deleteItem = (deleteItem) => {
+    console.log("In the actions - deleteItem");
+    return {
+        type: DELETE_ITEM,
+        payload: {deleteItem:deleteItem}
+    }
+} 
 export const updateItem = (user,updatedItem) => {
     console.log("In the actions - updateItem", updatedItem);
     return {

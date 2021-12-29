@@ -1,9 +1,9 @@
 import {    take, takeLatest, call, put } from "redux-saga/effects";
-import {GET_CURRENT_ORDER, UPDATE_ORDER} from "../constants/order";
+import {GET_CURRENT_ORDER, UPDATE_ORDER,DELETE_ORDER} from "../constants/order";
 import {LOGIN_SUCCESS} from "../constants/auth";
 import {refreshUser} from "../../services/auth.service";
-import {getCurrentOrderApi,getUpdateOrderApi} from "../../services/order.service";
-import {setCurrentOrder} from "../actions/order";
+import {getCurrentOrderApi,getUpdateOrderApi,deleteOrderService} from "../../services/order.service";
+import {setCurrentOrder,} from "../actions/order";
 import {setUser} from "../actions/user";
 function* getCurrentOrderFlow(action){
 
@@ -35,10 +35,19 @@ function* updateOrderFlow(action){
         throw error;
     }
 }
-
+function* deleteOrderFlow(action){
+    try{
+        const deleteOrder= action.payload;
+        yield call(deleteOrderService,deleteOrder)
+    }catch(error){
+        console.log(error);
+        throw error;
+    }
+}
 function* orderWatcher(){
     yield takeLatest(GET_CURRENT_ORDER,getCurrentOrderFlow);
-    yield takeLatest(UPDATE_ORDER,updateOrderFlow)
+    yield takeLatest(UPDATE_ORDER,updateOrderFlow);
+    yield takeLatest(DELETE_ORDER,deleteOrderFlow)
 }
 
 export default orderWatcher;
