@@ -12,7 +12,7 @@ import BasketPage from "./pages/BasketPage";
 import FormPage from "./pages/FormPage";
 import EditOrderPage from "./pages/EditOrderPage";
 import ViewOrderPage from "./pages/ViewOrderPage";
-
+import EmailConfirmationPage from "./pages/EmailConfirmationPage";
 const Routes=({currentItem})=>{
     return(
         <Switch>
@@ -29,7 +29,7 @@ const Routes=({currentItem})=>{
             <Route path="/basket" exact><BasketPage/></Route>
             <Route path="/createItem" exact><CreateItemPage></CreateItemPage></Route>
             <Route path="/updateItem" exact><FormPage/></Route>
-
+            <Route path="/emailConfirmation/:hash" ><EmailConfirmationPage></EmailConfirmationPage></Route>
 
             <Redirect to="/" ></Redirect>
         </Switch>

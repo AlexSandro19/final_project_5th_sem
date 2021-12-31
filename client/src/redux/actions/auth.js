@@ -1,4 +1,4 @@
-import { LOGIN_REQUESTING } from "../constants/auth";
+import { LOGIN_REQUESTING,EMAIL_CONFIRMATION } from "../constants/auth";
 
 export const loginRequest = ({ email, password }) => {
   return {
@@ -7,3 +7,9 @@ export const loginRequest = ({ email, password }) => {
   };
 };
 
+export const emailConfirmationRequest = ({hash}) =>{
+  return{
+    type:EMAIL_CONFIRMATION,
+    payload:hash
+  }
+}
