@@ -22,7 +22,8 @@ router.post("/message",async(req,res)=>{
    [
     check("email","Enter valid email").normalizeEmail().isEmail(),
     check("password","Enter a valid password").exists(),
-    check("name","Enter a valid name").exists().notEmpty(),
+    check("firstName","Enter a valid first name").exists().notEmpty(),
+    check("lastName","Enter a valid last name").exists().notEmpty(),
     check("username","Enter a valid username").exists().notEmpty(),
     check("phone","Enter a valid phone").exists().notEmpty(),
     check("address","Enter a valid address").exists().notEmpty(),
@@ -38,7 +39,7 @@ router.post("/message",async(req,res)=>{
          });
       }
 
-      const {name,username,address,phone,email, password } = req.body;
+      const {firstName,lastName,username,address,phone,email, password } = req.body;
       const role="USER";
       const emailConfirmed=false;
       const orders=[];
@@ -132,7 +133,7 @@ router.post(
 
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email }).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).exec();
+      const user = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).exec();
       console.log(user.populated("items"));
       if (!user) {
         return res.status(400).json({
@@ -157,7 +158,7 @@ router.post(
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
-      res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,name:user.name,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
+      res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,firstName:user.firstName,lastName:user.lastName,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
     } catch (e) {
       console.log(e);
       res.status(500).json({ message: "Something went wrong, try again" });

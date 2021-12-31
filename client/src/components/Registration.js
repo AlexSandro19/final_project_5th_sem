@@ -35,8 +35,9 @@ return(
 
         <Grid item xs={12}><Typography style={{width:"100%",textAlign:"center"}} variant="h2">Register</Typography></Grid>
         <Grid item xs={12}><TextField type="email" value={form.email} onChange={changeHandler} style={{width:"100%"}} required label="Email" id="email" name="email" ></TextField></Grid>
-        <Grid item xs={6}><TextField type="text" value={form.username} onChange={changeHandler} style={{width:"100%"}}  required label="Username" id="username" name="username"></TextField></Grid>
-        <Grid item xs={6}><TextField type="text" value={form.name} onChange={changeHandler} style={{width:"100%"}}  label="Name" id="name" name="name"></TextField></Grid>
+        <Grid item xs={12}><TextField type="text" value={form.username} onChange={changeHandler} style={{width:"100%"}}  required label="Username" id="username" name="username"></TextField></Grid>
+        <Grid item xs={6}><TextField type="text" value={form.firstName} onChange={changeHandler} style={{width:"100%"}}  label="firstName" id="firstName" name="firstName"></TextField></Grid>
+        <Grid item xs={6}><TextField type="text" value={form.lastName} onChange={changeHandler} style={{width:"100%"}}  label="lastName" id="lastName" name="lastName"></TextField></Grid>
         <Grid item xs={12}><TextField type="password" value={form.password} onChange={changeHandler} style={{width:"100%"}}  required label="Password" id="password" name="password" ></TextField></Grid>
         <Grid item xs={12}><TextField type="password" onChange={changeHandler} style={{width:"100%"}}  required label="Confirm password" required id="passwordConfirm" name="passwordConfirm" ></TextField></Grid>
         <Grid item xs={7}><TextField type="tel" value={form.phone} onChange={changeHandler} style={{width:"100%"}} required label="Phone number" id="phone" name="phone"></TextField></Grid>

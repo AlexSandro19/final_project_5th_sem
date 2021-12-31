@@ -9,8 +9,8 @@ function* loginFlow(action) {
     
     try {
 
-      const {name, email, subject, message } = action.payload
-      const responseMessage = yield call(contactEmail, name, email, subject, message);
+      const {firstName, lastName, email, subject, message } = action.payload
+      const responseMessage = yield call(contactEmail, firstName, lastName, email, subject, message);
   
       yield put(contactFormSuccess(responseMessage));
   

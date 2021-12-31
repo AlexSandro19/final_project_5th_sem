@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ContactForm = ({messageResponse, contactFormRequest}) => {
     const [form,setForm] = useState({
-        name:" ",
+        firstName:" ",
+        lastName:" ",
         email:" ",
         subject:" ",
         message:" ",
@@ -38,11 +39,19 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
        
         <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
             <TextField
-            label="Name"
+            label="First-Name"
             required
             id = "outlined"
-            value={form.name}
-            name = "name"
+            value={form.firstName}
+            name = "firstName"
+            onChange={changeHandler}
+            />
+            <TextField
+            label="Last-Name"
+            required
+            id = "outlined"
+            value={form.lastName}
+            name = "lastName"
             onChange={changeHandler}
             />
             <TextField

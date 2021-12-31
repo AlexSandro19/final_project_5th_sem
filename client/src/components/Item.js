@@ -101,7 +101,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
                 
                 <Button component={Link} to="/updateItem">
                     <MoreHorizIcon fontSize="default" />
-                </Button> { /*why there are doube  in style*/ }
+                </Button>
                 </div>
                     <Typography variant="body1">{item.description}</Typography>
                     <Typography variant="body1">{item.price}</Typography>

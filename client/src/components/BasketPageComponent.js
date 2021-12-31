@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import {requestAllItems, setFilteredItems} from "../redux/actions/item"
 import {addItemToBasket, updateItemsBasket} from "../redux/actions/basket";
+import {saveCartAction} from "../redux/actions/order";
 import {Loader} from "./Loader"
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
@@ -12,6 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import InboxIcon from '@mui/icons-material/Inbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import {Link} from "react-router-dom";
 
 import Item from "../components/Item"; 
 
@@ -35,12 +37,13 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
+export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket, saveCartAction})=>{
 
     // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
     let noMoreItemsToAdd = false;
     
     const itemsToDisplay = [...new Set(itemsInBasket)];
+
     console.log("Items to display", itemsToDisplay);
     const capitalizeString = (initialStr) => {
         return initialStr
@@ -100,6 +103,13 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
 
     }
 
+    const buttonPressed = () => {
+      console.log("Button Pressed -- checkout")
+      const itemsInCart = itemsToDisplay.map(currentItem => ({itemObject:currentItem, itemName:currentItem.name,itemPrice:currentItem.price, quantityInCart: countSameItems(currentItem), totalPerItem: countSameItems(currentItem) * currentItem.price}))
+      console.log("itemsInCart ", itemsInCart)
+      saveCartAction(user, itemsInCart);
+    }
+
     return (
         !itemsToDisplay.length ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
             <>
@@ -110,7 +120,8 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
             <TableCell>Item</TableCell>
             <TableCell align="right">Description</TableCell>
             <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Price per Item</TableCell>
+            <TableCell align="right">Unit Price</TableCell>
+            <TableCell align="right">Total Price</TableCell>
             <TableCell align="right">Change Quantity</TableCell>
             <TableCell align="right">Delete Item</TableCell>
           </TableRow>
@@ -127,6 +138,7 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
               <TableCell align="right">{item.description}</TableCell>
               <TableCell align="right">{countSameItems(item)}</TableCell>
               <TableCell align="right">{item.price}</TableCell>
+              <TableCell align="right">{item.price * countSameItems(item)}</TableCell>
               <TableCell align="right">
               <ButtonGroup>
           <Button
@@ -156,6 +168,13 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
               </TableCell>
             </TableRow>
           ))}
+          {/* <TableRow>
+            <TableCell colspan="7">&nbsp;</TableCell>
+          </TableRow>
+          <TableRow> 
+            <TableCell >&nbsp;</TableCell>
+            <TableCell>Toal: </TableCell>
+          </TableRow> */}
         </TableBody>
       </Table>
     </TableContainer>
@@ -171,10 +190,13 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
                                 <b>You reached the quantity limit for this item.</b>
                             </Alert>
                         </Snackbar>
+                
+                <Button component={Link} to="/orderDetails" onClick={buttonPressed}>Proceed to Checkout</Button>
    
             </>
     ))
 }
+
 
 const mapStateToProps = (state) => {
     return {
@@ -183,6 +205,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {updateItemsBasket})(BasketPageComponent);
+export default connect(mapStateToProps, {updateItemsBasket, saveCartAction})(BasketPageComponent);
 
 
