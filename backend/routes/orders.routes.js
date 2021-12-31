@@ -1,0 +1,61 @@
+const { Router } = require("express");
+
+const { check, validationResult } = require("express-validator");
+const Furniture = require("../model/Furniture");
+const User = require("../model/User")
+const Order= require("../model/Order");
+require("dotenv").config();
+
+
+
+const router = Router();
+router.post("/updateOrder",async(req,res)=>{
+  try{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+        message: "Invalid data while sending",
+      });
+     
+   }
+   const {order} = req.body
+   const updatedOrder = await Order.findByIdAndUpdate(order._id,order,{new:true});
+   //console.log(updatedOrder);
+   return res.status(200).json(updatedOrder);
+  }catch(error){
+    console.log(error.message);
+    return res.status(500).json({error:error,message:error.message})
+
+  }
+})
+
+router.post("/order",async(req,res)=>{
+
+    try{
+      const errors=  validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: "Invalid data while sending",
+        });
+     }
+
+     const {orderId}=req.body;
+     //console.log(orderId);
+     const order = await Order.findOne({_id:orderId}).populate("items");
+     //console.log(order);
+     if(!order){
+         return res.status(400).json({message:"Order not found"})
+     }
+     return res.status(200).json(order);
+    }catch(error){
+
+        console.log(error.message);
+        return res.status(500).json({error:error,message:error.message})
+    }
+
+})
+
+
+module.exports = router;

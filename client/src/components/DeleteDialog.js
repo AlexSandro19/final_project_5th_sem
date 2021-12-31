@@ -1,7 +1,7 @@
 import { Dialog,DialogTitle,DialogActions,DialogContent, DialogContentText, Button} from "@mui/material"
 import { useState } from "react";
-export  const DeleteDialog = ({text,handleClose,modalOpen})=>{
-
+export  const DeleteDialog = ({text,handleClose,modalOpen,deleteFunction})=>{
+ 
     return(
             <Dialog
             open={modalOpen}
@@ -20,6 +20,7 @@ export  const DeleteDialog = ({text,handleClose,modalOpen})=>{
                 <Button  variant="contained"
             color="primary"
             type="submit"
+            onClick={deleteFunction}
             >DELETE</Button>
             </DialogActions>
             </Dialog>

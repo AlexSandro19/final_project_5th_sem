@@ -78,7 +78,7 @@ router.get("/items",
       try {
         console.log("api/items is called");
         const allItems = await Furniture.find({});
-        console.log(allItems);
+        //console.log(allItems);
         // console.log(allItems[0]); -- to access a specifc element in the array
         if (allItems.length === 0) {
           return res.status(404).json({ message: "No data available" });
@@ -92,7 +92,44 @@ router.get("/items",
 
     }
  );
-
+ router.post("/deleteItem",async(req,res)=>{
+   try{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+        message: "Invalid data while sending",
+      });
+    }
+    const deleteItem = req.body;
+    //console.log(deleteItem);
+    await Furniture.findByIdAndDelete(deleteItem._id);
+    const allItems = await Furniture.find({});
+    return res.status(200).json(allItems)
+   }catch(error){
+    console.log(error.message);
+    return res.status(404).json({ message: error });
+   }
+ })
+router.post("/createItem",async(req,res)=>{
+  try{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+        message: "Invalid data while sending",
+      });
+    }
+    const item = req.body;
+    console.log("SDASD00");
+    console.log(item);
+    await Furniture.create(item);
+    return res.status(200).json({message:"Successfully created a new Item"});
+  }catch(error){
+    console.log(error.message);
+    return res.status(404).json({ message: error });
+  }
+})
 router.post("/updateItem",
     async (req, res) => {
       try {

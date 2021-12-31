@@ -1,60 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from "react-redux";
-import { useHistory } from 'react-router-dom';
-import {requestAllItems, setCurrentItem} from "../redux/actions/item";
 import { TextField, Button,Box, Typography, Paper, InputLabel, Select,MenuItem } from "@mui/material";
+import { Grid} from "@mui/material";
+import { useState } from "react"
 import FileBase from 'react-file-base64';
-import {updateItem, createItem} from "../redux/actions/item";
+import { useHistory } from "react-router-dom";
 
-const FormPageComponent = ({ user,currentItem, items, setCurrentItem, updateItem }) => {
-const history = useHistory();
-const [form, setForm] = useState({...currentItem});
-    // const [postData, setPostData] = useState({creator:'', title:'', message:'', tags:'', selectedFile:''});
-
-    // const post = useSelector( (state) => currentId ? state.posts.find((p) => p._id === currentId) : null); 
-    // const classes = useStyles();
- 
-    // useEffect(() => {
-    //     if(post) {setPostData(post)};
-    // }, [post])
-
-    const handleSubmit = (e) => { // e = event
-        updateItem(user,form);
-        e.preventDefault();
+export const CreateItem = ({items,createItem})=>{
+    const history= useHistory();
+    const [form,setForm] = useState({});
+    const updatedItemsList =[...items];
+    
+    const submitHandler = ()=>{
+        form.ratings={ratingsArray:[{userId:"6188f2447bfae277ce60e9f3",rating:4}],medianValueRating:4}
+        updatedItemsList.push(form);
+        createItem(updatedItemsList,form);
         history.push("/profile");
-
-        // console.log(currentId, postData);
-        
-
-        // if(currentId){
-        //     dispatch(updatePost(currentId, postData));
-        // }else{
-        //     dispatch(createPost(postData));
-        // }
-
-        clear();
-    }
-    const clear = () => {
-        // setCurrentId(null);
-        // setPostData({creator:'', title:'', message:'', tags:'', selectedFile:''});
     }
 
     const cancel = () => {
-        //setForm({...currentItem});
+        setForm({})
+
         history.push("/profile");
     }
+    return(
+        <div>
+        <Grid container spacing={2}>
+        <form autoComplete="off" noValidate onSubmit={submitHandler}>
 
-    // const updateCurrentItem = (item) => {
-    //     // console.log("updated item: ", item);
-    //     setCurrentItem(item);
-    // }
-
-
-    return (
-        <Box>
-            <form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                <Typography variant="h6">{false ? 'Editing' : 'Creating'} an Item</Typography>
-                <TextField name="name" variant="outlined" 
+        
+        <Grid item xs={12}><Typography style={{width:"100%",textAlign:"center"}} variant="h2">Create Item</Typography></Grid>
+        <TextField name="name" variant="outlined" 
                            label="Name" fullWidth value={form.name} 
                            onChange={(e) => setForm({ ...form, name: e.target.value })} />
                 <TextField name="description" variant="outlined" 
@@ -122,17 +96,9 @@ const [form, setForm] = useState({...currentItem});
                            
                 <Button  variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
                 <Button variant="contained" color="secondary" size="small" onClick={cancel} fullWidth>Cancel</Button>
-            </form>
-        </Box>
-    );
+           </form>
+           </Grid>
+        </div>
+    )
+
 }
-
-const mapStateToProps = (state) => {
-    return {
-        user:state.user,
-        itemsInBasket: state.basket.itemsInBasket, 
-        userIsAuthenticated: state.user.isAuthenticated,
-    };
-};
-
-export default connect(mapStateToProps, {setCurrentItem, updateItem})(FormPageComponent);
