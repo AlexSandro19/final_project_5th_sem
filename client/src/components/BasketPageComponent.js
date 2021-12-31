@@ -105,7 +105,8 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
 
     const buttonPressed = () => {
       console.log("Button Pressed -- checkout")
-      const itemsInCart = itemsToDisplay.map(currentItem => ({itemObject:currentItem, itemName:currentItem.name,itemPrice:currentItem.price, quantityInCart: countSameItems(currentItem), totalPerItem: countSameItems(currentItem) * currentItem.price}))
+      const itemsInCart = itemsInBasket.map(item => item._id);
+      // const itemsInCart = itemsToDisplay.map(currentItem => ({itemObject:currentItem, itemName:currentItem.name,itemPrice:currentItem.price, quantityInCart: countSameItems(currentItem), totalPerItem: countSameItems(currentItem) * currentItem.price}))
       console.log("itemsInCart ", itemsInCart)
       saveCartAction(user, itemsInCart);
     }

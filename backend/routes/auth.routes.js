@@ -84,8 +84,9 @@ router.post(
 
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).exec();
-      console.log(user.populated("items"));
+      const user = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      console.log("user.populated('items')", user.populated("items"));
+      console.log("user.populated('cart')", user.populated("cart"));
       if (!user) {
         return res.status(400).json({
           message: "Invalid authorization data",
@@ -131,7 +132,8 @@ router.post("/refreshUser",async(req,res)=>{
     const {email,userId} = req.body;
     console.log(userId);
     console.log(email);
-    const user= await User.findById(userId).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).exec();
+    const user= await User.findById(userId).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+    console.log(user)
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });

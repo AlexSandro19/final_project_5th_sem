@@ -1,15 +1,32 @@
 import {    take, takeLatest, call, put } from "redux-saga/effects";
-import {GET_CURRENT_ORDER, UPDATE_ORDER,DELETE_ORDER} from "../constants/order";
+import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,SAVE_CART,CREATE_ORDER,SAVE_ORDER} from "../constants/order";
 import {LOGIN_SUCCESS} from "../constants/auth";
 import {refreshUser} from "../../services/auth.service";
-import {getCurrentOrderApi,getUpdateOrderApi,deleteOrderService} from "../../services/order.service";
-import {setCurrentOrder,} from "../actions/order";
+import {getCurrentOrderApi,getUpdateOrderApi,deleteOrderService,saveCartService,createOrderService} from "../../services/order.service";
+import {setCurrentOrder} from "../actions/order";
 import {setUser} from "../actions/user";
 
 import { saveCartAction, saveOrderAction } from "../actions/order";
 
-import { saveCartService, saveOrderService } from  "../../services/order.service";
 
+
+function* createOrderFlow(action) {
+    try {
+      console.log("In saga -- createOrderFlow action.payload", action.payload)
+      const order = action.payload;
+      console.log("In saga -- createOrderFlow ", order )
+      const createdOrder = yield call(createOrderService, order)  
+      console.log("createdOrder", createdOrder)
+      if (createdOrder) {
+        yield put(setCurrentOrder(createdOrder));
+      } 
+    //   yield put(setUser(updatedUser))
+
+    }catch (error) {
+      console.log(error.message);
+      console.log(error);
+    }
+}
 
 function* getCurrentOrderFlow(action){
 
@@ -50,15 +67,11 @@ function* deleteOrderFlow(action){
         throw error;
     }
 }
-function* orderWatcher(){
-    yield takeLatest(GET_CURRENT_ORDER,getCurrentOrderFlow);
-    yield takeLatest(UPDATE_ORDER,updateOrderFlow);
-    yield takeLatest(DELETE_ORDER,deleteOrderFlow)
-}
+
 
 function* saveCartFlow(action) {
     try {
-      console.log("In saga -- saveCartFlow")
+      console.log("In saga -- saveCartFlow ", action)
       const user = action.payload.user;
       const cart = action.payload.cart;
       const {didUserUpdate} = yield call(saveCartService, user, cart)  
@@ -77,6 +90,14 @@ function* saveCartFlow(action) {
       console.log(error.message);
       console.log(error);
     }
+}
+
+function* orderWatcher(){
+    yield takeLatest(GET_CURRENT_ORDER,getCurrentOrderFlow);
+    yield takeLatest(UPDATE_ORDER,updateOrderFlow);
+    yield takeLatest(DELETE_ORDER,deleteOrderFlow)
+    yield takeLatest(SAVE_CART, saveCartFlow) 
+    yield takeLatest(CREATE_ORDER, createOrderFlow) 
 }
 
 export default orderWatcher;
