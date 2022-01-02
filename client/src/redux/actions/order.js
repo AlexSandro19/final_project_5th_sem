@@ -1,4 +1,6 @@
 import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER} from "../constants/order"
+import { CREATE_ORDER, SAVE_ORDER, SAVE_CART } from "../constants/order";
+
 export const setCurrentOrder = (order) => {
     // console.log("In the actions - setCurrentItem");
     // console.log(order);
@@ -29,7 +31,6 @@ export const deleteOrder = (order) =>{
         payload:order,
     }
 }
-import { CREATE_ORDER, SAVE_ORDER, SAVE_CART } from "../constants/order";
 
 
 export const createNewOrder = (order) => {
