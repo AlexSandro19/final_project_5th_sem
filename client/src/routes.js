@@ -10,6 +10,7 @@ import ContactForm from "./components/ContactForm";
 import EditItemPage from "./pages/EditItemPage";
 import BasketPage from "./pages/BasketPage";
 import FormPage from "./pages/FormPage";
+import Modeling from "./components/Modeling";
 
 const Routes=({currentItem})=>{
     return(
@@ -26,6 +27,12 @@ const Routes=({currentItem})=>{
             <Route path="/contact" exact><ContactForm/> </Route>
             <Route path="/basket" exact><BasketPage/></Route>
             <Route path="/updateItem" exact><FormPage/></Route>
+            <Route path="/modeling" exact><Modeling/></Route>
+            {/*<Route path="/modeling" render={() => <Redirect
+        to={{
+          pathname: "index.html"
+        }}
+      />}/>*/}
 
 
             <Redirect to="/" ></Redirect>
