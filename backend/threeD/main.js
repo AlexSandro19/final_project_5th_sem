@@ -3,7 +3,9 @@ import { OrbitControls } from '../node_modules/three/examples/jsm/controls/Orbit
 import * as dat from '../node_modules/dat.gui/build/dat.gui.module.js';
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import { TransformControls } from '../node_modules/three/examples/jsm/controls/TransformControls.js';
-import { FlyControls } from '../node_modules/three/examples/jsm/controls/FlyControls.js'
+import html2canvas from '../node_modules/html2canvas/dist/html2canvas.esm.js'
+import  canvas2Image  from '../node_modules/canvas2image-2/canvas2image.js'
+
 let INTERSECTED;//what intersects with the objects
 var objects3D = [] //hold all intersectable objects
 var raycaster = new THREE.Raycaster(); // create once ray
@@ -14,14 +16,13 @@ var renderer;
 let intersects = []
 var props = {}; //define methods in GUI
 let mainGroup = new THREE.Object3D(); // group of draggable objects
-let roomGroup = new THREE.Object3D(); // group of draggable objects
+let roomGroup = new THREE.Object3D(); // squareRoom
+let roomGroup1 = new THREE.Object3D(); // Dyanmic
 let intersects1 = []//second raycaster items for intersection
 const raycaster1 = new THREE.Raycaster()//second raycaster
 const sceneMeshes= [] //second raycaster objects to act on
 const dir = new THREE.Vector3()
-const raycaster2 = new THREE.Raycaster()
-const sceneMeshes1= []
-let intersects2 = []
+
 //resize
 function onResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -30,56 +31,72 @@ function onResize() {
   }
 
 function init() {
-    getIntroInfo()
     scene = new THREE.Scene()
+    
     var box = getBox(0.1,0.1,0.1)
-    box.position.y = -1
-    var gui = new dat.GUI()
-    var pointLight = getPointLight(1)
-    var pointLight1 = getPointLight(1)
-    var pointLight2 = getPointLight(1)
-    var pointLight4 = getPointLight(1)
-    var pointLight3 = getPointLight(1)
-    var pointLight5 = getPointLight(1)
+    box.position.y = -100
     scene.add(box)
-    pointLight.position.y = 100
-    pointLight1.position.y = -100
-    pointLight2.position.x = 100
-    pointLight3.position.x = -100
-    pointLight4.position.z = 100
-    pointLight5.position.z = -100
+    var selected = box
+    objects3D.push(mainGroup);
+
+    var roomParams = {
+        x : 0,
+        y: 0,
+        z: 0
+    }
     
-    window.addEventListener('resize', onResize, false);
+    var introGuiControls = new function(){
+        this.x = 0
+        this.y = 0
+        this.z = 0
+        this.createRoom = {createRoom: function(){
+            if(roomParams.x === roomParams.y && roomParams.x === roomParams.z){
+                if(roomParams.x !== 0){
+                    console.log('square')
+                    //rooms.push(createSquareRoom(roomParams.x))
+                    scene.add(createSquareRoom(roomParams.x))
+                    scene.add( new THREE.GridHelper( roomParams.x, roomParams.x, 0x888888, 0x444444 ) );
+                    introGui.hide()
+                    gui.show()
+                    camera.position.set(-11,11,-5)
+                }else{
+                    alert('please enter a valid number')
+                }
+            }else{
+                if(roomParams.x !== 0 && roomParams.y !== 0 && roomParams.z !== 0){
+                    //rooms.push(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
+                    scene.add(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
+                    introGui.hide()
+                    console.log('different')
+                    gui.show()
+                    camera.position.set(-11,11,-5)
+                    var f4 = gui.addFolder('Change room aspect')
+                    f4.add(guiControls.changeRoomWall,"changeWall").name("First wall")
+                    f4.add(guiControls.changeSecondRoomWall,"changeSecondWall").name("Second wall")
+                }else{
+                    alert('please enter a valid number')
+                }
+            }
+        }}
+    }
+    //hold our methods in dat.gui
+    var introGui = new dat.GUI()
+    var i2 = introGui.addFolder("Create ROom")
+    i2.open()
+    i2.add(introGuiControls,"x",1,10).name("Length:").step(1).onChange(function(e){
+        roomParams.x = e
+    })
+    i2.add(introGuiControls,"y",1,10).name("Width:").step(1).onChange(function(e){
+        roomParams.y = e
+    })
+    i2.add(introGuiControls,"z",1,10).name("Height:").step(1).onChange(function(e){
+        roomParams.z = e
+    })
+    i2.add(introGuiControls.createRoom,"createRoom")
     
-    props.addGUIObject = ''
+    //////////////////////////////////////////////////////////////////
     
     //hold our methods in dat.gui
-    let addObject = function(src, value){
-        loader.load( src, function ( gltf ) {   
-        
-            gltf.scene.children[2].properties = {different:value}
-            scene.add( gltf.scene );
-            console.log(gltf.scene)
-            console.log(selected)
-            console.log(mainGroup)
-            mainGroup.add(gltf.scene);
-            objects3D.push(mainGroup);
-            //sceneMeshes.push(mainGroup)
-            gltf.scene.scale.set(1,1,1)
-            gltf.scene.position.set(0,2,0)
-            console.log(gltf.scene)
-            scene.add(mainGroup);
-            camera.lookAt(gltf.scene.position)
-        }, undefined, function ( error ) {
-    
-        console.error( error.message );
-            
-        } );
-    }
-
-    var selected = box
-    //createSquareRoom(100)
-    createSquareRoom(1)
     var guiControls = new function() {
         this.color = box.material.color.getStyle();
         this.x = box.scale.x
@@ -98,6 +115,7 @@ function init() {
             var newBox = getBox(0.2,0.2,0.2)
             newBox.position.y = 1
             objects3D.push(newBox)
+            sceneMeshes.push(newBox)
             control.attach(newBox)
             scene.add(newBox)
         }}
@@ -108,126 +126,276 @@ function init() {
             control.attach(newSphere)
             scene.add(newSphere)
         }}
-      };
+        this.takeScreen = {takeScreen: function(){
+            gui.hide()
+            html2canvas(document.body).then(function(canvas){
+                console.log('at least not here')
+                return canvas2Image.saveAsPNG(canvas);
+            })
+            gui.show()
+        }}
+        this.modifyRoom = {modifyRoom: function(){
+            introGui.show()
+            introGui.add()
+        }}
+        this.changeRoomWall = { changeWall: function(){
+            console.log(scene.children[10].children[1])
+            console.log(scene.children[10])
+            console.log(scene.children)
+            scene.children[10].children[1].position.z = -scene.children[10].children[1].position.z 
+            camera.position.z = - camera.position.z
+        }} 
+        this.changeSecondRoomWall = { changeSecondWall: function(){
+            scene.children[10].children[2].position.x = -scene.children[10].children[2].position.x 
+            camera.position.x = - camera.position.x
+        }}
+        this.deleteBasic = {deleteBasic: function(){
+            removeBasicObject(selected)
+        }}
+        this.xLeft = 0.5
+        this.xRight = 0.5
+        this.yLeft = 0.5
+        this.yRight = 0.5
+        this.zLeft = 0.5
+        this.zRight = 0.5
+    };
+    
+    var gui = new dat.GUI()
+    gui.hide()
 
+    //light
+    var sphere = getSphere(0.001)
+    var sphere1 = getSphere(0.001)
+    var sphere2 = getSphere(0.001)
+    var sphere3 = getSphere(0.001)
+    var sphere4 = getSphere(0.001)
+    var sphere5 = getSphere(0.001)
+    var pointLight = getPointLight(1)
+    var pointLight1 = getPointLight(1)
+    var pointLight2 = getPointLight(1)
+    var pointLight4 = getPointLight(1)
+    var pointLight3 = getPointLight(1)
+    var pointLight5 = getPointLight(1)
+    sphere.add(pointLight)
+    sphere1.add(pointLight1)
+    sphere2.add(pointLight2)
+    sphere3.add(pointLight3)
+    sphere4.add(pointLight4)
+    sphere5.add(pointLight5)
+    sphere.position.y = 5
+    pointLight.intensity = 1
+    pointLight1.intensity = 0.5
+    pointLight4.intensity = 0.5
+    pointLight2.intensity = 0.5
+    pointLight3.intensity = 0.5
+    pointLight5.intensity = 0.5
+    sphere1.position.y = -5
+    sphere2.position.x = 5
+    sphere2.position.y = 2.5
+    sphere3.position.x = -5
+    sphere3.position.y = 2.5
+    sphere4.position.z = 5
+    sphere5.position.z = -5
+    scene.add(sphere)
+    scene.add(sphere1)
+    scene.add(sphere2)
+    scene.add(sphere3)
+    scene.add(sphere4)
+    scene.add(sphere5)
+    // objeect names
+    props.addGUIObject = ''
+    //load the gltf obj to scene
+    let addObject = function(src, value){
+        loader.load( src, function ( gltf ) {   
+            var bbox = new THREE.Box3().setFromObject(gltf.scene);
+            console.log(bbox.getSize(new THREE.Vector3()))
+            //gltf.scene.updateMatrixWorld(true)
+            
+            gltf.scene.children[0].material.color.setStyle(box.material.color.getStyle())
+            gltf.scene.children[0].material = gltf.scene.children[0].material.clone() 
+            gltf.scene.children[0].material.metalness = 0
+            gltf.scene.children[0].rotation.y += Math.PI 
+            gltf.scene.children[0].material.roughness = 0
+            gltf.scene.children[0].up.set(0,0,0)
+            gltf.scene.children[0].properties = {different:value, normalScale: bbox.getSize(new THREE.Vector3())}
+            scene.add( gltf.scene );
+            mainGroup.add(gltf.scene);
+            scene.add(mainGroup);
+        }, undefined, function ( error ) {
+            
+            console.error( error.message );
+            
+        } );
+    }
+    //mouse info
+    var MouseControls = {
+        LeftClick: "Pick object",
+        MiddleClick: "Position object on floor",
+        RightClick: "Rotate object"
+    }
+    //gui folders
     var f1 = gui.addFolder('Premade Objects')
-    f1
-      .addColor(guiControls, "color")
-      .listen()
-      .onChange(function(e) {
-        selected.material.color.setStyle(e);
-      });
-      f1
-      .add(guiControls, "x",0.1,5)
-      .listen().name('Scale x')
-      .onChange(function(e) {
-        selected.scale.x = e;
-      });
-      f1
-      .add(guiControls, "y",0.1,5)
-      .listen().name('Scale y')
-      .onChange(function(e) {
-        selected.scale.y = e;
-      });
-      f1
-      .add(guiControls, "z",0.1,5)
-      .listen().name('Scale z')
-      .onChange(function(e) {
-        selected.scale.z = e;
-      });
-      f1
-      .add(guiControls.selected, "delete")
-      .listen()
-
-     
-    f1.add(props,'addGUIObject',
-    ['doubleDoubleTopKitchen','doubleUpkitchen','firdge','nearBed', 'oilkitchen','openDoubleTopKitchen'])
-    .name('Add resizable items')
-    .listen()
-    .onChange(
-        function(newValue) {
-        console.log(formatResizableObjectFolderName(newValue))    
-        addObject(formatResizableObjectFolderName(newValue),true)
-    
-    });
-    f1.add(props,'addGUIObject',
-    ['3 Door Closet','DoubleKitchenCloset','pipe','smallCloset','assets/WashingMachine.glb','assets/ThreeDoorsBedroomCloset.glb'])
-    .name('Add standart items')
-    .listen()
-    .onChange(
-        function(newValue) {
-        console.log(formatStandartObjectFolderName(newValue))    
-        addObject(formatStandartObjectFolderName(newValue),false)
-    
-    });
-    f1.open()
-
     var f2 = gui.addFolder('Basic Objects')
-    var boxF2 = f2.add(guiControls.addBox,'addBox')
-    f2.add(guiControls.addSphere,'addSphere')
     var f3 = gui.addFolder('Rotate Objects')
-    f3.add(guiControls.rotateLeft,"rotateLeft")
+    var f5 = gui.addFolder('Adjust light')
+    var f6 = gui.addFolder('Mouse controls')
+    
+    f1
+    .addColor(guiControls, "color")
     .listen()
-    f3.add(guiControls.rotateRight,"rotateRight")
+    .onChange(function(e) {
+        selected.material.color.setStyle(e);
+    });
+    
+    f1
+    .add(guiControls, "x",0.1,5).step(0.1)
+    .listen().name('Width')
+    .onChange(function(e) {
+        selected.scale.x = e/selected.properties.normalScale.x;
+    });
+    
+    f1
+    .add(guiControls, "y",0.1,5).step(0.1)
+    .listen().name('Height')
+    .onChange(function(e) {
+        
+        selected.scale.y = e/selected.properties.normalScale.y;
+
+    });
+    
+    f1
+    .add(guiControls, "z",0.1,5).step(0.1)
+    .listen().name('Length')
+    .onChange(function(e) {
+        selected.scale.z = e/selected.properties.normalScale.z;
+    });
+    
+    f1
+    .add(guiControls.selected, "delete")
     .listen()
-    //dat.gui section
-
-    scene.add(pointLight)
-    scene.add(pointLight1)
-    scene.add(pointLight2)
-    scene.add(pointLight3)
-    scene.add(pointLight4)
-    scene.add(pointLight5)
     
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight,1,1000)
-    camera.position.x = 1
-    camera.position.y = 2
-    camera.position.z = 1
-
-
     
-    var loader = new GLTFLoader()
-    renderer = new THREE.WebGLRenderer()
-
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    renderer.setClearColor('rgb(120, 120, 120)')
-    document.getElementById('webgl').appendChild(renderer.domElement)
-   
+    //add objects to dat gui
+    f1.add(props,'addGUIObject',
+    ['3 Door Closet1','small Closet Near Bed','Standart Bed','3doors Small Closet','desk','single Bed','Open Closet','Half Opened Closet','Table 2','Table 3'])
+    .name('Dormitory')
+    .listen()
+    .onChange(
+        function(newValue) {
+            console.log(formatResizableObjectFolderName(newValue))    
+            addObject(formatResizableObjectFolderName(newValue),true)
+            
+        });
+    f1.add(props,'addGUIObject',
+    ['fridge','Top 1x2','Top 2x2','corner','Double Horizontal Closet','Double Vertical Doors','Single Door Closet','3 Horizontal Doors','open 3 shelves'])
+    .name('Kitchen')
+    .listen()
+    .onChange(
+        function(newValue) {
+            console.log(formatStandartObjectFolderName(newValue))    
+            addObject(formatStandartObjectFolderName(newValue),false)
+            
+        });
+        //scene.children[10].children[1]
+    f1.open()
+    f2.add(guiControls.addBox,'addBox')
+    f2.add(guiControls.addSphere,'addSphere')
+    f2.add(guiControls.deleteBasic,'deleteBasic').name("delete")
     
-    //addd this to all new objects
-    const lineMaterial = new THREE.LineBasicMaterial({
-        color: 0x0000ff,
-    })
-    const points = []
-points[0] = new THREE.Vector3(-0.1, 0, 0)
-points[1] = new THREE.Vector3(0.1, 0, 0)
-let lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
-const xLine = new THREE.Line(lineGeometry, lineMaterial)
-scene.add(xLine)
-points[0] = new THREE.Vector3(0, -0.1, 0)
-points[1] = new THREE.Vector3(0, 0.1, 0)
-lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
-const yLine = new THREE.Line(lineGeometry, lineMaterial)
-scene.add(yLine)
-points[0] = new THREE.Vector3(0, 0, -0.1)
-points[1] = new THREE.Vector3(0, 0, 0.1)
-lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
-const zLine = new THREE.Line(lineGeometry, lineMaterial)
-scene.add(zLine)
+    f3.add(guiControls.rotateLeft,"rotateLeft").name("left")
+    .listen()
+    f3.add(guiControls.rotateRight,"rotateRight").name('right')
+    .listen()
+    
+    f5.add(guiControls,'xLeft',0.1,5).listen().name('up')
+    .onChange(function(e){
+        sphere.position.y = e
+    }) 
+    f5.add(guiControls,'xRight',-5,0).listen().name('down')
+    .onChange(function(e){
+        sphere1.position.y = e
+    }) 
+    f5.add(guiControls,'yLeft',-5,0).listen().name('right')
+    .onChange(function(e){
+        sphere2.position.x = e
+    }) 
+    f5.add(guiControls,'yRight',0.1,5).listen().name('left')
+    .onChange(function(e){
+        sphere3.position.x = e
+    }) 
+    f5.add(guiControls,'zLeft',0.1,5).listen().name('back')
+    .onChange(function(e){
+        sphere4.position.z = e
+    }) 
+    f5.add(guiControls,'zRight',-5,0).listen().name('front')
+    .onChange(function(e){
+        sphere5.position.z = e
+    }) 
+    f6.add(MouseControls,'LeftClick')
+    f6.add(MouseControls,'MiddleClick',true)
+    f6.add(MouseControls,'RightClick')
+    
+    f6.open()
+    var f7 = gui.addFolder('Screenshot')
+    f7.add(guiControls.takeScreen,"takeScreen")   
+        
+        //camera
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight,1,1000)
+        camera.position.x = 0
+        camera.position.y = 0
+        camera.position.z = 0
+        var loader = new GLTFLoader()
+        renderer = new THREE.WebGLRenderer({
+            preserveDrawingBuffer: true,
+            setPixelRatio : 1,
+            antialias: true
+        })
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        renderer.setClearColor('rgb(120, 120, 120)')
+        document.getElementById('webgl').appendChild(renderer.domElement)
+        window.addEventListener('resize', onResize, false);
+        
+        
+       //center
+        const lineMaterial = new THREE.LineBasicMaterial({
+            color: 0x0000ff,
+        })
+        const points = []
+        points[0] = new THREE.Vector3(-0.1, 0, 0)
+        points[1] = new THREE.Vector3(0.1, 0, 0)
+        let lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
+        const xLine = new THREE.Line(lineGeometry, lineMaterial)
+        scene.add(xLine)
+        points[0] = new THREE.Vector3(0, -0.1, 0)
+        points[1] = new THREE.Vector3(0, 0.1, 0)
+        lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
+        const yLine = new THREE.Line(lineGeometry, lineMaterial)
+        scene.add(yLine)
+        points[0] = new THREE.Vector3(0, 0, -0.1)
+        points[1] = new THREE.Vector3(0, 0, 0.1)
+        lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
+        const zLine = new THREE.Line(lineGeometry, lineMaterial)
+        scene.add(zLine)
+        function delay(time) {
+            return new Promise(resolve => setTimeout(resolve, time));
+          }
+          
+    //orbit controls
     var controls = new OrbitControls(camera, renderer.domElement)
     controls.minDistance = 2;
     controls.maxDistance = 30;
-    //controls.addEventListener( 'change', render ) //
+    //cant go under y = 0!
     controls.addEventListener('change', function () {
         render()
-        /*if(camera.position.y < 0){
-            camera.position.y = 5
-            
-            
-        }*/
+        if(camera.position.y < 0){
+            camera.position.y = 4
+            controls.enabled = false
+            delay(500).then(() => controls.enabled = true)   
+        }
         xLine.position.copy(controls.target)
         yLine.position.copy(controls.target)
         zLine.position.copy(controls.target)
+        
         raycaster1.set(
             controls.target,
             dir.subVectors(camera.position, controls.target).normalize()
@@ -250,13 +418,10 @@ scene.add(zLine)
     
         update(controls,control)
         controls.update();
-                
-                //adds grid to move objects , needs to be on click
             
         var control = new TransformControls( camera, renderer.domElement );
         control.addEventListener( 'change', ()=>{
             render()
-            raycaster2.set(selected.position,0,0,0)
         });
             
         control.addEventListener( 'dragging-changed', function ( event ) {
@@ -268,132 +433,77 @@ scene.add(zLine)
     scene.add(control)
     document.addEventListener( 'mousemove', onMouseMove );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-    
+
     function onDocumentMouseDown(event){
-        mouse.x = ( (event.clientX -renderer.domElement.offsetLeft) / renderer.domElement.width ) * 2 - 1;
-        mouse.y = -( (event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height ) * 2 + 1;
-        raycaster.setFromCamera(mouse, camera);
-        //detectCollisionCubes(plane,box)
-        intersects = raycaster.intersectObjects(objects3D, true);
-        if(intersects.length > 0 ){
-            INTERSECTED = intersects[ 0 ].object;
-            console.log(INTERSECTED)
-            control.attach(INTERSECTED);
-            scene.add(control);
-            selected = INTERSECTED
-            
-            if(selected.properties.different === true){
-                console.log('yeeeeeeeeeeeeeeeeeeeeees')
-                guiControls.color = selected.material.color.getStyle();
-                guiControls.x = selected.scale.x
-                guiControls.y = selected.scale.y
-                guiControls.z = selected.scale.z
-                console.log(selected)
-                this.selected = {delete: function(){
+        switch (event.button){
+            case 0: 
+            mouse.x = ( (event.clientX -renderer.domElement.offsetLeft) / renderer.domElement.width ) * 2 - 1;
+            mouse.y = -( (event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height ) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            //detectCollisionCubes(plane,box)
+            intersects = raycaster.intersectObjects(objects3D, true);
+            console.log(intersects)
+            if(intersects.length > 0 ){
+                INTERSECTED = intersects[ 0 ].object;
+                console.log(INTERSECTED)
+                control.attach(INTERSECTED);
+                scene.add(control);
+                selected = INTERSECTED
+                
+                    //change dat.gui accordingly to selected object
+                    guiControls.color = selected.material.color.getStyle();
+                    console.log(selected)
+                    guiControls.x = selected.scale.x*selected.properties.normalScale.x
+                    guiControls.y = selected.scale.y*selected.properties.normalScale.y
+                    guiControls.z = selected.scale.z*selected.properties.normalScale.z
+                    console.log(selected)
+                    console.log(selected.properties.normalScale)
                     
-                    removeSelected(selected)
-                }}
-                this.rotateLeft = {rotateLeft : function(){
-                    selected.rotation.y += Math.PI/2
-                }}
-                this.rotateLeft = {rotateLeft : function(){
-                    selected.rotation.y += -Math.PI/2
-                }}
-            }else if(selected.properties.different === false){
-                console.log('notDifferebt')
-                console.log(selected.properties.different)
-            }else{
-                console.log("nothing")
+                    this.selected = {delete: function(){
+                        
+                        removeSelected(selected)
+                    }}
+                    this.rotateLeft = {rotateLeft : function(){
+                        selected.rotation.y += Math.PI/2
+                    }}
+                    this.rotateLeft = {rotateLeft : function(){
+                        selected.rotation.y += -Math.PI/2
+                    }}
+                
+                
+                update(controls, control)
+            } else{
+                control.detach();
+                scene.remove(control);
+                console.log('dont')
             }
-            
-            update(controls, control)
-        } else{
-            control.detach();
-            scene.remove(control);
-            console.log('dont')
-        }  
+            break;
+            case 1:
+                console.log('middle')
+
+                selected.position.y = (selected.scale.y*selected.properties.normalScale.y)/2
+                
+            break;
+            case 2: 
+                console.log('right click')
+                selected.rotation.y += Math.PI/2
+                  
+        }
     }
 
     function onMouseMove( event ) {
-    
         event.preventDefault();
-        //if(objects3D.length > 0){
-          //  colidable(mainGroup[0],objects3D)
-        //}
-        /*
-        mouse.x = ( (event.clientX -renderer.domElement.offsetLeft) / renderer.domElement.width ) * 2 - 1;
-        mouse.y = -( (event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height ) * 2 + 1;
-        raycaster.setFromCamera(mouse, camera);
-        //detectCollisionCubes(plane,box)
-        intersects = raycaster.intersectObjects(objects3D, true);
-        if(intersects.length > 0 ){
-            INTERSECTED = intersects[ 0 ].object;
-            console.log(INTERSECTED)
-            control.attach(INTERSECTED);
-            scene.add(control);
-            selected = INTERSECTED
-            
-            if(selected.properties.different === true){
-                console.log('yeeeeeeeeeeeeeeeeeeeeees')
-                guiControls.color = selected.material.color.getStyle();
-                guiControls.x = selected.scale.x
-                guiControls.y = selected.scale.y
-                guiControls.z = selected.scale.z
-                console.log(selected)
-                this.selected = {delete: function(){
-                    
-                    removeSelected(selected)
-                }}
-                this.rotateLeft = {rotateLeft : function(){
-                    selected.rotation.y += Math.PI/2
-                }}
-                this.rotateLeft = {rotateLeft : function(){
-                    selected.rotation.y += -Math.PI/2
-                }}
-            }else if(selected.properties.different === false){
-                console.log('notDifferebt')
-                console.log(selected.properties.different)
-            }else{
-                console.log("nothing")
-            }
-            
-            update(controls, control)
-        } else{
-            control.detach();
-            scene.remove(control);
-            console.log('dont')
-        }  
-        */
     }
-    var sampleText = new function() {
-        this.message = "Welcome";
-        this.lenght = 10;
-        this.width = 10;
-        this.height = 10;
-        this.createRoom = {createRoom : function(x,y,z){
-            if(x === y === z){
-                createSquareRoom(x)
-            }else{
-                createDynamicRoom(x,y,z)
-            }
-        }}
-    };
-    function getIntroInfo(){
-        
-        var introGui = new dat.GUI()
-        dat.GUI.toggleHide()
-    }
+     
 }
 
-
-// add into object pool
-
-       
 function render() {
     
 	renderer.render( scene, camera );
     
 }
+
+
 let v = new THREE.Vector3();
 // iterate over source elements        
 for (let i = 0; i < sceneMeshes.length; i += 1) {
@@ -427,9 +537,19 @@ function removeSelected(obj){
     for(let i in mainGroup.children){
         for(let j in mainGroup.children[i].children){
             if(mainGroup.children[i].children[j] === obj){
+                console.log(mainGroup.children[i])
                 mainGroup.remove(mainGroup.children[i])
                 scene.remove(mainGroup.children[i])
             }
+        }
+    }
+}
+function removeBasicObject(obj){
+
+    for (let i in sceneMeshes){
+        if(sceneMeshes[i] === obj){
+            scene.remove(sceneMeshes[i])
+            sceneMeshes.remove(sceneMeshes[i])
         }
     }
 }
@@ -467,7 +587,7 @@ function getPointLight(intensity){
     return light
 }
 
-
+//try to detect collision
 function detectCollisionCubes(object1, object2){
     object1.geometry.computeBoundingBox(); //not needed if its already calculated
     object2.geometry.computeBoundingBox();
@@ -482,22 +602,6 @@ function detectCollisionCubes(object1, object2){
     return box1.intersectsBox(box2);
 }
 
-function colidable(Object,array){
-    for (var vertexIndex = 0; vertexIndex < Object.geometry.vertices.length; vertexIndex++)
-{       
-    var localVertex = Object.geometry.vertices[vertexIndex].clone();
-    var globalVertex = Object.matrix.multiplyVector3(localVertex);
-    var directionVector = globalVertex.subSelf( Object.position );
-
-    var ray = new THREE.Ray( Object.position, directionVector.clone().normalize() );
-    var collisionResults = ray.intersectObjects( array );
-    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-    {
-        // a collision occurred... do something...
-        console.log("workksk")
-    }
-}
-}
 //x-lenght, y-height, z - width
 function createSquareRoom(x){
     let firstWall = getPlane(x,x)
@@ -509,10 +613,12 @@ function createSquareRoom(x){
     thirdWall.position.z = x/2
     secondWall.position.y = x/2
     thirdWall.position.y = x/2
-    scene.add(firstWall)
-    scene.add(secondWall)
-    scene.add(thirdWall)
-    scene.add( new THREE.GridHelper( x, x*10, 0x888888, 0x444444 ) );
+    
+    roomGroup.add(firstWall)   
+    roomGroup.add(secondWall)   
+    roomGroup.add(thirdWall) 
+    return roomGroup
+    
 }
 
 function createDynamicRoom(l,w,h){
@@ -525,13 +631,10 @@ function createDynamicRoom(l,w,h){
     secondWall.position.y = h/2
     thirdWall.position.x = l/2
     thirdWall.position.y = h/2
-    roomGroup.add(firstWall)   
-    roomGroup.add(secondWall)   
-    roomGroup.add(thirdWall)   
-    scene.add(roomGroup)
-    roomGroup.position.set(0,0,0)
-    
-    sceneMeshes1.push(roomGroup)
+    roomGroup1.add(firstWall)   
+    roomGroup1.add(secondWall)   
+    roomGroup1.add(thirdWall)   
+    return roomGroup1
 }
 
 
@@ -539,12 +642,12 @@ function createDynamicRoom(l,w,h){
 function formatResizableObjectFolderName(objectName){
     
         objectName = objectName.replace(/ /g,"")
-        return "assets/resizable/" + objectName + ".glb"
+        return "assets/dorms/" + objectName + ".glb"
 }
 function formatStandartObjectFolderName(objectName){
     
     objectName = objectName.replace(/ /g,"")
-    return "assets/standart/" + objectName + ".glb"
+    return "assets/kitchen/" + objectName + ".glb"
 }
 
 function update(controls,control){
