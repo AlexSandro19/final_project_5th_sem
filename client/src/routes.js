@@ -10,6 +10,7 @@ import ContactForm from "./components/ContactForm";
 import CreateItemPage from "./pages/CreateItemPage";
 import BasketPage from "./pages/BasketPage";
 import FormPage from "./pages/FormPage";
+import Modeling from "./components/Modeling";
 import EditOrderPage from "./pages/EditOrderPage";
 import ViewOrderPage from "./pages/ViewOrderPage";
 import EmailConfirmationPage from "./pages/EmailConfirmationPage";
@@ -33,6 +34,12 @@ const Routes=({currentItem})=>{
             <Route path="/updateItem" exact><FormPage/></Route>
             <Route path="/orderDetails" exact><OrderDetails/></Route>
             <Route path="/emailConfirmation/:hash" ><EmailConfirmationPage></EmailConfirmationPage></Route>
+            <Route path="/modeling" exact><Modeling/></Route>
+            {/*<Route path="/modeling" render={() => <Redirect
+        to={{
+          pathname: "index.html"
+        }}
+      />}/>*/}
 
             <Redirect to="/" ></Redirect>
         </Switch>
