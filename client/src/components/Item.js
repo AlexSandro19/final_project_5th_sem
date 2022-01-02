@@ -23,10 +23,14 @@ const useStyles=makeStyles(()=>({
         paddingBottom:"7%",
     },
     card:{
-       
-        marginTop:"10%",
-        marginLeft:"5%",
-        width:"90%",
+        borderRadius: '15',
+        margin: '30px 0',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '95%',
+        
     },
 
 })) 
@@ -104,7 +108,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
                 </Button>
                 </div>
                     <Typography variant="body1">{item.description}</Typography>
-                    <Typography variant="body1">{item.price}</Typography>
+                    <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price}</Typography>
                 </CardContent>
             </CardActionArea>
             <CardActions>

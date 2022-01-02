@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+
 import * as THREE from '../../node_modules/three/build/three.module.js'
 import { OrbitControls } from '../../node_modules/three/examples/jsm/controls/OrbitControls.js';
 import * as dat from '../../node_modules/dat.gui/build/dat.gui.module.js';
@@ -65,7 +66,18 @@ function init() {
                     console.log('square')
                     //rooms.push(createSquareRoom(roomParams.x))
                     scene.add(createSquareRoom(roomParams.x))
-                    scene.add( new THREE.GridHelper( roomParams.x, roomParams.x, 0x888888, 0x444444 ) );
+                    var verticalGrid1 = new THREE.GridHelper( roomParams.x, roomParams.x*10, 0x888888, 0x444444)
+                    verticalGrid1.position.x = roomParams.x/2
+                    verticalGrid1.position.y = roomParams.x/2
+                    verticalGrid1.rotation.z += Math.PI/2
+                    scene.add(verticalGrid1)
+                    var verticalGrid2 = new THREE.GridHelper( roomParams.x, roomParams.x*10, 0x888888, 0x444444)
+                    verticalGrid2.position.z = roomParams.x/2
+                    verticalGrid2.position.y = roomParams.x/2
+                    verticalGrid2.rotation.x = Math.PI/2
+                    scene.add(verticalGrid2)
+                    
+                    scene.add( new THREE.GridHelper( roomParams.x, roomParams.x*10, 0x888888, 0x444444 ) );
                     introGui.hide()
                     gui.show()
                     camera.position.set(-11,11,-5)
@@ -74,6 +86,14 @@ function init() {
                 }
             }else{
                 if(roomParams.x !== 0 && roomParams.y !== 0 && roomParams.z !== 0){
+                    if(roomParams.x === roomParams.y){
+                    scene.add(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
+                    scene.add(new THREE.GridHelper( roomParams.x, roomParams.x*10, 0x888888, 0x444444))
+                    introGui.hide()
+                    console.log('different')
+                    gui.show()
+                    camera.position.set(-11,11,-5)
+                    }
                     //rooms.push(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
                     scene.add(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
                     introGui.hide()
@@ -93,13 +113,13 @@ function init() {
     var introGui = new dat.GUI()
     var i2 = introGui.addFolder("Create ROom")
     i2.open()
-    i2.add(introGuiControls,"x",1,10).name("Length:").step(1).onChange(function(e){
+    i2.add(introGuiControls,"x",1,10).name("Length:").step(0.01).onChange(function(e){
         roomParams.x = e
     })
-    i2.add(introGuiControls,"y",1,10).name("Width:").step(1).onChange(function(e){
+    i2.add(introGuiControls,"y",1,10).name("Width:").step(0.01).onChange(function(e){
         roomParams.y = e
     })
-    i2.add(introGuiControls,"z",1,10).name("Height:").step(1).onChange(function(e){
+    i2.add(introGuiControls,"z",1,5).name("Height:").step(0.01).onChange(function(e){
         roomParams.z = e
     })
     i2.add(introGuiControls.createRoom,"createRoom")
@@ -216,7 +236,7 @@ function init() {
     props.addGUIObject = ''
     //load the gltf obj to scene
     let addObject = function(src, value){
-        loader.load( 'Top2x2.glb', function ( gltf ) {   
+        loader.load( src, function ( gltf ) {   
             var bbox = new THREE.Box3().setFromObject(gltf.scene);
             console.log(bbox.getSize(new THREE.Vector3()))
             //gltf.scene.updateMatrixWorld(true)
@@ -258,14 +278,14 @@ function init() {
     });
     
     f1
-    .add(guiControls, "x",0.1,5).step(0.1)
+    .add(guiControls, "x",0.1,5).step(0.001)
     .listen().name('Width')
     .onChange(function(e) {
         selected.scale.x = e/selected.properties.normalScale.x;
     });
     
     f1
-    .add(guiControls, "y",0.1,5).step(0.1)
+    .add(guiControls, "y",0.1,5).step(0.001)
     .listen().name('Height')
     .onChange(function(e) {
         
@@ -274,7 +294,7 @@ function init() {
     });
     
     f1
-    .add(guiControls, "z",0.1,5).step(0.1)
+    .add(guiControls, "z",0.1,5).step(0.001)
     .listen().name('Length')
     .onChange(function(e) {
         selected.scale.z = e/selected.properties.normalScale.z;
@@ -652,12 +672,12 @@ function createDynamicRoom(l,w,h){
 function formatResizableObjectFolderName(objectName){
     
         objectName = objectName.replace(/ /g,"")
-        return "/public/assets/kitchen/" + objectName + ".glb"
+        return "./assets/dorm/" + objectName + ".glb"
 }
 function formatStandartObjectFolderName(objectName){
     
     objectName = objectName.replace(/ /g,"")
-    return "/3dObjects/kitchen/" + objectName + ".glb"
+    return "./assets/kitchen/" + objectName + ".glb"
 }
 
 function update(controls,control){
