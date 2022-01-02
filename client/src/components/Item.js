@@ -18,10 +18,14 @@ const useStyles=makeStyles(()=>({
         paddingBottom:"7%",
     },
     card:{
-       
-        marginTop:"10%",
-        marginLeft:"5%",
-        width:"90%",
+        borderRadius: '15',
+        margin: '30px 0',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '95%',
+        
     },
 
 })) 
@@ -56,8 +60,8 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
     return(
         <>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
-            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(item)}}>
-                <CardContent>
+            <CardActionArea style={{backgroundColor:"#FDFFEE", height: '150px'}} component={Link} to="/item" onClick={() => {setCurrentItem(item)}}>
+                <CardContent style = {{display: 'flex', flexDirection: 'column'}}>
                     <div>
                     <Typography variant="h5">{item.name}</Typography>
                 
@@ -66,7 +70,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
                 </Button> { /*why there are doube  in style*/ }
                 </div>
                     <Typography variant="body1">{item.description}</Typography>
-                    <Typography variant="body1">{item.price}</Typography>
+                    <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price}</Typography>
                 </CardContent>
             </CardActionArea>
             <CardActions>

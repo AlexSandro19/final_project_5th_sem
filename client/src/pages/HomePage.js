@@ -105,7 +105,7 @@ return(
         {popular.map((item)=>{
             return(
                 <Grid item xs={6}>
-                <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
+                <Card style={{}} className={classes.card}>
                     <CardContent>
                         <Typography variant="h4">{item.name}</Typography>
                         <Typography variant="body1">{item.description}</Typography>
