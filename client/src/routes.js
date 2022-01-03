@@ -7,9 +7,14 @@ import ItemPage from "./pages/ItemPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import ProfilePage from "./pages/ProfilePage";
 import ContactForm from "./components/ContactForm";
-import EditItemPage from "./pages/EditItemPage";
+import CreateItemPage from "./pages/CreateItemPage";
 import BasketPage from "./pages/BasketPage";
 import FormPage from "./pages/FormPage";
+import Modeling from "./components/Modeling";
+import EditOrderPage from "./pages/EditOrderPage";
+import ViewOrderPage from "./pages/ViewOrderPage";
+import EmailConfirmationPage from "./pages/EmailConfirmationPage";
+import OrderDetails from "./pages/OrderDetails";
 
 const Routes=({currentItem})=>{
     return(
@@ -20,13 +25,21 @@ const Routes=({currentItem})=>{
             <Route path="/item" exact><ItemPage currentItem={currentItem}/></Route>
             <Route path="/register" exact><RegistrationPage /></Route>
             <Route path="/profile" exact><ProfilePage /></Route>
-            <Route path="/editItem/" exact><EditItemPage ></EditItemPage></Route>
-            <Route path="/editOrder/" exact></Route>
-            <Route path="/viewOrder/" exact></Route>
+            <Route path="/editItem/" exact><FormPage/></Route>
+            <Route path="/editOrder/" exact><EditOrderPage></EditOrderPage></Route>
+            <Route path="/viewOrder/" exact><ViewOrderPage></ViewOrderPage></Route>
             <Route path="/contact" exact><ContactForm/> </Route>
             <Route path="/basket" exact><BasketPage/></Route>
+            <Route path="/createItem" exact><CreateItemPage></CreateItemPage></Route>
             <Route path="/updateItem" exact><FormPage/></Route>
-
+            <Route path="/orderDetails" exact><OrderDetails/></Route>
+            <Route path="/emailConfirmation/:hash" ><EmailConfirmationPage></EmailConfirmationPage></Route>
+            <Route path="/modeling" exact><Modeling/></Route>
+            {/*<Route path="/modeling" render={() => <Redirect
+        to={{
+          pathname: "index.html"
+        }}
+      />}/>*/}
 
             <Redirect to="/" ></Redirect>
         </Switch>

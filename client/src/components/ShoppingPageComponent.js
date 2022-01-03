@@ -294,7 +294,7 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
 
                 }
             </Grid>
-            {true ? 
+            {userIsAuthenticated ? 
                 <Badge color="secondary" badgeContent={itemsInBasket.length}>
                      <Tooltip title="See added items in Basket" arrow>
                          <Fab color="primary" className={classes.fab} aria-label="Shopping Bag" component={Link} to="/basket">

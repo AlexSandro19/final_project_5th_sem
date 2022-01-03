@@ -27,10 +27,13 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const FormPage=({currentItem})=> {
+const FormPage=({currentItem, items})=> {
     const classes=useStyles();
+    console.log("Current item ", currentItem);
+    console.log("Items ", items);    
+
     return (
-        <FormPageComponent currentItem={currentItem}>
+        <FormPageComponent currentItem={currentItem} items={items}>
         </FormPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
@@ -47,7 +50,7 @@ const FormPage=({currentItem})=> {
 const mapStateToProps = (state) => {
     return {
         itemsInBasket: state.basket.itemsInBasket, 
-        items: state.items.items,
+        items: state.items,
         currentItem: state.items.currentItem,
     };
 };

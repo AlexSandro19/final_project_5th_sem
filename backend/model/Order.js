@@ -13,6 +13,9 @@ const schema= new Schema({
     delivered:{type:String},
     ordered:{type:String},
     message:{type:String},
+    userId:{type:String},
+    orderPaid:{type:Boolean},
+    paypalOrderId:{type:String}
     }, 
     {
     timestamps: true,

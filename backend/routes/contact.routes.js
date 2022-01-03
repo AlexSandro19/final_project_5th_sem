@@ -23,7 +23,7 @@ router.post("/contact",
         });
       }
 
-      const { name, email, subject, message } = req.body;
+      const { firstName, lastName, email, subject, message } = req.body;
       
       
       const transporter = nodemailer.createTransport({
@@ -40,7 +40,7 @@ router.post("/contact",
         to: "testovtestov22@gmail.com",
         replyTo:email,
         subject: subject,
-        text:"Email sent from: "+email+' \n Name: '+name+'\n Message: '+message+' ',
+        text:"Email sent from: "+email+' \n Name: '+firstName+' '+lastName+'\n Message: '+message+' ',
       };
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {

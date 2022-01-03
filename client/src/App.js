@@ -1,3 +1,4 @@
+import { PayPalScriptProvider } from "@paypal/react-paypal-js"
 import { makeStyles } from "@mui/styles";
 import { createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,7 +10,12 @@ import { IconButton } from "@mui/material";
 import MessagePage from "./pages/MessagePage"
 import Routes from "./routes";
 import Navigation  from "./components/Navigation";
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 const theme = createTheme()
+
+
+
 const useStyles = makeStyles(() => ({
  
   root: {
@@ -35,9 +41,11 @@ const useStyles = makeStyles(() => ({
 
 function App() {
 
+  console.log("REACT_APP_PAYPAL_CLIENT_ID: ",process.env.REACT_APP_PAYPAL_CLIENT_ID);
   const classes = useStyles();
   return (
-
+    // <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID, "currency":"DKK", "disable-funding":"credit,card"}} > // to hide the credit card option
+    <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID, "currency":"DKK"}} >
     <Router>
     <div className={classes.root}>
       <CssBaseline />
@@ -55,6 +63,7 @@ function App() {
       </footer>
     </div>
     </Router>
+    </PayPalScriptProvider>
   );
 }
 

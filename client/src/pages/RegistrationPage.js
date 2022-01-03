@@ -8,7 +8,8 @@ const RegistrationPage=({registerUser})=>{
   const [form, setForm] = useState({
     email: "",
     username:"",
-    name:"",
+    firstName:"",
+    lastName:"",
     password:"",
     phone:"",
     address:"",

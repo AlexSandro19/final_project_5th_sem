@@ -4,9 +4,9 @@ import axios from "axios";
 const emailUrl = "/api/contact";
 
 
-export const contactEmail = (name, email, subject, message ) => {
+export const contactEmail = (firstName, lastName, email, subject, message ) => {
     return axios
-      .post(emailUrl, { name, email, subject, message})
+      .post(emailUrl, { firstName, lastName, email, subject, message})
       .then((response) => response.data)
       .catch((error) => {
         console.log(error);

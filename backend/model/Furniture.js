@@ -31,6 +31,12 @@ const schema = new Schema(
           type:String,
           //required:true,
       },
+      picturesArray:[
+        {
+          type:String,
+          //required:true,
+        }
+      ],
       categoryArray:[
         {
           type:String,

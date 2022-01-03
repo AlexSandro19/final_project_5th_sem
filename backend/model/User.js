@@ -15,7 +15,11 @@ const schema = new Schema(
       type:String,
       required:true  
     },
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },
@@ -36,6 +40,10 @@ const schema = new Schema(
         type:Boolean,
         default: false
     },
+    confirmationHash:{
+      type:String,
+      default:""
+    },
     orders:[
       {
         type:Types.ObjectId,
@@ -43,10 +51,27 @@ const schema = new Schema(
       }
     ],
     cart:[
-       { 
-        type:Types.ObjectId,
-        ref:"Furniture"
+      {
+        itemObject:{ 
+          type:Types.ObjectId,
+          ref:"Furniture"
+        }, 
+        itemName:{ 
+          type:String,
+        }, 
+        itemPrice:{
+          type: Number,
+          //required: true,
+        }, 
+        quantityInCart:{
+          type: Number,
+          //required: true,
+        }, 
+        totalPerItem:{
+          type: Number,
+          //required: true,
         }
+      }
     ]
 
   },

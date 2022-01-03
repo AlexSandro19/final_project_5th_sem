@@ -1,19 +1,5 @@
-import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS, CREATE_ITEM, UPDATE_ITEM } from "../constants/item";
+import { REQUEST_ALL_ITEMS,DELETE_ITEM, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS, CREATE_ITEM, UPDATE_ITEM } from "../constants/item";
 
-// const initialState = {
-
-//   id: null,
-//   name: "",
-//   hasWarranty: false,
-//   isPopular: false,
-//   price: 0,
-//   quantity: 0,
-//   stock: false,
-//   description: "",
-//   categoryArray: [],
-//   materialArray: [],
-
-// };
 
 const initialState = {items: [], currentItem:{}, filteredItems:[] };
 
@@ -33,7 +19,7 @@ const reducer = (state = initialState, action) => {
       };
     case SET_CURRENT_ITEM:
       return {
-        items: [],
+        items: action.items,
         currentItem: action.payload,
       };
     
@@ -41,7 +27,16 @@ const reducer = (state = initialState, action) => {
       return {
         filteredItems: action.payload,
       };
-    
+    case CREATE_ITEM:
+      return{
+        items:action.payload.items,
+        currentItem:action.payload.newItem
+      }
+    case DELETE_ITEM:
+      return{
+        items:[],
+        currentItem:{}
+      }
     default:
       return state;
   }

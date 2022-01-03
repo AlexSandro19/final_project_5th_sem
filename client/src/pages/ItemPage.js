@@ -43,6 +43,7 @@ const ItemPage=({items, currentItem, userIsAuthenticated})=> {
     console.log("userIsAuthenticated: ", userIsAuthenticated);
     return (
         <Paper width="90%">
+            <img src={currentItem.picturesArray[0]} alt=""></img>
             <Typography variant="h1">{currentItem.name}</Typography>
             <Typography variant="subtitle1">{currentItem.description}</Typography>
             <Typography variant="body2">Color: ADD COLOR TO FURNITURE</Typography>
