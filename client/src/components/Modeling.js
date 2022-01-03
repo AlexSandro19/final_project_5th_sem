@@ -312,8 +312,8 @@ function init() {
     .listen()
     .onChange(
         function(newValue) {
-            console.log(formatResizableObjectFolderName(newValue))    
-            addObject(formatResizableObjectFolderName(newValue),true)
+            console.log(formatDormsObjectFolderName(newValue))    
+            addObject(formatDormsObjectFolderName(newValue),true)
             
         });
     f1.add(props,'addGUIObject',
@@ -322,8 +322,8 @@ function init() {
     .listen()
     .onChange(
         function(newValue) {
-            console.log(formatStandartObjectFolderName(newValue))    
-            addObject(formatStandartObjectFolderName(newValue),false)
+            console.log(formatKitchenObjectFolderName(newValue))    
+            addObject(formatKitchenObjectFolderName(newValue),false)
             
         });
         //scene.children[10].children[1]
@@ -412,7 +412,7 @@ function init() {
           
     //orbit controls
     var controls = new OrbitControls(camera, renderer.domElement)
-    controls.minDistance = 2;
+    controls.minDistance = 5;
     controls.maxDistance = 30;
     //cant go under y = 0!
     controls.addEventListener('change', function () {
@@ -509,9 +509,12 @@ function init() {
             }
             break;
             case 1:
-                console.log('middle')
+                if(selected.properties.hasOwnProperty('normalScale') ){
 
-                selected.position.y = (selected.scale.y*selected.properties.normalScale.y)/2
+                    selected.position.y = (selected.scale.y*selected.properties.normalScale.y)/2
+                }else{
+                    console.log('not selected')
+                }
                 
             break;
             case 2: 
@@ -669,12 +672,12 @@ function createDynamicRoom(l,w,h){
 
 
 
-function formatResizableObjectFolderName(objectName){
+function formatDormsObjectFolderName(objectName){
     
         objectName = objectName.replace(/ /g,"")
         return "./assets/dorm/" + objectName + ".glb"
 }
-function formatStandartObjectFolderName(objectName){
+function formatKitchenObjectFolderName(objectName){
     
     objectName = objectName.replace(/ /g,"")
     return "./assets/kitchen/" + objectName + ".glb"
