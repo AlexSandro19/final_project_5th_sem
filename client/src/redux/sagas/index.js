@@ -4,6 +4,7 @@ import ItemSaga from "./item";
 import LoginSaga from "./auth";
 import RegisterSaga from "./register";
 import OrderSaga from "./order";
+import EmailSaga from "./email";
 export default function* rootSaga() {
-  yield all([LoginSaga(),ItemSaga(),RegisterSaga(),ContactSaga(),OrderSaga()]);
+  yield all([LoginSaga(),ItemSaga(),RegisterSaga(),ContactSaga(),OrderSaga(),EmailSaga()]);
 }

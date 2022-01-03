@@ -2,8 +2,8 @@ import axios from "axios";
 const getCurrentOrderUrl="/api/orders/order";
 const updateOrderUrl="/api/orders/updateOrder";
 const deleteOrderUrl="/api/orders/deleteOrder";
-const createOrderUrl = "/api/createOrder";
-const saveCartUrl = "/api/saveCart"
+const createOrderUrl = "/api/orders/createOrder";
+const saveCartUrl = "/api/orders/saveCart"
 
 
 export const createOrderService = (order) => {

@@ -88,6 +88,15 @@ const useStyles = makeStyles((theme) => ({
             component={NavLink}
             className={classes.button}
             color="inherit"
+            activeClassName="active"
+            to="/modeling"
+          >
+            3D Modeling
+          </Button>
+          <Button
+            component={NavLink}
+            className={classes.button}
+            color="inherit"
             onClick={logOut}
             activeClassName="active"
             to="/"

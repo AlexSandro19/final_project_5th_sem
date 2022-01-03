@@ -1,6 +1,7 @@
 import {GET_CURRENT_ORDER,GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,DELETE_ORDER,CREATE_ORDER, SAVE_ORDER, SAVE_CART} from "../constants/order"
 const initialState={
-    currentOrder:{}
+    currentOrder:{},
+    order:{}
 }
 const reducer=(state=initialState,action)=>{
     console.log("In the Basket Reducer", action.type, action.payload);
@@ -30,4 +31,3 @@ const reducer=(state=initialState,action)=>{
 }
 
 export default reducer
-

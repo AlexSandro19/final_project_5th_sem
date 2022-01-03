@@ -46,25 +46,23 @@ function App() {
   return (
     // <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID, "currency":"DKK", "disable-funding":"credit,card"}} > // to hide the credit card option
     <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID, "currency":"DKK"}} >
-      <LocalizationProvider dateAdapter={DateAdapter}>
-        <Router>
-        <div className={classes.root}>
-          <CssBaseline />
-          <Navigation/>
-          <MessagePage/>
-          <main className={classes.content}>
-          <Routes />
-          </main>
-          <footer className={classes.footer}>
-            <IconButton>
-            <FacebookIcon/>
-            </IconButton>
-            <IconButton> <InstagramIcon/></IconButton>
-            <IconButton>  <LinkedInIcon/></IconButton>
-          </footer>
-        </div>
-        </Router>
-      </LocalizationProvider>
+    <Router>
+    <div className={classes.root}>
+      <CssBaseline />
+      <Navigation/>
+      <MessagePage/>
+      <main className={classes.content}>
+      <Routes />
+      </main>
+      <footer className={classes.footer}>
+        <IconButton>
+        <FacebookIcon/>
+        </IconButton>
+        <IconButton> <InstagramIcon/></IconButton>
+        <IconButton>  <LinkedInIcon/></IconButton>
+      </footer>
+    </div>
+    </Router>
     </PayPalScriptProvider>
   );
 }

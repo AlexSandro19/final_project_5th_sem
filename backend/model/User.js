@@ -40,6 +40,10 @@ const schema = new Schema(
         type:Boolean,
         default: false
     },
+    confirmationHash:{
+      type:String,
+      default:""
+    },
     orders:[
       {
         type:Types.ObjectId,

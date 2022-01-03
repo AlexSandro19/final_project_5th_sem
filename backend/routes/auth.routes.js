@@ -7,7 +7,7 @@ const Order = require("../model/Order");
 const Furniture = require("../model/Furniture");
 const auth = require("../middleware/auth.middleware");
 //const { grantAccess } = require("../middleware/authorization.middleware");
-
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const router = Router();
@@ -53,17 +53,66 @@ router.post("/message",async(req,res)=>{
        }
 
       const hashedPassword = await bcrypt.hash(password, 12);
-      const user = new User({ email, password: hashedPassword,role,firstName,lastName,username,address,phone,cart,orders,emailConfirmed });
+      const confirmationHash= await (await bcrypt.hash(email, 12)).split("/")[0];
+      const user = new User({ email, password: hashedPassword,role,name,username,address,confirmationHash,phone,cart,orders,emailConfirmed });
 
       await user.save();
-
+      
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+          user: 'testovtestov22@gmail.com',
+          pass: process.env.EMAIL_PASSWORD
+        }
+      });
+      console.log(confirmationHash);
+      const mailOptions = {
+        from: 'testovtestov22@gmail.com',
+        to: email,
+        replyTo:email,
+        subject: `Email confirmation for ${name}`,
+        text:`Thank you for creating a profile on our website. To confirm your profile please click the link specified
+          Link: http://localhost:3000/emailConfirmation/${confirmationHash}
+        `,
+      };
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      }); 
        return res.status(201).json({ message: "User account created" });
      } catch (error) {
        return res.status(500).json({ message: "Something went wrong",error:error.message });
      }
 }
 );
+router.post("/confirmation",async(req,res)=>{
+  try{
+    const {hash}= req.body;
+    console.log(hash);
+    const user= await User.findOne({confirmationHash:hash});
+    console.log(user);
+    if(user.emailConfirmed){
+      res.status(200).json({message:"Email was already confirmed",emailConfirmed:true})
+    }  
+    if(user){
+      user.emailConfirmed = true;
+      user.confirmationHash = " ";
+      await user.save();
+      res.status(200).json({message:"Successfully confirmed email",emailConfirmed:true});
+    }else{
+      res.status(500).json({ message: "Something went wrong, try again" ,emailConfirmed:false});
+    }
+  }catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Something went wrong, try again" });
+  }
 
+})
 // POST /api/auth/login
 router.post(
   "/login",
@@ -144,6 +193,5 @@ router.post("/refreshUser",async(req,res)=>{
   }
 
 })
-
 
 module.exports = router;

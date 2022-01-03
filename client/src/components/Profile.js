@@ -1,7 +1,7 @@
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import { useState } from "react";
-import { DataGrid } from '@mui/x-data-grid';
+//import { DataGrid } from '@mui/x-data-grid';
 import { TextField,ButtonBase,Grid,Divider, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, Tab } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
@@ -33,6 +33,8 @@ const useStyles=makeStyles(()=>({
 
 export const Profile=({getCurrentOrder,setCurrentItem,handleDeleteOrderOpen,handleDeleteItemOpen,user,form,sendProfileUpdateForm,changeHandler,items})=>{
 const classes=useStyles();
+console.log("user", user)
+console.log(user.orders)
 const orderList=[...user.orders];
 console.log("user in Profile", user)
 console.log("user.orders in Profile", user.orders)
