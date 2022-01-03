@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Auth } from "../components/Auth";
 import { loginRequest } from "../redux/actions/auth";
+import { useHistory } from "react-router-dom";
 
 const AuthPage=({requesting,successful,modalOpen,handleClose,loginRequest})=>{
+  const history = useHistory()
     const [formErrors, setFormErrors] = useState({});
     // useEffect(()=>{
     //   if(domain){
@@ -37,6 +39,7 @@ const AuthPage=({requesting,successful,modalOpen,handleClose,loginRequest})=>{
         event.preventDefault();
         loginRequest(form);
         handleClose(false);
+        history.push("/");
        //setFormErrors({});
       };
 
