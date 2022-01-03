@@ -48,8 +48,7 @@ export const Auth=({modalOpen,handleClose,form,submitHandler,changeHandler,formE
         <DialogTitle id="form-dialog-title">User Login</DialogTitle>
         <DialogContent className={classes.dialog}>
           <DialogContentText>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam quis,
-            esse dolore quod.
+          
           </DialogContentText>
           <TextField
             style={{marginBottom:theme.spacing(2)}}

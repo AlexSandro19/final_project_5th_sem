@@ -1,10 +1,10 @@
-import {GET_CURRENT_ORDER,GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,DELETE_ORDER} from "../constants/order"
-import { CREATE_ORDER, SAVE_ORDER, SAVE_CART } from "../constants/order";
+import {GET_CURRENT_ORDER,GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,DELETE_ORDER,CREATE_ORDER, SAVE_ORDER, SAVE_CART} from "../constants/order"
 const initialState={
     currentOrder:{},
     order:{}
 }
 const reducer=(state=initialState,action)=>{
+    console.log("In the Basket Reducer", action.type, action.payload);
     switch(action.type){
         case GET_CURRENT_ORDER:
             return{
@@ -23,15 +23,7 @@ const reducer=(state=initialState,action)=>{
                 currentOrder:null,
 
             }
-            case CREATE_ORDER:
-                return {
-                  order: [...action.payload],
-              };
-              case SAVE_ORDER:
-                return {
-                  order: [...action.payload],
-              };
-              
+            
         default: 
         return state;
     }

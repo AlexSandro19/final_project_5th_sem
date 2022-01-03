@@ -1,14 +1,14 @@
 import React, { useEffect, useCallback } from "react";
-import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase } from "@mui/material";
+import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase, } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import {requestAllItems} from "../redux/actions/item"
 import OrderDetailsComponent from "../components/OrderDetailsComponent"
+import ViewOrderPage from "./ViewOrderPage"
 import {Loader} from "../components/Loader"
 import Item from "../components/Item"; 
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import { createOrderAction } from "../redux/actions/order";
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -28,25 +28,30 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const OrderDetails=({items, itemsInBasket, user, createOrderAction})=> {
-    const classes=useStyles();
-    console.log("User in OrderDetails", user)
+const OrderConfirmation=({user, currentOrder})=> {
 
-
+    if (!currentOrder){
+        <Loader></Loader>
+    }
     return (
-        !itemsInBasket.length ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
-            <>
-        <OrderDetailsComponent user={user} itemsInBasket={itemsInBasket} createOrderAction={createOrderAction}>
-        </OrderDetailsComponent>
+        <>
+        <Grid container spacing={2}>
+        <Grid item xs={12}>
+            <Typography variant="h2">Thank you!. The order is confirmed</Typography>
+        </Grid>
+        <Grid item xs={12}>
+            <ViewOrderPage></ViewOrderPage>
+        </Grid>
+        </Grid>
         </>
-    ))
+    )
 }
 
 const mapStateToProps = (state) => {
     return {
-        itemsInBasket: state.basket.itemsInBasket, 
+        currentOrder: state.order.currentOrder, 
         user: state.user,
     };
 };
     
-export default connect(mapStateToProps,{createOrderAction})(OrderDetails)
+export default connect(mapStateToProps,{})(OrderConfirmation)

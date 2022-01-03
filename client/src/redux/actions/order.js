@@ -1,6 +1,4 @@
-import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER} from "../constants/order"
-import { CREATE_ORDER, SAVE_ORDER, SAVE_CART } from "../constants/order";
-
+import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,SAVE_CART,CREATE_ORDER,SAVE_ORDER} from "../constants/order"
 export const setCurrentOrder = (order) => {
     // console.log("In the actions - setCurrentItem");
     // console.log(order);
@@ -32,23 +30,23 @@ export const deleteOrder = (order) =>{
     }
 }
 
-
-export const createNewOrder = (order) => {
+export const createOrderAction = (user, order) => {
     console.log("In the actions - createNewOrder", order);
     return {
         type: CREATE_ORDER,
-        payload: order
+        payload: order, 
+        user
     }
 }
 
 
-export const saveOrderAction = (order) => {
-    console.log("In the actions - saveOrder", order);
-    return {
-        type: SAVE_ORDER,
-        payload: order
-    }
-}
+// export const saveOrderAction = (order) => {
+//     console.log("In the actions - saveOrder", order);
+//     return {
+//         type: SAVE_ORDER,
+//         payload: order
+//     }
+// }
 
 export const saveCartAction = (user, cart) => {
     console.log("In the actions - saveOrder", user, cart);

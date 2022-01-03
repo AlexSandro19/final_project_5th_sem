@@ -36,6 +36,8 @@ const classes=useStyles();
 console.log("user", user)
 console.log(user.orders)
 const orderList=[...user.orders];
+console.log("user in Profile", user)
+console.log("user.orders in Profile", user.orders)
 console.log(items)
 const [page,setPage]=useState(0);
 const [rowsPerPage,setRowsPerPage]=useState(5);

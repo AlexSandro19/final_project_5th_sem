@@ -36,8 +36,7 @@ const useStyles=makeStyles(()=>({
 
 export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, addItemToBasket})=>{
     const classes=useStyles();
-    console.log("In the ShoppingPageComponent");
-    console.log(Array.isArray(items));
+    console.log("In the ShoppingPageComponent itemsInBasket", itemsInBasket);
  
     
     const [checked, setChecked] = useState([]);

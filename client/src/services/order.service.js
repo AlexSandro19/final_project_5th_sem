@@ -5,6 +5,7 @@ const deleteOrderUrl="/api/orders/deleteOrder";
 const createOrderUrl = "/api/orders/createOrder";
 const saveCartUrl = "/api/orders/saveCart"
 
+
 export const createOrderService = (order) => {
     console.log("In the service -- createOrder");
     return axios.post(createOrderUrl, order) // ?????
@@ -16,7 +17,7 @@ export const createOrderService = (order) => {
 } 
 
 export const saveCartService = (user, cart) => {
-    console.log("In the service -- saveCart");
+    console.log("In the service -- saveCart", user, cart);
     return axios.post(saveCartUrl, {user, cart}) // ?????
                 .then((response) => response.data)
                 .catch((error) => {
