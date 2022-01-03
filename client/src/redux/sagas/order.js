@@ -11,21 +11,30 @@ import { saveCartAction, saveOrderAction } from "../actions/order";
 
 
 function* createOrderFlow(action) {
-    try {
-      console.log("In saga -- createOrderFlow action.payload", action.payload)
-      const order = action.payload;
-      console.log("In saga -- createOrderFlow ", order )
-      const createdOrder = yield call(createOrderService, order)  
-      console.log("createdOrder", createdOrder)
-      if (createdOrder) {
-        yield put(setCurrentOrder(createdOrder));
-      } 
-    //   yield put(setUser(updatedUser))
+  try {
+    console.log("In saga -- createOrderFlow action.payload", action.payload)
+    const order = action.payload;
+    const user = action.user
+    console.log("In saga -- createOrderFlow ", order )
+    const {orderCreated} = yield call(createOrderService, order)  
+    if (orderCreated) {
+      user.orders.push(order)
+      console.log("User in createOrderFlow", user)
+      yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
+      if (user.orders){
+        const createdOrderIndex = user.orders.length - 1
+        yield put(setCurrentOrder(user.orders[createdOrderIndex]));
+      }
+      yield put({
+        type: LOGIN_SUCCESS,
+      });
+    } 
+  //   yield put(setUser(updatedUser))
 
-    }catch (error) {
-      console.log(error.message);
-      console.log(error);
-    }
+  }catch (error) {
+    console.log(error.message);
+    console.log(error);
+  }
 }
 
 function* getCurrentOrderFlow(action){
@@ -49,7 +58,7 @@ function* updateOrderFlow(action){
         const updateOrder = yield call(getUpdateOrderApi,order)
         const payload=yield call(refreshUser,user);
         console.log(payload);
-        yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.name,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
+        yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.firstName, payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
         yield put({
           type: LOGIN_SUCCESS,
         });
@@ -74,12 +83,10 @@ function* saveCartFlow(action) {
       console.log("In saga -- saveCartFlow ", action)
       const user = action.payload.user;
       const cart = action.payload.cart;
-      const {didUserUpdate} = yield call(saveCartService, user, cart)  
-      console.log("didUserUpdate", didUserUpdate)
+      const {userUpdated, didUserUpdate} = yield call(saveCartService, user, cart)  
+      console.log("didUserUpdate", userUpdated)
       if (didUserUpdate) {
-        const payload=yield call(refreshUser,user);
-        console.log("RefreshUser", payload);
-        yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.firstName,payload.lastName, payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
+        yield put(setUser(user.token, userUpdated.id, userUpdated.role, user.exp,userUpdated.username,userUpdated.firstName,userUpdated.lastName, userUpdated.email,userUpdated.phone,userUpdated.address,userUpdated.cart,userUpdated.emailConfirmed,userUpdated.orders));
         yield put({
           type: LOGIN_SUCCESS,
         });

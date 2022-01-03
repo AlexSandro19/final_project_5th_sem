@@ -1,16 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import {requestAllItems, setCurrentItem} from "../redux/actions/item";
-import { TextField, Button, Typography, Paper, InputLabel, Select,MenuItem, Checkbox, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { Grid, TextField, Button, Typography, Paper, InputLabel, Select,MenuItem, Checkbox, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import FileBase from 'react-file-base64';
 import {updateItem, createItem} from "../redux/actions/item";
 import PaypalCheckoutButton from './PaypalCheckoutButton';
+import { useHistory } from "react-router-dom"
 
-const OrderDetailsComponent = ({ user }) => {
+const OrderDetailsComponent = ({ user, itemsInBasket, createOrderAction }) => {
 
+    const history = useHistory()
+    // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
+    const countSameItems = (receivedItem) => {
+      const sameItemArray = itemsInBasket.filter(item => receivedItem._id === item._id);
+      return sameItemArray.length;
+    } 
     console.log(" In OrderDetailsComponent, user ", user);
     const cart = user.cart;
-    console.log("In OrderDetailsComponent cart", cart )
+    console.log("In OrderDetailsComponent cart", itemsInBasket )
+    
+
+    const itemsToDisplay = []
+    if (itemsInBasket.length){
+      for (let i = 0; i < itemsInBasket.length; i++){
+      console.log("Index in the beginning", i)
+      const item = itemsInBasket[i]
+      console.log("item in itemsToDisplay", item)
+      const numberOfDuplicates = countSameItems(item) - 1
+      console.log("numberOfDuplicates ", numberOfDuplicates)
+      itemsToDisplay.push(item)
+      i += numberOfDuplicates
+      console.log("Index in the end", i)
+    }
+    console.log("items in itemsToDisplay", itemsToDisplay)
+
+    }
+    
+    
     // const userProperties = Object.getOwnPropertyNames(user)
     const [form, setForm] = useState({...user});
 
@@ -55,9 +81,11 @@ const OrderDetailsComponent = ({ user }) => {
 
     return (
         <>
+        <Grid container spacing={2}>
+        <Grid item xs={12}>
+        <Typography variant="h3">Order Details</Typography>
         <Paper>
             <form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                <Typography variant="h3">Order Details</Typography>
                 <Typography variant="h6">Customer Information</Typography>
                 <Checkbox
                     checked={checked}
@@ -82,6 +110,9 @@ const OrderDetailsComponent = ({ user }) => {
             </form>
         </Paper>
         <Typography variant="h6">Chosen Items</Typography>
+        </Grid>
+        <Grid item xs={12}>
+         
 <TableContainer component={Paper}>
 <Table sx={{ minWidth: 650 }} aria-label="items-table">
   <TableHead>
@@ -93,25 +124,29 @@ const OrderDetailsComponent = ({ user }) => {
     </TableRow>
   </TableHead>
   <TableBody>
-    {cart.map((item) => (
+    {itemsToDisplay.map((item) => (
       <TableRow
-        key={item.itemName}
+        key={item.name}
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
       >
         <TableCell component="th" scope="row">
-          {capitalizeString(item.itemName)}
+          {capitalizeString(item.name)}
         </TableCell>
-        <TableCell align="right">{item.quantityInCart}</TableCell>
-        <TableCell align="right">{item.itemPrice}</TableCell>
-        <TableCell align="right">{item.totalPerItem}</TableCell>
+        <TableCell align="right">{countSameItems(item)}</TableCell>
+        <TableCell align="right">{item.price}</TableCell>
+        <TableCell align="right">{item.price * countSameItems(item)}</TableCell>
         
       </TableRow>
     ))}
   </TableBody>
 </Table>
 </TableContainer>
-
-    <PaypalCheckoutButton user={user}/>
+</Grid>
+  <Grid item xs={12}>
+    <PaypalCheckoutButton user={user} history={history} itemsInBasket={itemsInBasket} createOrderAction={createOrderAction}/>
+    
+    </Grid>
+  </Grid>
 </>
     );
 }

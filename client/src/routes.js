@@ -13,6 +13,7 @@ import FormPage from "./pages/FormPage";
 import OrderDetails from "./pages/OrderDetails";
 import EditOrderPage from "./pages/EditOrderPage";
 import ViewOrderPage from "./pages/ViewOrderPage";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 const Routes=({currentItem})=>{
     return(
@@ -31,6 +32,7 @@ const Routes=({currentItem})=>{
             <Route path="/createItem" exact><CreateItemPage></CreateItemPage></Route>
             <Route path="/updateItem" exact><FormPage/></Route>
             <Route path="/orderDetails" exact><OrderDetails/></Route>
+            <Route path="/orderConfirmation" exact><OrderConfirmation/></Route>
 
 
             <Redirect to="/" ></Redirect>

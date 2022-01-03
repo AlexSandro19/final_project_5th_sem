@@ -8,6 +8,9 @@ import {Loader} from "../components/Loader"
 import Item from "../components/Item"; 
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import {saveCartAction} from "../redux/actions/order";
+
+
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -27,11 +30,11 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const BasketPage=({itemsInBasket, items, user})=> {
+const BasketPage=({itemsInBasket, items, user,saveCartAction})=> {
 
     const classes=useStyles();
     return (
-        <BasketPageComponent itemsInBasket={itemsInBasket} items={items} user={user}>
+        <BasketPageComponent itemsInBasket={itemsInBasket} items={items} user={user} saveCartAction={saveCartAction}>
         </BasketPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
@@ -53,4 +56,4 @@ const mapStateToProps = (state) => {
     };
 };
     
-export default connect(mapStateToProps,{})(BasketPage)
+export default connect(mapStateToProps,{saveCartAction})(BasketPage)

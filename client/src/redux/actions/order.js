@@ -30,22 +30,23 @@ export const deleteOrder = (order) =>{
     }
 }
 
-export const createNewOrder = (order) => {
+export const createOrderAction = (user, order) => {
     console.log("In the actions - createNewOrder", order);
     return {
         type: CREATE_ORDER,
-        payload: order
+        payload: order, 
+        user
     }
 }
 
 
-export const saveOrderAction = (order) => {
-    console.log("In the actions - saveOrder", order);
-    return {
-        type: SAVE_ORDER,
-        payload: order
-    }
-}
+// export const saveOrderAction = (order) => {
+//     console.log("In the actions - saveOrder", order);
+//     return {
+//         type: SAVE_ORDER,
+//         payload: order
+//     }
+// }
 
 export const saveCartAction = (user, cart) => {
     console.log("In the actions - saveOrder", user, cart);

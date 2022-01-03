@@ -13,7 +13,7 @@ function* updateItemFlow(action) {
       const updatedItem = yield call(updateItem, item)
       const payload=yield call(refreshUser,user);
       //console.log(payload);
-      yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.name,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
+      yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.firstName, payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
       yield put({
         type: LOGIN_SUCCESS,
       });

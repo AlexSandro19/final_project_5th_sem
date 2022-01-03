@@ -4,7 +4,6 @@ import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import {requestAllItems, setFilteredItems} from "../redux/actions/item"
 import {addItemToBasket, updateItemsBasket} from "../redux/actions/basket";
-import {saveCartAction} from "../redux/actions/order";
 import {Loader} from "./Loader"
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
@@ -14,6 +13,8 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import {Link} from "react-router-dom";
+import {saveCartAction} from "../redux/actions/order";
+import { useHistory } from "react-router-dom";
 
 import Item from "../components/Item"; 
 
@@ -37,32 +38,50 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket, saveCartAction})=>{
-
+export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket, saveCartAction, })=>{
+   const history = useHistory()
     // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
     let noMoreItemsToAdd = false;
-    
-    const itemsToDisplay = [...new Set(itemsInBasket)];
+    const countSameItems = (receivedItem) => {
+      const sameItemArray = itemsInBasket.filter(item => receivedItem._id === item._id);
+      return sameItemArray.length;
+    } 
 
-    console.log("Items to display", itemsToDisplay);
+    
+
+    const itemsToDisplay = []
+    if (itemsInBasket.length)
+    for (let i = 0; i < itemsInBasket.length; i++){
+      console.log("Index in the beginning", i)
+      const item = itemsInBasket[i]
+      console.log("item in itemsToDisplay", item)
+      const numberOfDuplicates = countSameItems(item) - 1
+      console.log("numberOfDuplicates ", numberOfDuplicates)
+      itemsToDisplay.push(item)
+      i += numberOfDuplicates
+      console.log("Index in the end", i)
+    }
+    console.log("itemsToDisplay in newItems", itemsToDisplay)
+
     const capitalizeString = (initialStr) => {
+      if (initialStr) {
         return initialStr
           .toLowerCase()
           .split(' ')
           .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join(' ');
+      }
+        return ""
     };
 
-    const countSameItems = (receivedItem) => {
-        const sameItemArray = itemsInBasket.filter(item => receivedItem._id === item._id);
-        return sameItemArray.length;
-    }
+  
 
     const removeItem = (itemToRemove) => {
         const updatedItemsInBasket = itemsInBasket.filter(item => item._id !== itemToRemove._id);
         console.log("updatedItemsInBasket", updatedItemsInBasket)
         updateItemsBasket(updatedItemsInBasket); 
         console.log("Delete: ", itemToRemove);
+        saveCartAction(user, updatedItemsInBasket);
     }
 
     const changeQuantity = (itemToChangeQuantity, action) => {
@@ -78,7 +97,7 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
             updatedItemsList.splice(index, 1);
         }
         updateItemsBasket(updatedItemsList);
-    
+        saveCartAction(user, updatedItemsList);
     }
 
     const disableIncreaseButton = (itemToCheck) => {
@@ -105,14 +124,16 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
 
     const buttonPressed = () => {
       console.log("Button Pressed -- checkout")
-      const itemsInCart = itemsInBasket.map(item => item._id);
+      // const itemsInCart = itemsInBasket.map(item => item._id);
       // const itemsInCart = itemsToDisplay.map(currentItem => ({itemObject:currentItem, itemName:currentItem.name,itemPrice:currentItem.price, quantityInCart: countSameItems(currentItem), totalPerItem: countSameItems(currentItem) * currentItem.price}))
-      console.log("itemsInCart ", itemsInCart)
-      saveCartAction(user, itemsInCart);
+      // console.log("itemsInCart ", itemsInCart)
+      saveCartAction(user, itemsInBasket);
+     
+      history.push("/orderDetails")
     }
 
     return (
-        !itemsToDisplay.length ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
+        (!itemsToDisplay.length || !itemsInBasket.length) ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
             <>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="items-table">
@@ -192,7 +213,7 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
                             </Alert>
                         </Snackbar>
                 
-                <Button component={Link} to="/orderDetails" onClick={buttonPressed}>Proceed to Checkout</Button>
+                <Button onClick={buttonPressed}>Proceed to Checkout</Button>
    
             </>
     ))
@@ -206,6 +227,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {updateItemsBasket, saveCartAction})(BasketPageComponent);
+export default connect(mapStateToProps, {updateItemsBasket,saveCartAction})(BasketPageComponent);
 
 

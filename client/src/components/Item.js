@@ -10,6 +10,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import {saveCartAction} from "../redux/actions/order";
 
 
 
@@ -31,17 +32,29 @@ const useStyles=makeStyles(()=>({
 
 })) 
 
-const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToBasket, updateItemsBasket})=>{
+const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToBasket, updateItemsBasket, user,saveCartAction})=>{
 
     const [isItemInBasket, setIsItemInBasket] = useState(false);
-
+    
+    const checkIfItemInBasket = () => {
+        
+        const isItemInArray = itemsInBasket.filter(itemInBasket => itemInBasket._id === item._id);
+        console.log("In the checkIfItemInBasket, index -- ", isItemInArray.length)
+        console.log("In the checkIfItemInBasket, itemsInBasket -- ", itemsInBasket)
+        if (isItemInArray.length !== 0){
+            return true;
+        }else{
+           return false;
+        } 
+    }
+   
     useEffect( () => {
         console.log("In use effect")
         const returnedValue = checkIfItemInBasket()
         console.log("returned value ", returnedValue)
 
         setIsItemInBasket(returnedValue);
-    }, [])
+    }, [itemsInBasket])
 
     const classes = useStyles();
     console.log(itemsInBasket);
@@ -60,6 +73,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
         addItemToBasket(itemsInBasket);
         setOpenSnackbar(true);
         setIsItemInBasket(true);
+        saveCartAction(user, itemsInBasket);
     }
 
     const capitalizeString = (initialStr) => {
@@ -70,17 +84,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
           .join(' ');
     };
 
-    const checkIfItemInBasket = () => {
-        
-        const isItemInArray = itemsInBasket.filter(itemInBasket => itemInBasket._id === item._id);
-        console.log("In the checkIfItemInBasket, index -- ", isItemInArray.length)
-        console.log("In the checkIfItemInBasket, itemsInBasket -- ", itemsInBasket)
-        if (isItemInArray.length !== 0){
-            return true;
-        }else{
-           return false;
-        } 
-    }
+ 
 
     const removeItem = () => {
         const updatedItemsInBasket = itemsInBasket.filter(itemFromBasket => item._id !== itemFromBasket._id);
@@ -88,6 +92,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
         updateItemsBasket(updatedItemsInBasket); 
         console.log("Delete: ", item);
         setIsItemInBasket(false);
+        saveCartAction(user, updatedItemsInBasket);
     }
 
     return(
@@ -113,7 +118,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
                 <Button onClick={addToCartPressed}><Typography style={{textAlign:"center"}} variant="h6">ADD <AddShoppingCartIcon  fontSize="default"/></Typography></Button>
                 : <></>
             }
-            {userIsAuthenticated && isItemInBasket? 
+            {userIsAuthenticated && isItemInBasket ? 
                 <>
                 <Button disabled><Typography style={{textAlign:"center"}} variant="h6">ADDED <DoneOutlineIcon  fontSize="default"/></Typography></Button>
                 <Tooltip title="Remove Item from Basket" arrow>
@@ -154,7 +159,8 @@ const mapStateToProps = (state) => {
     return {
         itemsInBasket: state.basket.itemsInBasket, 
         userIsAuthenticated: state.user.isAuthenticated,
+        user: state.user
     };
 };
 
-export default connect(mapStateToProps, {setCurrentItem, addItemToBasket, updateItemsBasket})(Item);
+export default connect(mapStateToProps, {setCurrentItem, addItemToBasket, updateItemsBasket,saveCartAction})(Item);
