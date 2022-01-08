@@ -63,7 +63,8 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
     const classes = useStyles();
     console.log(itemsInBasket);
 
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [itemRemovedSnackbar, setItemRemovedSnackbar] = useState(false);
+    const [itemAddedSnackbar, setItemAddedSnackbar] = useState(false);
     
 
     const addToCartPressed = (e) => {
@@ -75,7 +76,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
             itemsInBasket.splice(index, 0, item);
         }
         addItemToBasket(itemsInBasket);
-        setOpenSnackbar(true);
+        setItemAddedSnackbar(true);
         setIsItemInBasket(true);
         saveCartAction(user, itemsInBasket);
     }
@@ -95,6 +96,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
         console.log("updatedItemsInBasket", updatedItemsInBasket)
         updateItemsBasket(updatedItemsInBasket); 
         console.log("Delete: ", item);
+        setItemRemovedSnackbar(true);
         setIsItemInBasket(false);
         saveCartAction(user, updatedItemsInBasket);
     }
@@ -144,14 +146,25 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
             
             </Card>
             <Snackbar
-                open={openSnackbar}
+                open={itemAddedSnackbar}
                 autoHideDuration={2000}
-                onClose={() => {setOpenSnackbar(false)}}
+                onClose={() => {setItemAddedSnackbar(false)}}
                 // message={`${item.name} item was added to Basket!`}
                 // action={action}
             >
                 <Alert severity="success" sx={{ width: '100%' }}>
                     <b>{capitalizeString(item.name)}</b> item was added to Basket!
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={itemRemovedSnackbar}
+                autoHideDuration={2000}
+                onClose={() => {setItemRemovedSnackbar(false)}}
+                // message={`${item.name} item was added to Basket!`}
+                // action={action}
+            >
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    <b>{capitalizeString(item.name)}</b> item was removed from Basket.
                 </Alert>
             </Snackbar>
         </>
