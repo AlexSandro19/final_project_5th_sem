@@ -48,7 +48,9 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
     //const [refreshPage, setRefreshPage] = useState("test");
 
     useEffect( () => {
-        setFilteredItems([...items]);
+        const itemsInStock = items.filter(item => item.stock)
+        console.log("itemsInStock ", itemsInStock)
+        setFilteredItems([...itemsInStock]);
         setItemsReceived(true);
     }, [items])
     //console.log(refreshPage);
@@ -58,7 +60,9 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
     const drawerWidth = 240;
     
     const filterItems = (filterOption) => () => {
-        setFilteredItems([...items]);
+        const itemsInStock = items.filter(item => item.stock)
+        console.log("itemsInStock ", itemsInStock)
+        setFilteredItems([...itemsInStock]);
         console.log(`Checkbox pressed ${filterOption}`);
         // const currentIndex = checked.indexOf(filterOption);
         const newChecked = [...checked];
@@ -100,7 +104,7 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
         const filtered = [];
         if (newChecked.length){
             newChecked.forEach(optionChecked => {
-            const filteredItemsOnOption = items.filter((item) => {
+            const filteredItemsOnOption = itemsInStock.filter((item) => {
                 let addItem = false;
                 if (filtered.includes(item)) {
                     return false;
@@ -119,10 +123,13 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
             })
             filtered.push(...filteredItemsOnOption);
         })
-        if ((typeof newChecked[0]) === 'number'){
+        if (!filtered.length && ((typeof newChecked[0]) !== 'number')){
+            setFilteredItems(filtered) 
+            setEmptyFilteredItemsList(true);
+        }else if ((typeof newChecked[0]) === 'number'){
             let arrayToCheck;
             if (filtered.length === 0){
-                arrayToCheck = items;
+                arrayToCheck = itemsInStock;
             }else {
                 arrayToCheck = filtered;
             }
@@ -137,6 +144,7 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
 
         }
         console.log("items length: ", items.length);
+        console.log("itemsInStock length: ", itemsInStock.length);
         console.log("filtered length: ", filtered.length);
         console.log("filtered : ", filtered);
         
