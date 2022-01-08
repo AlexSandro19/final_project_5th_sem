@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
             to="/allitems"
             activeClassName="active"
           >
-            All Items
+            Shop
           </Button>
             <Button
             className={classes.button}
