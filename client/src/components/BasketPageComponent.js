@@ -41,7 +41,6 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
     let noMoreItemsToAdd = false;
     
     const itemsToDisplay = [...new Set(itemsInBasket)];
-    console.log("Items to display", itemsToDisplay);
     const capitalizeString = (initialStr) => {
         return initialStr
           .toLowerCase()
@@ -57,15 +56,14 @@ export const BasketPageComponent=({itemsInBasket, items, updateItemsBasket})=>{
 
     const removeItem = (itemToRemove) => {
         const updatedItemsInBasket = itemsInBasket.filter(item => item._id !== itemToRemove._id);
-        console.log("updatedItemsInBasket", updatedItemsInBasket)
+
         updateItemsBasket(updatedItemsInBasket); 
-        console.log("Delete: ", itemToRemove);
+        
     }
 
     const changeQuantity = (itemToChangeQuantity, action) => {
         // e.preventDefault();
         const updatedItemsList = [...itemsInBasket];
-        console.log("In changeQuantity", itemToChangeQuantity);
      
         if (action === "increase"){
             const index = updatedItemsList.indexOf(itemToChangeQuantity);

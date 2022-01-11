@@ -15,10 +15,7 @@ const router = Router();
 router.get("/items",
     async (req, res) => {
       try {
-        console.log("api/items is called");
         const allItems = await Furniture.find({});
-        console.log(allItems);
-        // console.log(allItems[0]); -- to access a specifc element in the array
         if (allItems.length === 0) {
           return res.status(404).json({ message: "No data available" });
         }
@@ -35,12 +32,9 @@ router.get("/items",
 router.post("/updateItem",
     async (req, res) => {
       try {
-        console.log("api/updateItem is called");
 
         const updatedItem = req.body;
-        console.log("updated item: ", updatedItem);
         const savedItem = await  Furniture.findByIdAndUpdate(updatedItem._id, updatedItem,  { new: true }); 
-        console.log("saved item: ", savedItem);
         return res.status(200).json(savedItem);
         // if (Object.keys(savedItem).length !== 0){
         //   console.log("item updated successfully");

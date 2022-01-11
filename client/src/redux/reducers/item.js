@@ -19,7 +19,6 @@ const initialState = {items: [], currentItem:{}, filteredItems:[] };
 
 
 const reducer = (state = initialState, action) => {
-  console.log("In the Item Reducer", action.type);
   switch (action.type) {
     case REQUEST_ALL_ITEMS_SUCCESS:
       return {

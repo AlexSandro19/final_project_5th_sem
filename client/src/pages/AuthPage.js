@@ -19,7 +19,7 @@ const AuthPage=({requesting,successful,modalOpen,handleClose,loginRequest})=>{
     //   if (errors) {
         
     //     errors.forEach((error) => {
-    //       console.log(error);
+    //
     //       setFormErrors((i) => ({ ...i, [error.param]: error.msg }));
     //     });
     //   }
@@ -33,7 +33,6 @@ const AuthPage=({requesting,successful,modalOpen,handleClose,loginRequest})=>{
         setForm({ ...form, [event.target.name]: event.target.value });
       };
       const submitHandler = async (event) => {
-        console.log(event)
         event.preventDefault();
         loginRequest(form);
         handleClose(false);

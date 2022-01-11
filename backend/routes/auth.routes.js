@@ -84,7 +84,6 @@ router.post(
       const { email, password } = req.body;
 
       const user = await User.findOne({ email }).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).exec();
-      console.log(user.populated("items"));
       if (!user) {
         return res.status(400).json({
           message: "Invalid authorization data",
@@ -103,14 +102,12 @@ router.post(
         });
       }
       // user.dashboard.map((item)=>{
-      //   console.log(item)
       // })
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
       res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,name:user.name,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
     } catch (e) {
-      console.log(e);
       res.status(500).json({ message: "Something went wrong, try again" });
     }
   }

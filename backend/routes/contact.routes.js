@@ -51,7 +51,6 @@ router.post("/contact",
       }); 
       res.status(200).json({ message: "successfully emailed me "});
     } catch (e) {
-      console.log(e);
       res.status(500).json({ message: "Something went wrong, try again" });
     }
   }

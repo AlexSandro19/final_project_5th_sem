@@ -3,7 +3,6 @@ import {useState} from "react";
 import { EditItem } from "../components/EditItem";
 
 const EditItemPage=({currentItem})=>{
-    console.log(currentItem)
     return(
         <EditItem currentItem={currentItem}>
         </EditItem>

@@ -31,16 +31,9 @@ const ItemPage=({items, currentItem, userIsAuthenticated})=> {
     const classes=useStyles();
 
     const addItemToCart = (item) => {
-        console.log(item);
 
     }
 
-    console.log("In the ItemPage");
-    console.log(items);
-    console.log(currentItem);
-    console.log(currentItem.materials);
-    console.log(currentItem.materialArray);
-    console.log("userIsAuthenticated: ", userIsAuthenticated);
     return (
         <Paper width="90%">
             <Typography variant="h1">{currentItem.name}</Typography>

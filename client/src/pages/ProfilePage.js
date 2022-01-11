@@ -37,7 +37,6 @@ const ProfilePage=({user,items,setCurrentItem})=>{
         setModalOpen(false);
         setDeleteOrderOpen(false);
       };
-      console.log(deleteOrderOpen);
     return(
         <div>
         <Profile setCurrentItem={setCurrentItem} handleDeleteOrderOpen={handleDeleteOrderOpen}  handleDeleteItemOpen={handleDeleteItemOpen} items={items} user={user} form={form} sendProfileUpdateForm={sendProfileUpdateForm} changeHandler={changeHandler}>

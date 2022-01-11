@@ -22,7 +22,6 @@ const [form, setForm] = useState({name: ""});
         e.preventDefault();
 
 
-        // console.log(currentId, postData);
         
 
         // if(currentId){
@@ -39,7 +38,6 @@ const [form, setForm] = useState({name: ""});
     }
 
     const updateCurrentItem = (item) => {
-        // console.log("updated item: ", item);
         setCurrentItem(item);
     }
 

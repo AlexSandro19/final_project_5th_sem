@@ -4,7 +4,6 @@ import { registerApi } from "../../services/auth.service";
 
 function* register(action){
     try{
-        console.log(action.payload);
         const {name,email,username,password,phone,address}=action.payload.form;
         const message= yield call(registerApi,name,email,username,password,phone,address);
         yield put({
@@ -16,7 +15,6 @@ function* register(action){
             
         })
     }catch(e){
-        console.log(e);
         yield put({
             type:REGISTER_USER_FAILURE,
             message:{

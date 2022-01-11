@@ -37,11 +37,20 @@
   }
 }
 .webgl {
-  height: 100%;
-  width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+
   margin: 0px;
   padding: 0px;
 }
+.webgl1 {
+  position: absolute;
+  top: 13.1em;
+  right: -1em;
+}
 .dg.main {
-  margin-top: 60px;
+  position: absolute;
 }

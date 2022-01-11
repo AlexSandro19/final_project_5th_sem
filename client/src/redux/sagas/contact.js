@@ -15,8 +15,7 @@ function* loginFlow(action) {
       yield put(contactFormSuccess(responseMessage));
   
     } catch (error) {
-      console.log(error.message);
-      console.log(error);
+    
     }
 }
 

@@ -33,9 +33,7 @@ const ShoppingPage=({items, itemsInBasket, userIsAuthenticated, requestAllItems}
     // requestAllItems();
     useEffect( () => {
         
-        console.log("useEffect called");
         fetchItems();
-        console.log("after getting data", items);
     }, [fetchItems])
 
     return (

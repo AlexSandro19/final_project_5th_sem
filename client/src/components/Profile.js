@@ -32,10 +32,7 @@ const useStyles=makeStyles(()=>({
 
 export const Profile=({setCurrentItem,handleDeleteOrderOpen,handleDeleteItemOpen,user,form,sendProfileUpdateForm,changeHandler,items})=>{
 const classes=useStyles();
-console.log(user.orders)
 const orderList=[...user.orders];
-console.log(orderList);
-console.log(items);
 const [page,setPage]=useState(0);
 const [rowsPerPage,setRowsPerPage]=useState(5);
 const handlePageChange=(event,newPage)=>{
@@ -46,8 +43,6 @@ const handleChangeRowsPerPage=(event)=>{
     setPage(0);
 }
 const setItem=(item)=>{
-    console.log("ADADAEFAEFGF00",item);
-    console.log(item)
     setCurrentItem(item)
 }
 const emptyRows=rowsPerPage - Math.min(rowsPerPage,items.length-page*rowsPerPage);

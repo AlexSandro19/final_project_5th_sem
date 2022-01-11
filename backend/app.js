@@ -37,14 +37,12 @@ async function start() {
       console.log(`App has been started on port ${PORT}...`)
     );
   } catch (e) {
-    console.log("Server Error", e.message);
     process.exit(1);
   }
   mongoose.connection.on('error', err => {
     logError(err);
   });
   // mongoose.connection.on('disconnected', err => {
-  //   console.log("Disconnected from Mongo");
   //   logError(err);
   // });
 

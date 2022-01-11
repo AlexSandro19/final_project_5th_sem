@@ -54,7 +54,6 @@ useEffect(()=>{
         const second = b.ratings.medianValueRating;
         return second - first ;
     })
-//console.log(highestRated);
 var displayText=[
     {
         title:"Title 1",

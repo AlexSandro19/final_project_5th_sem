@@ -8,10 +8,10 @@ const initialState = {
 
 
   const reducer = (state = initialState, action) => {
-    console.log(state);
+
     switch (action.type) {
       case CONTACT_FORM_SENDING:
-        console.log("here");
+        
         return {
           requesting: true,
           successful: false,

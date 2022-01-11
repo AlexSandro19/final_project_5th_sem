@@ -27,7 +27,6 @@ function* loginFlow(credentials) {
   let payload;
   try {
     payload = yield call(loginApi, credentials.email, credentials.password);
-    // console.log(payload);
     const exp = new Date().valueOf() + expirationTime;
 
     yield put(setUser(payload.token, payload.userId, payload.role, exp,payload.username,payload.name,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
@@ -44,7 +43,6 @@ function* loginFlow(credentials) {
 
     // history.push("/projects");
   } catch (error) {
-    console.log(error);
     yield put({
       type: LOGIN_FAILURE,
       message: {
@@ -63,7 +61,6 @@ function* loginWatcher() {
     if (!token) {
       while (!token) {
         const { payload } = yield take(LOGIN_REQUESTING);
-        console.log(payload);
         yield call(loginFlow, payload);
         token = yield call(getLocalAuthToken);
       }
