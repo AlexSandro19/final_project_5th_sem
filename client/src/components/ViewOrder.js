@@ -1,6 +1,7 @@
 
 import { Card, Grid, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, } from "@mui/material"
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 export const ViewOrder=({currentOrder})=>{
     const [page,setPage]=useState(0);
     const [rowsPerPage,setRowsPerPage]=useState(5);
@@ -12,6 +13,10 @@ export const ViewOrder=({currentOrder})=>{
     const handleChangeRowsPerPage=(event)=>{
         setRowsPerPage(parseInt(event.target.value,5));
         setPage(0);
+    }
+    const history=useHistory();
+    const goBack=()=>{
+        history.goBack();
     }
     return(
 
@@ -108,6 +113,7 @@ export const ViewOrder=({currentOrder})=>{
             </Grid>
             </Grid>
             </Grid>
+            <Grid> <Button onClick={goBack} variant="contained" color="primary">Back</Button></Grid>
             </Grid>
         </Card>
         </div>

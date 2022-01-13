@@ -35,7 +35,7 @@ const Routes=({currentItem})=>{
             <Route path="/updateItem" exact><FormPage/></Route>
             <Route path="/orderDetails" exact><OrderDetails/></Route>
             <Route path="/orderConfirmation" exact><OrderConfirmation/></Route>
-
+            
             <Route path="/emailConfirmation/:hash" ><EmailConfirmationPage></EmailConfirmationPage></Route>
             <Route path="/modeling" exact><Modeling/></Route>
             {/*<Route path="/modeling" render={() => <Redirect

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useCallback, useState } from "react";
-import { Card, CardActionArea, ListItemButton,Tooltip, Checkbox, Radio, CardContent,ListItem, ListItemIcon,ListItemText,Toolbar, List, Drawer, Grid, Box, Typography, ButtonBase, Badge, Divider, Snackbar, Alert } from "@mui/material";
+import { Card, CardActionArea, ListItemButton,Tooltip, Checkbox, Radio, Button,CardContent,ListItem, ListItemIcon,ListItemText,Toolbar, List, Drawer, Grid, Box, Typography, ButtonBase, Badge, Divider, Snackbar, Alert } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import {requestAllItems, setFilteredItems} from "../redux/actions/item"
@@ -34,7 +34,7 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, addItemToBasket})=>{
+export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenticated, addItemToBasket})=>{
     const classes=useStyles();
     console.log("In the ShoppingPageComponent itemsInBasket", itemsInBasket);
  
@@ -136,9 +136,7 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
         }
 
         }
-        console.log("items length: ", items.length);
-        console.log("filtered length: ", filtered.length);
-        console.log("filtered : ", filtered);
+
         
         // if (items.length && (!filtered.length)){
         //     console.log("items.length && !filtered.length: here");
@@ -252,8 +250,9 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
           </List>
         </Box>
       </Drawer>
-
+           
             <Grid container spacing={3} alignItems="stretch" >
+                
                 {/* <Grid key={"sideBar"} item sm={6} md={4} >
                     <Tabs variant="permanent" open >
                     <Toolbar />
@@ -293,6 +292,7 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
 
                 }
             </Grid>
+            <Button onClick={goBack} variant="contained" color="primary">Back</Button>
             {userIsAuthenticated ? 
                 <Badge color="secondary" badgeContent={itemsInBasket.length}>
                      <Tooltip title="See added items in Basket" arrow>
@@ -301,6 +301,7 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
                          </Fab>
                          </Tooltip>
                      </Badge>
+                     
                 : <></>
             }
                      

@@ -94,6 +94,16 @@ const useStyles = makeStyles((theme) => ({
             3D Modeling
           </Button>
           <Button
+          className={classes.button}
+          color="inherit"
+          component={NavLink}
+          to="/contact"
+          activeClassName="active"
+          >
+
+            Contact
+          </Button>
+          <Button
             component={NavLink}
             className={classes.button}
             color="inherit"
@@ -134,6 +144,16 @@ const useStyles = makeStyles((theme) => ({
             activeClassName="active"
           >
             All Items
+          </Button>
+          <Button
+          className={classes.button}
+          color="inherit"
+          component={NavLink}
+          to="/contact"
+          activeClassName="active"
+          >
+
+            Contact
           </Button>
             <Button
             

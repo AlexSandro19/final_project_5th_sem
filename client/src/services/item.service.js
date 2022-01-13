@@ -17,7 +17,7 @@ const deleteItemUrl="/api/deleteItem";
 // };
 
 export const requestItems = () => {
-    console.log("In the service --  requestItems");
+
     return axios.get(requestItemsUrl)
                 .then((response) => response.data)
                 .catch((error) => {
@@ -26,7 +26,7 @@ export const requestItems = () => {
                 });
 } 
 export const updateItem = (item) => {
-    console.log("In the service -- updateItem");
+
     return axios.post(updateItemUrl, item) // ?????
                 .then((response) => response.data)
                 .catch((error) => {
@@ -35,7 +35,7 @@ export const updateItem = (item) => {
                 });
 } 
 export const createItem = (currentItem) => {
-    console.log("In the service -- createItem");
+
     return axios.post(createItemUrl, currentItem) // ?????
                 .then((response) => response.data)
                 .catch((error) => {
@@ -44,7 +44,7 @@ export const createItem = (currentItem) => {
                 });
 } 
 export const deleteItemService = (deleteItem) => {
-    console.log("In the service -- deletItem");
+
     return axios.post(deleteItemUrl, deleteItem) // ?????
                 .then((response) => response.data)
                 .catch((error) => {

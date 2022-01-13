@@ -36,15 +36,13 @@ const useStyles=makeStyles(()=>({
 
 })) 
 
-const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToBasket, updateItemsBasket, user,saveCartAction})=>{
+const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToBasket, updateItemsBasket, user,saveCartAction})=>{
 
     const [isItemInBasket, setIsItemInBasket] = useState(false);
     
     const checkIfItemInBasket = () => {
         
         const isItemInArray = itemsInBasket.filter(itemInBasket => itemInBasket._id === item._id);
-        console.log("In the checkIfItemInBasket, index -- ", isItemInArray.length)
-        console.log("In the checkIfItemInBasket, itemsInBasket -- ", itemsInBasket)
         if (isItemInArray.length !== 0){
             return true;
         }else{
@@ -53,9 +51,8 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
     }
    
     useEffect( () => {
-        console.log("In use effect")
         const returnedValue = checkIfItemInBasket()
-        console.log("returned value ", returnedValue)
+   
 
         setIsItemInBasket(returnedValue);
     }, [itemsInBasket])
@@ -77,7 +74,7 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
         addItemToBasket(itemsInBasket);
         setOpenSnackbar(true);
         setIsItemInBasket(true);
-        saveCartAction(user, itemsInBasket);
+        saveCartAction(user, itemsInBasket,"ADD");
     }
 
     const capitalizeString = (initialStr) => {
@@ -96,14 +93,14 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
         updateItemsBasket(updatedItemsInBasket); 
         console.log("Delete: ", item);
         setIsItemInBasket(false);
-        saveCartAction(user, updatedItemsInBasket);
+        saveCartAction(user, updatedItemsInBasket,"REMOVE");
     }
 
     return(
         <>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
             <img src={item.picturesArray[0]} alt=""></img> 
-            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(item)}}>
+            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(items,item)}}>
                 <CardContent>
                     <div>
                     <Typography variant="h5">{item.name}</Typography>
@@ -163,7 +160,8 @@ const mapStateToProps = (state) => {
     return {
         itemsInBasket: state.basket.itemsInBasket, 
         userIsAuthenticated: state.user.isAuthenticated,
-        user: state.user
+        user: state.user,
+        items:state.items.items
     };
 };
 

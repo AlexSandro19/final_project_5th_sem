@@ -38,7 +38,7 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket, saveCartAction, })=>{
+export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItemsBasket, saveCartAction, })=>{
    const history = useHistory()
     // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
     let noMoreItemsToAdd = false;
@@ -214,7 +214,7 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
                         </Snackbar>
                 
                 <Button onClick={buttonPressed}>Proceed to Checkout</Button>
-   
+                <Button onClick={goBack} variant="contained" color="primary">Back</Button>
             </>
     ))
 }

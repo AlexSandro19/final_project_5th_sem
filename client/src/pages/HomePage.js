@@ -57,21 +57,17 @@ useEffect(()=>{
 //console.log(highestRated);
 var displayText=[
     {
-        title:"Title 1",
-        description:"Small description "
+        title:"More than a decade on the market",
+        description:" For 12 years we make evryone’s life better by sharing what we can do best. "
     },
     {
-        title:"Title 2",
-        description:"Small description "
+        title:"All over the country:",
+        description:"We focus on reaching everyone and believe that anyone should have access to comfort. "
     },
     {
-        title:"Title 3",
-        description:" Small description "
+        title:"Trust:",
+        description:" We believe that a work done perfectly, and a satisfied customer is more valuable than deceiving others and earning money."
     },  
-    {
-        title:"Title 4",
-        description:"Small description "
-    }
 ]
 return(
     <div>
@@ -105,16 +101,23 @@ return(
         {popular.map((item)=>{
             return(
                 <Grid item xs={6}>
-                <Card style={{}} className={classes.card}>
+                <Card style={{backgroundColor:"#C4C4C4",height:"210px"}} className={classes.card}>
+                    <Grid container >
+
+                    <Grid item xs={12}>
                     <CardContent>
-                        <Typography variant="h4">{item.name}</Typography>
-                        <Typography variant="body1">{item.description}</Typography>
-                        <Typography variant="body2">Price: {item.price} DKK</Typography>
+                    <Typography variant="h4">{item.name}</Typography> 
+                    <Typography variant="body1" style={{height:"60px"}}  >{item.description}</Typography>
+                    <Typography variant="body2">Price: {item.price} DKK</Typography>
 
                     </CardContent>
-                <CardActionArea style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
-                <Typography style={{textAlign:"center"}} variant="h6">CART</Typography>
+                    </Grid> 
+                <Grid item xs={12}><CardActionArea style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
+                <Typography style={{textAlign:"center"}} variant="h6">VIEW</Typography>
+              
                 </CardActionArea>
+                </Grid> 
+                </Grid>
                 </Card>
                 </Grid>
             )
@@ -140,11 +143,11 @@ return(
         </Grid></Grid></Box>
         <Grid item xs={6}> <Box style={{height:"300px"}} className={classes.back}>     
         <Typography variant="h4" textAlign="center">Highest Rated Items</Typography>
-        <Grid container spacing={1}>
+        <Grid container >
         {highestRated.slice(0,2).map((item)=>{
             return(
                 <Grid item xs={6}>
-                <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
+                <Card style={{backgroundColor:"#C4C4C4",height:"210px"}} className={classes.card}>
                     <CardContent>
                         <Typography variant="h4">{item.name}</Typography>
                         <Typography variant="body1">{item.description}</Typography>
@@ -152,7 +155,7 @@ return(
 
                     </CardContent>
                 <CardActionArea style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
-                <Typography style={{textAlign:"center"}} variant="h6">CART</Typography>
+                <Typography style={{textAlign:"center"}} variant="h6">VIEW</Typography>
                 </CardActionArea>
                 </Card>
                 </Grid>

@@ -4,6 +4,7 @@ const storageName = "userData";
 const loginUrl = "/api/auth/login";
 const refreshUrl = "/api/auth/refreshUser";
 const registerUrl = "/api/auth/register";
+const updateUserUrl = "/api/auth/updateUser";
 const confirmationUrl = "/api/auth/confirmation";
 export const loginApi = (email, password) => {
   return axios
@@ -13,6 +14,11 @@ export const loginApi = (email, password) => {
       throw error.response.data;
     });
 };
+export const updateUserApi =(name,email,username,firstName,lastName,password,passwordConfirm,phone,address)=>{
+  return axios.post(updateUserUrl,{name,email,username,firstName,lastName,password,passwordConfirm,phone,address}).then((response)=>response.data).catch((error)=>{
+    throw error.response.data;
+  })
+}
 export const refreshUser = (user) => {
   return axios
     .post(refreshUrl, { email:user.email, userId:user.id })
@@ -21,13 +27,12 @@ export const refreshUser = (user) => {
       throw error.response.data;
     });
 };
-export const registerApi = (name,email,username,password,phone,address) =>{
-  return axios.post(registerUrl,{name,email,username,password,phone,address}).then((response)=>response.data).catch((error)=>{
+export const registerApi = (email,username,password,confirmPassword,firstName,lastName,phone,address) =>{
+  return axios.post(registerUrl,{email,username,password,confirmPassword,firstName,lastName,phone,address}).then((response)=>response.data).catch((error)=>{
     throw error.response.data;
   })
 };
 export const getEmailConfirmation = (hash)=>{
-  console.log(hash);
   return axios.post(confirmationUrl,{hash}).then(response=>response.data).catch((error)=>{
     throw error.response.data;
   });

@@ -8,5 +8,5 @@ import user from "./user";
 import message from "./message";
 import order from "./order";
 export default combineReducers({
-  auth,user,items, basket,message,contact, order
+  auth,user,items, basket,message,contact, order,
   });

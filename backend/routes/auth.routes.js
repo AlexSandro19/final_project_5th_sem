@@ -10,26 +10,73 @@ const auth = require("../middleware/auth.middleware");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-const router = Router();
-//POST /api/auth/message
-router.post("/message",async(req,res)=>{
 
-  return res.status(201).json({ message: "User account created" });
-})
+const router = Router();
+//POST /api/auth/updateUser
+router.post("/updateUser",   
+    [
+      check("email","Enter valid email").normalizeEmail().isEmail(),
+      check("password","Enter a valid password").exists().notEmpty(),
+      check("passwordConfirm","Enter a valid confirmation password").exists().notEmpty(),
+      check("firstName","Enter a valid first name").exists().notEmpty(),
+      check("lastName","Enter a valid last name").exists().notEmpty(),
+      check("username","Enter a valid username").exists().notEmpty(),
+      check("phone","Enter a valid phone").exists().notEmpty(),
+      check("address","Enter a valid address").exists().notEmpty(),
+    ],async(req,res)=>{
+      try{
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+          return res.status(400).json({
+            errors: errors.array(),
+            message: "Invalid data while registering",
+          });
+       }   
+       const {firstName,lastName,username,address,phone,email, password,passwordConfirm } = req.body;
+
+       if(password !== passwordConfirm){
+        return res.status(400).json({
+          message: "Confirm password is not correct",
+          errors: [{ value: "password", msg: "Confirm password is not correct", param: "password" }],
+        });
+      }
+      const user =  await User.findOne({ email }).select(" password email emailConfirmed orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      user.firstName=firstName;
+      user.lastName=lastName;
+      user.username=username;
+      user.address=address;
+      user.phone=phone;
+      user.email=email;
+      user.password=await bcrypt.hash(password, 12);
+      await user.save();
+      return res.status(200).json(user);
+      }catch (error) {
+        console.log(error);
+        return res.status(500).json({
+          message: "Invalid authorization data",
+          errors: [
+            { value: error, msg: error.message },
+          ],
+        });
+      }
+    });
 // POST /api/auth/register
  router.post(
    "/register",
    [
-    check("email","Enter valid email").normalizeEmail().isEmail(),
-    check("password","Enter a valid password").exists(),
-    check("firstName","Enter a valid first name").exists().notEmpty(),
-    check("lastName","Enter a valid last name").exists().notEmpty(),
-    check("username","Enter a valid username").exists().notEmpty(),
-    check("phone","Enter a valid phone").exists().notEmpty(),
-    check("address","Enter a valid address").exists().notEmpty(),
+    check("email","Enter valid email").normalizeEmail().isEmail().notEmpty(),
+    check("username","Enter a valid username").exists().notEmpty().escape(),
+    check("password","Enter a valid password").exists().notEmpty().escape(),
+    check("confirmPassword","Enter a valid confirmation password").exists().notEmpty().escape(),
+    check("firstName","Enter a valid first name").isString().exists().notEmpty().escape(),
+    check("lastName","Enter a valid last name").exists().notEmpty().escape(),
+    check("phone","Enter a valid phone").exists().notEmpty().escape(),
+    check("address","Enter a valid address").exists().notEmpty().escape(),
    ],
    async (req, res) => {
      try {
+       console.log(req.body);
        const errors = validationResult(req);
 
        if (!errors.isEmpty()) {
@@ -39,22 +86,33 @@ router.post("/message",async(req,res)=>{
          });
       }
 
-      const {firstName,lastName,username,address,phone,email, password } = req.body;
-      const role="USER";
+      const {firstName,lastName,username,address,phone,email, password,confirmPassword } = req.body;
+      const role="USER"; 
       const emailConfirmed=false;
       const orders=[];
       const cart=[];
-      const candidate = await User.findOne({ email });
-
-    if (candidate) {
+      const candidateEmail = await User.findOne({ email });
+      const candidateUsername = await User.findOne({username});
+      if(password !== confirmPassword){
+        return res.status(400).json({
+          message: "Confirm password is not correct",
+          errors: [{ value: "confirmPassword", msg: "Confirm password is not correct", param: "confirmPassword" }],
+        });
+      }
+      else if (candidateEmail) {
          return res
            .status(400)
-           .json({ message: "User with this email already exists" });
+           .json({ message: "User with this email already exists",errors:[{value:email,msg:"User with this email already exists ",param:"email"}]});
        }
+       else if (candidateUsername) {
+        return res
+          .status(400)
+          .json({ message: "User with this username already exists",errors:[{value:username,msg:"User with this username already exists ",param:"username"}]});
+      }
 
       const hashedPassword = await bcrypt.hash(password, 12);
       const confirmationHash= await (await bcrypt.hash(email, 12)).split("/")[0];
-      const user = new User({ email, password: hashedPassword,role,name,username,address,confirmationHash,phone,cart,orders,emailConfirmed });
+      const user = new User({ email, password: hashedPassword,role,firstName,lastName,username,address,confirmationHash,phone,cart,orders,emailConfirmed });
 
       await user.save();
       
@@ -72,44 +130,67 @@ router.post("/message",async(req,res)=>{
         from: 'testovtestov22@gmail.com',
         to: email,
         replyTo:email,
-        subject: `Email confirmation for ${name}`,
+        subject: `Email confirmation for ${firstName} ${lastName}`,
         text:`Thank you for creating a profile on our website. To confirm your profile please click the link specified
           Link: http://localhost:3000/emailConfirmation/${confirmationHash}
         `,
       };
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-          console.log(error);
+          return res.status(500).json({
+            message: "",
+            errors: [
+              { value: error, msg: error.message, },
+            ],
+          });
         } else {
           console.log('Email sent: ' + info.response);
         }
       }); 
        return res.status(201).json({ message: "User account created" });
      } catch (error) {
-       return res.status(500).json({ message: "Something went wrong",error:error.message });
+      return res.status(500).json({
+        message: "",
+        errors: [
+          { value: error, msg: error.message, },
+        ],
+      });
      }
 }
 );
-router.post("/confirmation",async(req,res)=>{
+router.post("/confirmation",[check("hash").exists().notEmpty(),],async(req,res)=>{
   try{
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+        message: "Invalid data sent for confirmation",
+      });
+    }
     const {hash}= req.body;
-    console.log(hash);
+
     const user= await User.findOne({confirmationHash:hash});
-    console.log(user);
-    if(user.emailConfirmed){
-      res.status(200).json({message:"Email was already confirmed",emailConfirmed:true})
-    }  
+  
     if(user){
+      if(user.emailConfirmed){
+        res.status(200).json({message:"Email was already confirmed",emailConfirmed:true})
+      }
       user.emailConfirmed = true;
       user.confirmationHash = " ";
       await user.save();
       res.status(200).json({message:"Successfully confirmed email",emailConfirmed:true});
     }else{
-      res.status(500).json({ message: "Something went wrong, try again" ,emailConfirmed:false});
+      res.status(500).json({ message: "User not found" ,errors:[{value:"email",msg:"User not found"}]});
     }
-  }catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Something went wrong, try again" });
+  }catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Invalid data",
+      errors: [
+        { value: error, msg: error.message },
+      ],
+    });
   }
 
 })
@@ -118,7 +199,8 @@ router.post(
   "/login",
   [
     check("email", "Enter valid email").normalizeEmail().isEmail(),
-    check("password", "Enter password").exists(),
+    check("password", "Enter password").exists().notEmpty(),
+    check('password').isLength({ max: 8 }).withMessage('Password Must Be at Least 8 Characters')
   ],
   async (req, res) => {
     try {
@@ -133,16 +215,15 @@ router.post(
 
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
-      console.log("user.populated('items')", user.populated("items"));
-      console.log("user.populated('cart')", user.populated("cart"));
-      if (!user) {
+      const userCheck = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      
+      if (!userCheck) {
         return res.status(400).json({
           message: "Invalid authorization data",
           errors: [{ value: email, msg: "User not found", param: "email" }],
         });
       }
-
+      const user = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
@@ -153,21 +234,24 @@ router.post(
           ],
         });
       }
-      // user.dashboard.map((item)=>{
-      //   console.log(item)
-      // })
+
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
       res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,firstName:user.firstName,lastName:user.lastName,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
-    } catch (e) {
-      console.log(e);
-      res.status(500).json({ message: "Something went wrong, try again" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: "Invalid data",
+        errors: [
+          { value: error, msg: error.message },
+        ],
+      });
     }
   }
 );
 
-router.post("/refreshUser",async(req,res)=>{
+router.post("/refreshUser",[check("email","Invalid email provided").exists().notEmpty(),check("userId","Invalid userId provided").exists().notEmpty()],async(req,res)=>{
 
   try{
     const errors = validationResult(req);
@@ -179,17 +263,21 @@ router.post("/refreshUser",async(req,res)=>{
       });
     }
     const {email,userId} = req.body;
-    console.log(userId);
-    console.log(email);
+
     const user= await User.findById(userId).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
-    console.log(user)
+
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,name:user.name,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
   }catch(error){
     console.log(error);
-    res.status(500).json({ message: "Something went wrong, try again" });
+    return res.status(500).json({
+      message: "Invalid data",
+      errors: [
+        { value: error, msg: error.message },
+      ],
+    });
   }
 
 })

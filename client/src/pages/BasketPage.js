@@ -9,6 +9,7 @@ import Item from "../components/Item";
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import {saveCartAction} from "../redux/actions/order";
+import { useHistory } from "react-router-dom";
 
 
 
@@ -31,10 +32,13 @@ const useStyles=makeStyles(()=>({
 }))
 
 const BasketPage=({itemsInBasket, items, user,saveCartAction})=> {
-
+    const history=useHistory();
     const classes=useStyles();
+    const goBack=()=>{
+        history.goBack();
+    }
     return (
-        <BasketPageComponent itemsInBasket={itemsInBasket} items={items} user={user} saveCartAction={saveCartAction}>
+        <BasketPageComponent goBack={goBack} itemsInBasket={itemsInBasket} items={items} user={user} saveCartAction={saveCartAction}>
         </BasketPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (

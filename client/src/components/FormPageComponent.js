@@ -6,9 +6,9 @@ import { TextField, Button,Box, Typography, Paper, InputLabel, Select,MenuItem }
 import FileBase from 'react-file-base64';
 import {updateItem, createItem} from "../redux/actions/item";
 
-const FormPageComponent = ({ user,currentItem, items, setCurrentItem, updateItem }) => {
-const history = useHistory();
-const [form, setForm] = useState({...currentItem});
+const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem, updateItem }) => {
+    const history = useHistory();
+    const [form, setForm] = useState({...currentItem});
     // const [postData, setPostData] = useState({creator:'', title:'', message:'', tags:'', selectedFile:''});
 
     // const post = useSelector( (state) => currentId ? state.posts.find((p) => p._id === currentId) : null); 
@@ -21,8 +21,6 @@ const [form, setForm] = useState({...currentItem});
     const handleSubmit = (e) => { // e = event
         updateItem(user,form);
         e.preventDefault();
-        history.push("/profile");
-
         // console.log(currentId, postData);
         
 
@@ -41,7 +39,7 @@ const [form, setForm] = useState({...currentItem});
 
     const cancel = () => {
         //setForm({...currentItem});
-        history.push("/profile");
+        history.goBack()
     }
 
     // const updateCurrentItem = (item) => {
@@ -56,25 +54,40 @@ const [form, setForm] = useState({...currentItem});
                 <Typography variant="h6">{false ? 'Editing' : 'Creating'} an Item</Typography>
                 <TextField name="name" variant="outlined" 
                            label="Name" fullWidth value={form.name} 
-                           onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                           onChange={(e) => setForm({ ...form, name: e.target.value })} 
+                           error={!!formErrors["name"]}
+                           helperText={formErrors["name"] ? formErrors["name"] : ""}/>
                 <TextField name="description" variant="outlined" 
                            label="Description" fullWidth value={form.description} multiline
-                           onChange={(e) => setForm({ ...form, description: e.target.value })} />
+                           onChange={(e) => setForm({ ...form, description: e.target.value })} 
+                           error={!!formErrors["description"]}
+                           helperText={formErrors["description"] ? formErrors["description"] : ""}/>
                 <TextField name="price" variant="outlined" 
                            label="Price" fullWidth value={form.price} 
-                           onChange={(e) => setForm({ ...form, price: e.target.value })} />
+                           onChange={(e) => setForm({ ...form, price: e.target.value })}
+                           error={!!formErrors["price"]}
+                           helperText={formErrors["price"] ? formErrors["price"] : ""} />
                 <TextField name="quantity" variant="outlined" 
                            label="Quantity" fullWidth value={form.quantity} 
-                           onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
+                           onChange={(e) => setForm({ ...form, quantity: e.target.value })} 
+                           error={!!formErrors["quantity"]}
+                           helperText={formErrors["quantity"] ? formErrors["quantity"] : ""}/>
                 <TextField name="categoryArray" variant="outlined" 
                            label="Categories (put ',' between them)" fullWidth value={form.categoryArray} 
-                           onChange={(e) => setForm({ ...form, categoryArray: e.target.value.split(',') })} />
+                           onChange={(e) => setForm({ ...form, categoryArray: e.target.value.split(',') })} 
+                           error={!!formErrors["categoryArray"]}
+                           helperText={formErrors["categoryArray"] ? formErrors["categoryArray"] : ""}/>
                 <TextField name="materialArray" variant="outlined" 
                            label="Materials  (put ',' between them)" fullWidth value={form.materialArray} 
-                           onChange={(e) => setForm({ ...form, materialArray: e.target.value.split(',') })} />
+                           onChange={(e) => setForm({ ...form, materialArray: e.target.value.split(',') })} 
+                           error={!!formErrors["materialArray"]}
+                           helperText={formErrors["materialArray"] ? formErrors["materialArray"] : ""}/>
 
                 <InputLabel id="has-warranty">Warranty</InputLabel>
                 <Select
+                    name="hasWarranty"
+                    error={!!formErrors["hasWarranty"]}
+                    helperText={formErrors["hasWarranty"] ? formErrors["hasWarranty"] : ""}
                     labelId="has-warranty"
                     id="has-warranty-option"
                     value={form.hasWarranty}
@@ -87,10 +100,12 @@ const [form, setForm] = useState({...currentItem});
                 </Select>
                 <InputLabel id="is-popular">Popular</InputLabel>
                 <Select
+                    name="isPopular"
                     labelId="is-popular"
                     id="is-popular-option"
                     value={form.isPopular}
-                    // defaultValue={currentItem.hasWarranty}
+                    error={!!formErrors["isPopular"]}
+                    helperText={formErrors["isPopular"] ? formErrors["isPopular"] : ""}
                     label="Popular"
                     onChange={(e) => setForm({ ...form, isPopular: e.target.value })}
                 >
@@ -99,6 +114,9 @@ const [form, setForm] = useState({...currentItem});
                 </Select>
                 <InputLabel id="in-stock">In Stock</InputLabel>
                 <Select
+                    name="stock"
+                    error={!!formErrors["stock"]}
+                    helperText={formErrors["stock"] ? formErrors["stock"] : ""}
                     labelId="in-stock"
                     id="in-stock-option"
                     value={form.stock}

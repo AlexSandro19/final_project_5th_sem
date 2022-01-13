@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { TextField, Box, CardContent, CardMedia, Button, Typography } from '@mui/material';
 import { contactFormRequest } from "../redux/actions/contact";
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const ContactForm = ({messageResponse, contactFormRequest}) => {
+    const history=useHistory();
     const [form,setForm] = useState({
         firstName:" ",
         lastName:" ",
@@ -35,8 +37,12 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
         contactFormRequest(form)
 
     }
+    const goBack=()=>{
+        history.goBack();
+      }
     return (
-       
+        <div>
+       <Button onClick={goBack} variant="contained" color="primary">Back</Button>
         <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
             <TextField
             label="First-Name"
@@ -82,9 +88,10 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             rows={5}
             />
                 <Button
-            type="submit">Submit</Button> 
+            type="submit" color="primary" variant="contained">Submit</Button> 
 
         </form>
+        </div>
           
     )
 }

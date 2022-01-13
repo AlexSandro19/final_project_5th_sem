@@ -34,7 +34,13 @@ function* loginFlow(credentials) {
     yield put({
       type: LOGIN_SUCCESS,
     });
-
+    yield put({
+      type:"SUCCESS",
+      message:{
+        text:"Logged in successfully",
+        severity:"success"
+      }
+    });
     setAuthToken({
       userId: payload.userId,
       token: payload.token,
@@ -42,11 +48,12 @@ function* loginFlow(credentials) {
       exp: exp,
     });
 
-    // history.push("/projects");
+
   } catch (error) {
     console.log(error);
+    yield put({type:LOGIN_FAILURE});
     yield put({
-      type: LOGIN_FAILURE,
+      type: "FAILURE",
       message: {
         text: error.message,
         severity: "error",
@@ -85,6 +92,13 @@ function* loginWatcher() {
     yield take(USER_UNSET);
     token = null;
     yield call(logout);
+    yield put({
+      type:"SUCCESS",
+      message:{
+        text:"Logged out successfully",
+        severity:"success"
+      }
+    });
   }
 }
 

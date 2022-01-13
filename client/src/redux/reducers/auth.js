@@ -4,8 +4,9 @@ import {
     LOGIN_FAILURE,
     EMAIL_CONFIRMATION,
     EMAIL_CONFIRMATION_SUCCESS,
+    EMAIL_CONFIRMATION_FAILURE
   } from "../constants/auth";
-  import {USER_UNSET} from "../constants/user"
+  import {USER_UNSET, UPDATE_USER_FAILURE} from "../constants/user"
   const initialState = {
     requesting: false,
     successful: false,
@@ -14,10 +15,8 @@ import {
 
 
   const reducer = (state = initialState, action) => {
-    console.log(state);
     switch (action.type) {
       case LOGIN_REQUESTING:
-
         return {
           requesting: true,
           successful: false,
@@ -45,6 +44,12 @@ import {
           return{
             requesting: false,
             successful: true,
+            errors: [],
+          }
+        case EMAIL_CONFIRMATION_FAILURE:
+          return{
+            requesting: false,
+            successful: false,
             errors: [],
           }
       case USER_UNSET:

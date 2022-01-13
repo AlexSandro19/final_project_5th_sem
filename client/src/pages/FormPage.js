@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import { Card, CardActionArea, CardContent, Grid, Box, Typography, ButtonBase } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
@@ -27,13 +27,19 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-const FormPage=({currentItem, items})=> {
+const FormPage=({errors,currentItem, items})=> {
     const classes=useStyles();
-    console.log("Current item ", currentItem);
-    console.log("Items ", items);    
-
+    const [formErrors,setFormErrors]=useState({});
+    useEffect(() => {
+        if (errors) {
+        errors.forEach((error) => {
+           console.log(error);
+            setFormErrors((i) => ({ ...i, [error.param]: error.msg }));
+          });
+        }
+      }, [errors]);
     return (
-        <FormPageComponent currentItem={currentItem} items={items}>
+        <FormPageComponent formErrors={formErrors} currentItem={currentItem} items={items}>
         </FormPageComponent>
              //<Grid  container alignItems="stretch" spacing={3}>
               /* {items.data.map((item) => (
@@ -52,6 +58,7 @@ const mapStateToProps = (state) => {
         itemsInBasket: state.basket.itemsInBasket, 
         items: state.items,
         currentItem: state.items.currentItem,
+        errors:state.message.errors,
     };
 };
     

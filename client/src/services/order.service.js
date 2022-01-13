@@ -7,8 +7,7 @@ const saveCartUrl = "/api/orders/saveCart"
 
 
 export const createOrderService = (order) => {
-    console.log("In the service -- createOrder");
-    return axios.post(createOrderUrl, order) // ?????
+    return axios.post(createOrderUrl, order) 
                 .then((response) => response.data)
                 .catch((error) => {
                     console.log(error);
@@ -17,8 +16,7 @@ export const createOrderService = (order) => {
 } 
 
 export const saveCartService = (user, cart) => {
-    console.log("In the service -- saveCart", user, cart);
-    return axios.post(saveCartUrl, {user, cart}) // ?????
+    return axios.post(saveCartUrl, {user, cart}) 
                 .then((response) => response.data)
                 .catch((error) => {
                     console.log(error);
@@ -34,7 +32,7 @@ export const getCurrentOrderApi=(orderId)=>{
         throw err.response.data})
 }
 export const getUpdateOrderApi=(order)=>{
-    return axios.post(updateOrderUrl,{order})
+    return axios.post(updateOrderUrl,order)
     .then(response=>response.data)
     .catch((err)=>{
         console.log(err);

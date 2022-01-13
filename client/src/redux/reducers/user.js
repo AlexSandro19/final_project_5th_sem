@@ -1,4 +1,4 @@
-import { USER_SET, USER_UNSET } from "../constants/user";
+import { USER_SET, USER_UNSET, } from "../constants/user";
 
 const initialState = {
   isAuthenticated: false,
@@ -18,7 +18,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  console.log("In the reducer, user", action.payload)
   switch (action.type) {
     case USER_SET:
       return {
