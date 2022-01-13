@@ -34,7 +34,6 @@ const ItemPage=({items, currentItem, userIsAuthenticated})=> {
 
     }
 
-
     return (
         <Paper width="90%">
             <img src={currentItem.picturesArray[0]} alt=""></img>

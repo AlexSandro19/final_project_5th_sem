@@ -30,13 +30,15 @@ const useStyles=makeStyles(()=>({
         width:"90%",
     },
     fab:{
+        margin: "-2%"
     },
+    basket:{
+    }
 
 }))
 
 export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenticated, addItemToBasket})=>{
     const classes=useStyles();
-    console.log("In the ShoppingPageComponent itemsInBasket", itemsInBasket);
  
     
     const [checked, setChecked] = useState([]);
@@ -51,20 +53,17 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
         setFilteredItems([...items]);
         setItemsReceived(true);
     }, [items])
-    //console.log(refreshPage);
-    console.log(filteredItems);
+
     
     
     const drawerWidth = 240;
     
     const filterItems = (filterOption) => () => {
         setFilteredItems([...items]);
-        console.log(`Checkbox pressed ${filterOption}`);
         // const currentIndex = checked.indexOf(filterOption);
         const newChecked = [...checked];
-        console.log(typeof filterOption);
+
         if ((typeof filterOption) === 'string'){
-            console.log(`filterOption === string`);
             const currentIndex = checked.indexOf(filterOption);
             if (currentIndex === -1) {
                 newChecked.push(filterOption);
@@ -74,15 +73,11 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
 
         }
         if ((typeof filterOption) === 'number'){
-           console.log(`filterOption === number`);
             if ((typeof newChecked[0]) === 'number' && newChecked[0] === filterOption){
-                console.log("1st option");
                 newChecked.shift(); 
             }else if ((typeof newChecked[0]) === 'number' && newChecked[0] !== filterOption){
-                console.log("2nd option");
                 newChecked.splice(0, 1, filterOption);
             }else if (newChecked.length === 0 || (typeof newChecked[0]) === 'string'){
-                console.log("3rd option");
                 newChecked.unshift(filterOption); 
             }
             // if (currentIndex === -1) {
@@ -297,7 +292,7 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
                 <Badge color="secondary" badgeContent={itemsInBasket.length}>
                      <Tooltip title="See added items in Basket" arrow>
                          <Fab color="primary" className={classes.fab} aria-label="Shopping Bag" component={Link} to="/basket">
-                             <ShoppingBasketIcon />
+                             <ShoppingBasketIcon className={classes.basket} />
                          </Fab>
                          </Tooltip>
                      </Badge>

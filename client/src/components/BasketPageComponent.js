@@ -48,21 +48,7 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
     } 
 
     
-
-    const itemsToDisplay = []
-    if (itemsInBasket.length)
-    for (let i = 0; i < itemsInBasket.length; i++){
-      console.log("Index in the beginning", i)
-      const item = itemsInBasket[i]
-      console.log("item in itemsToDisplay", item)
-      const numberOfDuplicates = countSameItems(item) - 1
-      console.log("numberOfDuplicates ", numberOfDuplicates)
-      itemsToDisplay.push(item)
-      i += numberOfDuplicates
-      console.log("Index in the end", i)
-    }
-    console.log("itemsToDisplay in newItems", itemsToDisplay)
-
+    const itemsToDisplay = [...new Set(itemsInBasket)];
     const capitalizeString = (initialStr) => {
       if (initialStr) {
         return initialStr
@@ -78,16 +64,14 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
 
     const removeItem = (itemToRemove) => {
         const updatedItemsInBasket = itemsInBasket.filter(item => item._id !== itemToRemove._id);
-        console.log("updatedItemsInBasket", updatedItemsInBasket)
+
         updateItemsBasket(updatedItemsInBasket); 
-        console.log("Delete: ", itemToRemove);
         saveCartAction(user, updatedItemsInBasket);
     }
 
     const changeQuantity = (itemToChangeQuantity, action) => {
         // e.preventDefault();
         const updatedItemsList = [...itemsInBasket];
-        console.log("In changeQuantity", itemToChangeQuantity);
      
         if (action === "increase"){
             const index = updatedItemsList.indexOf(itemToChangeQuantity);

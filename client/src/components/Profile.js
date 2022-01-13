@@ -46,8 +46,6 @@ const handleChangeRowsPerPage=(event)=>{
     setPage(0);
 }
 const setItem=(item)=>{
-   // console.log("ADADAEFAEFGF00",item);
-   // console.log(item)
     setCurrentItem(items,item)
 }
 

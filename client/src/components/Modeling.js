@@ -31,6 +31,7 @@ let intersects1 = []//second raycaster items for intersection
 const raycaster1 = new THREE.Raycaster()//second raycaster
 const sceneMeshes= [] //second raycaster objects to act on
 const dir = new THREE.Vector3()
+var guiArr = []
 
 //resize
 function onResize() {
@@ -63,7 +64,6 @@ function init() {
         this.createRoom = {createRoom: function(){
             if(roomParams.x === roomParams.y && roomParams.x === roomParams.z){
                 if(roomParams.x !== 0){
-                    console.log('square')
                     //rooms.push(createSquareRoom(roomParams.x))
                     scene.add(createSquareRoom(roomParams.x))
                     var verticalGrid1 = new THREE.GridHelper( roomParams.x, roomParams.x*10, 0x888888, 0x444444)
@@ -90,14 +90,12 @@ function init() {
                     scene.add(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
                     scene.add(new THREE.GridHelper( roomParams.x, roomParams.x*10, 0x888888, 0x444444))
                     introGui.hide()
-                    console.log('different')
                     gui.show()
                     camera.position.set(-11,11,-5)
                     }
                     //rooms.push(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
                     scene.add(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
                     introGui.hide()
-                    console.log('different')
                     gui.show()
                     camera.position.set(-11,11,-5)
                     var f4 = gui.addFolder('Change room aspect')
@@ -110,8 +108,15 @@ function init() {
         }}
     }
     //hold our methods in dat.gui
-    var introGui = new dat.GUI()
-    var i2 = introGui.addFolder("Create ROom")
+    var introGui = new dat.GUI({autoplace: false})
+    introGui.domElement.id = "introGui"
+    var threeContainer = document.getElementById("webgl1")
+    threeContainer.appendChild(introGui.domElement)
+    var id1 = document.getElementById("introGui")
+    var container1 = id1.parentNode
+    //container1.appendChild(introGui.domElement)
+    guiArr.push(introGui)
+    var i2 = introGui.addFolder("Create Room")
     i2.open()
     i2.add(introGuiControls,"x",1,10).name("Length:").step(0.01).onChange(function(e){
         roomParams.x = e
@@ -159,7 +164,6 @@ function init() {
         this.takeScreen = {takeScreen: function(){
             gui.hide()
             html2canvas(document.body).then(function(canvas){
-                console.log('at least not here')
                 return canvas2Image.saveAsPNG(canvas);
             })
             gui.show()
@@ -169,9 +173,6 @@ function init() {
             introGui.add()
         }}
         this.changeRoomWall = { changeWall: function(){
-            console.log(scene.children[10].children[1])
-            console.log(scene.children[10])
-            console.log(scene.children)
             scene.children[10].children[1].position.z = -scene.children[10].children[1].position.z 
             camera.position.z = - camera.position.z
         }} 
@@ -190,7 +191,11 @@ function init() {
         this.zRight = 0.5
     };
     
-    var gui = new dat.GUI()
+    var gui = new dat.GUI({autoplace: false})
+    gui.domElement.id = "gui"
+    threeContainer.appendChild(gui.domElement)
+    //container1.appendChild(gui.domElement)
+    guiArr.push(gui)
     gui.hide()
 
     //light
@@ -238,7 +243,6 @@ function init() {
     let addObject = function(src, value){
         loader.load( src, function ( gltf ) {   
             var bbox = new THREE.Box3().setFromObject(gltf.scene);
-            console.log(bbox.getSize(new THREE.Vector3()))
             //gltf.scene.updateMatrixWorld(true)
             
             gltf.scene.children[0].material.color.setStyle(box.material.color.getStyle())
@@ -311,8 +315,7 @@ function init() {
     .name('Dormitory')
     .listen()
     .onChange(
-        function(newValue) {
-            console.log(formatDormsObjectFolderName(newValue))    
+        function(newValue) {    
             addObject(formatDormsObjectFolderName(newValue),true)
             
         });
@@ -321,8 +324,7 @@ function init() {
     .name('Kitchen')
     .listen()
     .onChange(
-        function(newValue) {
-            console.log(formatKitchenObjectFolderName(newValue))    
+        function(newValue) {    
             addObject(formatKitchenObjectFolderName(newValue),false)
             
         });
@@ -430,16 +432,12 @@ function init() {
             controls.target,
             dir.subVectors(camera.position, controls.target).normalize()
         )
-        console.log('controls',controls.target)
             
         intersects1 = raycaster1.intersectObjects(sceneMeshes, true)
         if (intersects1.length > 0) {
             if (
                 intersects1[0].distance < controls.target.distanceTo(camera.position)
             ) {
-                console.log(controls.target)
-                console.log(intersects1)
-                console.log(intersects1[0].distance)
                 camera.position.copy(intersects1[0].point)
         
             }
@@ -463,6 +461,14 @@ function init() {
     scene.add(control)
     document.addEventListener( 'mousemove', onMouseMove );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+    window.onbeforeunload = closeAll
+
+    function closeAll(){
+      container1.removeChild(gui.domElement)
+      container1.removeChild(introGui.domElement)
+      console.log("workk")
+      return "null"
+    }
 
     function onDocumentMouseDown(event){
         switch (event.button){
@@ -472,22 +478,17 @@ function init() {
             raycaster.setFromCamera(mouse, camera);
             //detectCollisionCubes(plane,box)
             intersects = raycaster.intersectObjects(objects3D, true);
-            console.log(intersects)
             if(intersects.length > 0 ){
                 INTERSECTED = intersects[ 0 ].object;
-                console.log(INTERSECTED)
                 control.attach(INTERSECTED);
                 scene.add(control);
                 selected = INTERSECTED
                 
                     //change dat.gui accordingly to selected object
                     guiControls.color = selected.material.color.getStyle();
-                    console.log(selected)
                     guiControls.x = selected.scale.x*selected.properties.normalScale.x
                     guiControls.y = selected.scale.y*selected.properties.normalScale.y
                     guiControls.z = selected.scale.z*selected.properties.normalScale.z
-                    console.log(selected)
-                    console.log(selected.properties.normalScale)
                     
                     this.selected = {delete: function(){
                         
@@ -505,20 +506,16 @@ function init() {
             } else{
                 control.detach();
                 scene.remove(control);
-                console.log('dont')
             }
             break;
             case 1:
                 if(selected.properties.hasOwnProperty('normalScale') ){
 
                     selected.position.y = (selected.scale.y*selected.properties.normalScale.y)/2
-                }else{
-                    console.log('not selected')
                 }
                 
             break;
             case 2: 
-                console.log('right click')
                 selected.rotation.y += Math.PI/2
                   
         }
@@ -545,8 +542,6 @@ for (let i = 0; i < sceneMeshes.length; i += 1) {
     if ( geometry instanceof THREE.BufferGeometry ) {
         const vertices = [];
         const positions = geometry.attributes.position.array;
-                
-        console.log('CollisionDetector BufferGeometry detected', geometry);
 
         for ( let k = 0; k < positions.length; k += 3 ) {
             v.set(positions[ k ],positions[ k + 1 ], positions[ k + 2 ]);
@@ -570,7 +565,6 @@ function removeSelected(obj){
     for(let i in mainGroup.children){
         for(let j in mainGroup.children[i].children){
             if(mainGroup.children[i].children[j] === obj){
-                console.log(mainGroup.children[i])
                 mainGroup.remove(mainGroup.children[i])
                 scene.remove(mainGroup.children[i])
             }
@@ -700,7 +694,9 @@ init()
   return (
     <div ref = {mountRef}>
        <div id = "webgl">
+       <div id = "webgl1"></div>
        </div>
+
     </div>
   );
 }

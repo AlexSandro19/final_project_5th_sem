@@ -54,7 +54,6 @@ useEffect(()=>{
         const second = b.ratings.medianValueRating;
         return second - first ;
     })
-//console.log(highestRated);
 var displayText=[
     {
         title:"More than a decade on the market",

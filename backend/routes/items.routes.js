@@ -13,10 +13,7 @@ const router = Router();
 router.get("/items",
     async (req, res) => {
       try {
-        console.log("api/items is called");
         const allItems = await Furniture.find({});
-        //console.log(allItems);
-        // console.log(allItems[0]); -- to access a specifc element in the array
         if (allItems.length === 0) {
           return res.status(404).json({ message: "No data available" });
         }

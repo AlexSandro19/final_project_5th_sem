@@ -30,7 +30,6 @@ const useStyles=makeStyles(()=>({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '95%',
         
     },
 
@@ -58,7 +57,6 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
     }, [itemsInBasket])
 
     const classes = useStyles();
-    console.log(itemsInBasket);
 
     const [openSnackbar, setOpenSnackbar] = useState(false);
     

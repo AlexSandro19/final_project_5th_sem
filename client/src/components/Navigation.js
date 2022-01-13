@@ -34,9 +34,7 @@ const useStyles = makeStyles((theme) => ({
     
     const classes = useStyles();
     const [modalOpen, setModalOpen] = useState(false);
-    console.log(successful);
-    console.log(requesting);
-    console.log(errors);
+
     const handleClickOpen = () => {
       setModalOpen(true);
     };

@@ -21,7 +21,8 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
     const handleSubmit = (e) => { // e = event
         updateItem(user,form);
         e.preventDefault();
-        // console.log(currentId, postData);
+
+
         
 
         // if(currentId){
@@ -40,6 +41,8 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
     const cancel = () => {
         //setForm({...currentItem});
         history.goBack()
+    const updateCurrentItem = (item) => {
+        setCurrentItem(item);
     }
 
     // const updateCurrentItem = (item) => {

@@ -21,7 +21,6 @@ export const requestItems = () => {
     return axios.get(requestItemsUrl)
                 .then((response) => response.data)
                 .catch((error) => {
-                    console.log(error);
                     throw error.response.data;
                 });
 } 
@@ -30,7 +29,6 @@ export const updateItem = (item) => {
     return axios.post(updateItemUrl, item) // ?????
                 .then((response) => response.data)
                 .catch((error) => {
-                    console.log(error);
                     throw error.response.data;
                 });
 } 

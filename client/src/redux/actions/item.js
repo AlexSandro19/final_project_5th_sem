@@ -1,7 +1,6 @@
 import { REQUEST_ALL_ITEMS,DELETE_ITEM, REQUEST_ALL_ITEMS_SUCCESS, SET_CURRENT_ITEM, SET_FILTERED_ITEMS, CREATE_ITEM, UPDATE_ITEM } from "../constants/item";
 
 export const requestAllItemsSuccess = (data) => {
-    console.log("In the actions -- requestAllItemsSuccess");
     return {
         type: REQUEST_ALL_ITEMS_SUCCESS,
         message: {
