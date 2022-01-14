@@ -1,12 +1,13 @@
 import {useState} from "react"
-
+import { Button, Link } from "@mui/material";
 import { connect } from "react-redux";
 import { PayPalButtons } from "@paypal/react-paypal-js"
+import { DateTime } from "luxon";
 
 import {addItemToBasket, updateItemsBasket} from "../redux/actions/basket";
 
 const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, history, itemsInBasket}) => {
-    
+
     const [paidForOrder, setPaidForOrder] = useState(false);
     let total = 0;
 
@@ -45,7 +46,7 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
     
     const itemsForPaypal = itemsToDisplay.map(item => ({name:item.name, quantity:countSameItems(item), unit_amount:{currency_code:"DKK", value:item.price}})) 
     console.log("itemsForPaypal", itemsForPaypal)
-    const emptyOrder = {items:user.cart,userId:user.id,totalValue:0, sent:undefined,delivered:undefined,ordered:undefined,message:"",orderPaid:false}
+    const emptyOrder = {items:itemsInBasket, userId:user.id, totalValue:0, sent:undefined, delivered:undefined, ordered:undefined, message:"", orderPaid:false, paypalOrderId: undefined}
 
 
     
@@ -54,7 +55,10 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
         console.log("Paypal handleApprove called");
         if (order.id){
             console.log("Order.id ", order.id)
-            const newOrder = {...emptyOrder, ordered:order.create_time, totalValue:total,paypalOrderId:order.id,orderPaid:true,}
+            const now = DateTime.fromISO(order.create_time)
+            const nowToString = `${now.day}-${now.month}-${now.year}`
+            console.log("now ", now)
+            const newOrder = {...emptyOrder, ordered:nowToString, totalValue:total,paypalOrderId:order.id,orderPaid:true}
             console.log("User", user)
             console.log("NewOrder ", newOrder)
             createOrderAction(user, newOrder)
@@ -72,10 +76,27 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
         //     alert("Thank you for your purchase!") 
         // }
     }
+    const payLaterButton = () => {
+        console.log("PaypalCheckoutButton payLaterButton pressed")
+        const now = DateTime.now()
+        const nowToString = `${now.day}-${now.month}-${now.year}` 
+        console.log("Time now ", now)
+        console.log("Time nowToString ", nowToString)
+        console.log("payLaterButton called");
+        const newOrder = {...emptyOrder, ordered:nowToString, totalValue:total}
+        console.log("User", user)
+        console.log("NewOrder ", newOrder)
+        createOrderAction(user, newOrder)
+        history.push("/orderConfirmation")
+            // updateItemsBasket(0);
+    }
+        
+
     
     return (
         <>
-        <PayPalButtons 
+        <PayPalButtons
+         
             createOrder={(data, actions) => {
                 console.log("Paypal createOrder called");
                 return actions.order.create({
@@ -123,6 +144,10 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
                console.log("Paypal onClick called");
             }}
         />
+        
+            <Button onClick={payLaterButton} color="primary">
+            Pay Later
+          </Button>
         </>
     )
 
