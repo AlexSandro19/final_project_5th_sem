@@ -1,6 +1,8 @@
 
 import { Card, Grid, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, } from "@mui/material"
 import { useState } from "react";
+import { DateTime } from "luxon";
+
 export const ViewOrder=({currentOrder})=>{
     const [page,setPage]=useState(0);
     const [rowsPerPage,setRowsPerPage]=useState(5);
@@ -13,6 +15,12 @@ export const ViewOrder=({currentOrder})=>{
         setRowsPerPage(parseInt(event.target.value,5));
         setPage(0);
     }
+
+    const printDate=(initialFormat)=>{
+        const date = DateTime.fromFormat(initialFormat, 'dd-MM-yyyy')
+        return date.toFormat('MMMM dd, yyyy')
+    }
+
     return(
 
         <div >
@@ -22,17 +30,38 @@ export const ViewOrder=({currentOrder})=>{
             <Grid item xs={6}>
             <Grid container spacing={2}>
             <Grid item xs={12}>
-            <Typography variant="h5">Order Id: 1 </Typography>
+            <Typography variant="h5">Order Id: {currentOrder._id}</Typography>
             </Grid>
             <Grid item xs={12}>
-            <Typography variant="h5" >Order date : {currentOrder.ordered} </Typography>
+            {(currentOrder.orderPaid) ? 
+                <Typography variant="h5" >Order Paid: Yes</Typography>
+                :
+                <Typography variant="h5" >Order Paid: No</Typography>
+            }
             </Grid>
-            <Grid item xs={12}>
-            <Typography variant="h5">Sent date : {currentOrder.sent} </Typography>
-            </Grid>
-            <Grid item xs={12}>
-            <Typography variant="h5">Delivery date : {currentOrder.delivered} </Typography>
-            </Grid>
+            {(currentOrder.ordered) && (
+                <Grid item xs={12}>
+                <Typography variant="h5" >Order date : {printDate(currentOrder.ordered)} </Typography>
+                </Grid>
+            )}
+            {(currentOrder.sent) ? 
+                <Grid item xs={12}>
+                <Typography variant="h5">Sent date : {printDate(currentOrder.sent)} </Typography>
+                </Grid>
+                : 
+                <Grid item xs={12}>
+                <Typography variant="h5">Order not sent</Typography>
+                </Grid>
+            }
+            {(currentOrder.delivered) ?
+                <Grid item xs={12}>
+                <Typography variant="h5">Delivery date : {printDate(currentOrder.delivered)} </Typography>
+                </Grid>
+                :
+                <Grid item xs={12}>
+                <Typography variant="h5">Order not delivered</Typography>
+                </Grid>
+            }
             <Grid item xs={12}><Typography style={{width:"100%",textAlign:"right"}} variant="h2">ITEMS</Typography></Grid>
             <Grid item xs={12}>
             <Table style={{marginLeft:"15%"}}>

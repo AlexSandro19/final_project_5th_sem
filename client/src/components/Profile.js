@@ -4,6 +4,7 @@ import { useState } from "react";
 //import { DataGrid } from '@mui/x-data-grid';
 import { TextField,ButtonBase,Grid,Divider, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, Tab } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import { DateTime } from "luxon";
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -58,6 +59,12 @@ const setOrder=(orderId)=>{
     console.log(orderId);
     getCurrentOrder(orderId);
 }
+
+const printDate=(initialFormat)=>{
+    const date = DateTime.fromFormat(initialFormat, 'dd-MM-yyyy')
+    return date.toFormat('MMMM dd, yyyy')
+}
+
 const emptyRows=rowsPerPage - Math.min(rowsPerPage,items.length-page*rowsPerPage);
 if(user.role === "ADMIN"){
     return(
@@ -156,6 +163,7 @@ if(user.role === "ADMIN"){
                        <TableHead>
                            <TableRow>
                                <TableCell>ID </TableCell>
+                               <TableCell>Paid </TableCell>
                                <TableCell>Date ordered </TableCell>
                                <TableCell>Date sent </TableCell>
                                <TableCell>Date delivered </TableCell>
@@ -168,10 +176,24 @@ if(user.role === "ADMIN"){
                        {orderList.map((order,index)=>{
                         return(
                             <TableRow>
-                                <TableCell>{index+1}</TableCell>
-                                <TableCell>{order.ordered}</TableCell>
-                                <TableCell>{order.sent}</TableCell>
-                                <TableCell>{order.delivered}</TableCell>
+                                <TableCell>{order._id}</TableCell>
+                                {(order.orderPaid) ? 
+                                    <TableCell>Yes</TableCell>
+                                :
+                                    <TableCell>No</TableCell>
+
+                                }
+                                <TableCell>{printDate(order.ordered)}</TableCell>
+                                {(order.sent) ? 
+                                    <TableCell>{printDate(order.sent)}</TableCell>
+                                :
+                                    <TableCell>Order not sent</TableCell>
+                                }
+                                {(order.delivered) ?
+                                    <TableCell>{printDate(order.delivered)}</TableCell>
+                                :
+                                    <TableCell>{printDate(order.delivered)}</TableCell>
+                                }
                                 <TableCell>{order.totalValue}</TableCell>
                               { order.message === "" ?(<TableCell>No message provided</TableCell>):(<TableCell>{order.message}</TableCell>)}
                               <TableCell>
