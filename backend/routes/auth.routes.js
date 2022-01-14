@@ -133,7 +133,7 @@ router.post(
 
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      const user = await User.findOne({ email }).select(" password email orders cart emailConfirmed username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
       console.log("user.populated('items')", user.populated("items"));
       console.log("user.populated('cart')", user.populated("cart"));
       if (!user) {

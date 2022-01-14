@@ -39,7 +39,9 @@ const useStyles=makeStyles(()=>({
 }))
 
 export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket, saveCartAction, })=>{
-   const history = useHistory()
+
+    const [emailNotConfirmed, setEmailNotConfirmed] = useState(false)
+    const history = useHistory()
     // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
     let noMoreItemsToAdd = false;
     const countSameItems = (receivedItem) => {
@@ -48,20 +50,21 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
     } 
 
     
-
     const itemsToDisplay = []
-    if (itemsInBasket.length)
-    for (let i = 0; i < itemsInBasket.length; i++){
-      console.log("Index in the beginning", i)
-      const item = itemsInBasket[i]
-      console.log("item in itemsToDisplay", item)
-      const numberOfDuplicates = countSameItems(item) - 1
-      console.log("numberOfDuplicates ", numberOfDuplicates)
-      itemsToDisplay.push(item)
-      i += numberOfDuplicates
-      console.log("Index in the end", i)
+    if (itemsInBasket.length){
+      for (let i = 0; i < itemsInBasket.length; i++){
+        console.log("Index in the beginning", i)
+        const item = itemsInBasket[i]
+        console.log("item in itemsToDisplay", item)
+        const numberOfDuplicates = countSameItems(item) - 1
+        console.log("numberOfDuplicates ", numberOfDuplicates)
+        itemsToDisplay.push(item)
+        i += numberOfDuplicates
+        console.log("Index in the end", i)
+      }
+      console.log("items in itemsToDisplay", itemsToDisplay)
+
     }
-    console.log("itemsToDisplay in newItems", itemsToDisplay)
 
     const capitalizeString = (initialStr) => {
       if (initialStr) {
@@ -127,9 +130,11 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
       // const itemsInCart = itemsInBasket.map(item => item._id);
       // const itemsInCart = itemsToDisplay.map(currentItem => ({itemObject:currentItem, itemName:currentItem.name,itemPrice:currentItem.price, quantityInCart: countSameItems(currentItem), totalPerItem: countSameItems(currentItem) * currentItem.price}))
       // console.log("itemsInCart ", itemsInCart)
-      saveCartAction(user, itemsInBasket);
-     
-      history.push("/orderDetails")
+      if (user.emailConfirmed){
+        history.push("/orderDetails")
+      }else{
+        setEmailNotConfirmed(true);
+      }
     }
 
     return (
@@ -200,22 +205,34 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
         </TableBody>
       </Table>
     </TableContainer>
-<Snackbar
-                            open={noMoreItemsToAdd}
-                            anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-                            autoHideDuration={2000}
-                            onClose={() => {noMoreItemsToAdd = false}}
-                            // message={`${item.name} item was added to Basket!`}
-                            // action={action}
-                        >
-                            <Alert severity="info" sx={{ width: '100%' }}>
-                                <b>You reached the quantity limit for this item.</b>
-                            </Alert>
-                        </Snackbar>
-                
-                <Button onClick={buttonPressed}>Proceed to Checkout</Button>
-   
-            </>
+    <Button onClick={buttonPressed}>Proceed to Checkout</Button>
+    
+    <Snackbar
+      open={noMoreItemsToAdd}
+      anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+      autoHideDuration={2000}
+      onClose={() => {noMoreItemsToAdd = false}}
+      // message={`${item.name} item was added to Basket!`}
+      // action={action}
+    >
+      <Alert severity="info" sx={{ width: '100%' }}>
+      <b>You reached the quantity limit for this item.</b>
+      </Alert>
+    </Snackbar>
+    <Snackbar
+      open={emailNotConfirmed}
+      anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+      autoHideDuration={2000}
+      // message={`${item.name} item was added to Basket!`}
+      // action={action}
+    >
+      <Alert severity="info" sx={{ width: '100%' }}>
+      <b>You need to confirm your email before proceeeding.</b>
+      </Alert>
+    </Snackbar>
+
+
+    </>
     ))
 }
 
