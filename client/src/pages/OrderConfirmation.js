@@ -30,10 +30,8 @@ const useStyles=makeStyles(()=>({
 
 const OrderConfirmation=({user, currentOrder})=> {
 
-    if (!currentOrder){
-        <Loader></Loader>
-    }
     return (
+        (Object.keys(currentOrder).length === 0) ? <Loader></Loader> : (
         <>
         <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -44,7 +42,7 @@ const OrderConfirmation=({user, currentOrder})=> {
         </Grid>
         </Grid>
         </>
-    )
+    ))
 }
 
 const mapStateToProps = (state) => {

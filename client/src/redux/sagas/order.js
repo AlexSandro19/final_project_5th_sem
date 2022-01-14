@@ -17,12 +17,13 @@ function* createOrderFlow(action) {
     const {orderCreated} = yield call(createOrderService, order)  
     if (orderCreated) {
       user.orders.push(order)
+      user.cart = []
       console.log("User in createOrderFlow", user)
       yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
-      if (user.orders){
-        const createdOrderIndex = user.orders.length - 1
-        yield put(setCurrentOrder(user.orders[createdOrderIndex]));
-      }
+      const lastcreatedOrderIndex = user.orders.length - 1
+      const lastCreatedOrder = user.orders[lastcreatedOrderIndex]
+      console.log("lastCreatedOrder in createOrderFlow ", lastCreatedOrder)
+      yield put(setCurrentOrder(lastCreatedOrder));
       yield put({
         type: LOGIN_SUCCESS,
       });
@@ -79,12 +80,13 @@ function* deleteOrderFlow(action){
 function* saveCartFlow(action) {
     try {
       console.log("In saga -- saveCartFlow ", action)
-      const user = action.payload.user;
-      const cart = action.payload.cart;
-      const {userUpdated, didUserUpdate} = yield call(saveCartService, user, cart)  
-      console.log("didUserUpdate", userUpdated)
+      const cart = action.payload;
+      const user = action.user;
+      const {didUserUpdate} = yield call(saveCartService, user, cart)  
       if (didUserUpdate) {
-        yield put(setUser(user.token, userUpdated.id, userUpdated.role, user.exp,userUpdated.username,userUpdated.firstName,userUpdated.lastName, userUpdated.email,userUpdated.phone,userUpdated.address,userUpdated.cart,userUpdated.emailConfirmed,userUpdated.orders));
+        user.cart = [...cart]
+        console.log("User after upfate in saveCartFlow", user)
+        yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName, user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
         yield put({
           type: LOGIN_SUCCESS,
         });

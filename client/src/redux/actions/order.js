@@ -52,6 +52,7 @@ export const saveCartAction = (user, cart) => {
     console.log("In the actions - saveOrder", user, cart);
     return {
         type: SAVE_CART,
-        payload: {user, cart}
+        payload: cart,
+        user
     }
 }

@@ -23,16 +23,16 @@ const OrderDetailsComponent = ({ user, itemsInBasket, createOrderAction }) => {
     const itemsToDisplay = []
     if (itemsInBasket.length){
       for (let i = 0; i < itemsInBasket.length; i++){
-      console.log("Index in the beginning", i)
-      const item = itemsInBasket[i]
-      console.log("item in itemsToDisplay", item)
-      const numberOfDuplicates = countSameItems(item) - 1
-      console.log("numberOfDuplicates ", numberOfDuplicates)
-      itemsToDisplay.push(item)
-      i += numberOfDuplicates
-      console.log("Index in the end", i)
-    }
-    console.log("items in itemsToDisplay", itemsToDisplay)
+        console.log("Index in the beginning", i)
+        const item = itemsInBasket[i]
+        console.log("item in itemsToDisplay", item)
+        const numberOfDuplicates = countSameItems(item) - 1
+        console.log("numberOfDuplicates ", numberOfDuplicates)
+        itemsToDisplay.push(item)
+        i += numberOfDuplicates
+        console.log("Index in the end", i)
+      }
+      console.log("items in itemsToDisplay", itemsToDisplay)
 
     }
     
@@ -41,7 +41,7 @@ const OrderDetailsComponent = ({ user, itemsInBasket, createOrderAction }) => {
     const [form, setForm] = useState({...user});
 
     // const [checked, setChecked] = useState(false);
-    let checked = false
+    // let checked = false
 
     const handleSubmit = (e) => { // e = event
         console.log("Details: ", form)
@@ -56,19 +56,19 @@ const OrderDetailsComponent = ({ user, itemsInBasket, createOrderAction }) => {
 
     }
 
-    const checkboxPressed = () =>  {
-        console.log("Checkbix pressed", checked)
-        checked = !checked
-        console.log("Checkbix pressed", checked)
-        if (checked) {
-            setForm({...user});
-        }else {
-            // setForm({...userProperties})
+    // const checkboxPressed = () =>  {
+    //     console.log("Checkbix pressed", checked)
+    //     checked = !checked
+    //     console.log("Checkbix pressed", checked)
+    //     if (checked) {
+    //         setForm({...user});
+    //     }else {
+    //         // setForm({...userProperties})
             
-        }
-        console.log("Form ", form)
+    //     }
+    //     console.log("Form ", form)
 
-    }
+    // }
 
     const capitalizeString = (initialStr) => {
         return initialStr
@@ -87,11 +87,11 @@ const OrderDetailsComponent = ({ user, itemsInBasket, createOrderAction }) => {
         <Paper>
             <form autoComplete="off" noValidate onSubmit={handleSubmit}>
                 <Typography variant="h6">Customer Information</Typography>
-                <Checkbox
+                {/* <Checkbox
                     checked={checked}
                     onChange={checkboxPressed}
                     inputProps={{ 'aria-label': 'controlled' }}
-                />
+                /> */}
                 <TextField name="first-name" variant="outlined" disabled
                            label="First Name" fullWidth value={form.firstName} 
                            onChange={(e) => ({ ...form, firstName: e.target.value })} />

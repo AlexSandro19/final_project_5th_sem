@@ -33,35 +33,6 @@ router.get("/items",
     }
  );
 
-router.post("/saveCart",
-    async (req, res) => {
-      try {
-        console.log("api/saveCart is called");
-        // const {user, cart} = req.body
-        const {user, cart} = req.body;
-        await User.findByIdAndUpdate(user.id, {...user, cart},  { new: true });
-        return res.status(200).json({didUserUpdate: true});
-        // if (Object.keys(savedItem).length !== 0){
-        //   console.log("item updated successfully");
-        //   return res.status(200).json(savedItem);
-        // }else {
-        //   console.log("item didnt update");
-        // }
-        // if (items.length === 0) {
-        //   return res.status(404).json({ message: "No data available" });
-        // }
-        // console.log(items);
-        // return res.status(200).json(items);
-        
-      } catch(error) {
-        console.log(error.message);
-          return res.status(404).json({ didUserUpdate: false, message: error });
-
-      }
-
-    }
-); 
- 
 router.post("/updateOrder",async(req,res)=>{
   try{
     const errors = validationResult(req);
@@ -120,11 +91,10 @@ router.post("/saveCart",
         console.log("/saveCart req.body ", req.body)
         const userToUpdate = await User.findOne({_id: user.id}).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
         console.log("user.populated('cart')", userToUpdate.populated("cart"));
-        user.cart = [...cart]
         userToUpdate.cart = [...cart]
         await userToUpdate.save();
         console.log("userToUpdate, ", userToUpdate)
-        return res.status(200).json({userUpdated:user, didUserUpdate:true});
+        return res.status(200).json({didUserUpdate:true});
         // if (Object.keys(savedItem).length !== 0){
         //   console.log("item updated successfully");
         //   return res.status(200).json(savedItem);
