@@ -27,7 +27,7 @@ import {Loader} from "../components/Loader";
 const mapStateToProps = (state) => {
     return {
         successful:state.auth.successful,
-        requesting:state.auth.requesting
+        requesting:state.auth.requesting,
     };
   };
   

@@ -9,7 +9,6 @@ export const contactEmail = (firstName, lastName, email, subject, message ) => {
       .post(emailUrl, { firstName, lastName, email, subject, message})
       .then((response) => response.data)
       .catch((error) => {
-        console.log(error);
         throw error.response.data;
       });
   };

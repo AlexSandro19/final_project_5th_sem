@@ -38,7 +38,7 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket, saveCartAction, })=>{
+export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItemsBasket, saveCartAction, })=>{
 
     const [emailNotConfirmed, setEmailNotConfirmed] = useState(false)
     const history = useHistory()
@@ -81,16 +81,14 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
 
     const removeItem = (itemToRemove) => {
         const updatedItemsInBasket = itemsInBasket.filter(item => item._id !== itemToRemove._id);
-        console.log("updatedItemsInBasket", updatedItemsInBasket)
+
         updateItemsBasket(updatedItemsInBasket); 
-        console.log("Delete: ", itemToRemove);
         saveCartAction(user, updatedItemsInBasket);
     }
 
     const changeQuantity = (itemToChangeQuantity, action) => {
         // e.preventDefault();
         const updatedItemsList = [...itemsInBasket];
-        console.log("In changeQuantity", itemToChangeQuantity);
      
         if (action === "increase"){
             const index = updatedItemsList.indexOf(itemToChangeQuantity);
@@ -205,8 +203,6 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
         </TableBody>
       </Table>
     </TableContainer>
-    <Button onClick={buttonPressed}>Proceed to Checkout</Button>
-    
     <Snackbar
       open={noMoreItemsToAdd}
       anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
@@ -216,7 +212,7 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
       // action={action}
     >
       <Alert severity="info" sx={{ width: '100%' }}>
-      <b>You reached the quantity limit for this item.</b>
+        <b>You reached the quantity limit for this item.</b>
       </Alert>
     </Snackbar>
     <Snackbar
@@ -227,11 +223,11 @@ export const BasketPageComponent=({itemsInBasket, items, user, updateItemsBasket
       // action={action}
     >
       <Alert severity="info" sx={{ width: '100%' }}>
-      <b>You need to confirm your email before proceeeding.</b>
+        <b>You need to confirm your email before proceeeding.</b>
       </Alert>
     </Snackbar>
-
-
+    <Button onClick={buttonPressed}>Proceed to Checkout</Button>
+    <Button onClick={goBack} variant="contained" color="primary">Back</Button>
     </>
     ))
 }

@@ -5,7 +5,7 @@ const Furniture = require("../model/Furniture");
 const User = require("../model/User")
 const Order= require("../model/Order");
 require("dotenv").config();
-
+const auth= require("../middleware/auth.middleware");
 
 
 const router = Router();
@@ -33,7 +33,18 @@ router.get("/items",
     }
  );
 
-router.post("/updateOrder",async(req,res)=>{
+router.post("/updateOrder",
+[
+check("_id","Try again. Error with the order").exists().isMongoId(),
+check("items","Try again. Error with the order").exists(),
+check("totalValue","Try again. Error with the order").exists(),
+check("message","Try again. Error with the order").exists(),
+check("sent","Try again. Error with the order").exists(),
+check("ordered","Try again. Error with the order").exists().notEmpty(),
+check("userId","Try again. Error with the order").exists(),
+check("delivered","Try again. Error with the order").exists(),
+]
+,async(req,res)=>{
   try{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -43,7 +54,20 @@ router.post("/updateOrder",async(req,res)=>{
       });
      
    }
-   const {order} = req.body
+   const order = req.body;
+   if(order.sent.split("-")[0] === "undefined"){ 
+      order.sent=" - - "
+       //return res.status(500).json({message:"Invalid date selected",errors:[{value:checkOrder.sent,msg:"Invalid sent date selected",param:"sent"}]})
+     } 
+     if ( order.delivered.split("-")[0] === "undefined"){
+      //return res.status(500).json({message:"Invalid date selected",errors:[{value:checkOrder.delivered,msg:"Invalid delivered date selected",param:"delivered"}]});
+      order.delivered=" - - "
+    } 
+    if ( order.ordered.split("-")[0] === "undefined"){
+     order.ordered=" - - "
+      // return res.status(500).json({message:"Invalid date selected",errors:[{value:checkOrder.ordered,msg:"Invalid ordered date selected",param:"ordered"}]});
+     }
+   console.log(order);
    const updatedOrder = await Order.findByIdAndUpdate(order._id,order,{new:true});
    //console.log(updatedOrder);
    return res.status(200).json(updatedOrder);
@@ -53,7 +77,18 @@ router.post("/updateOrder",async(req,res)=>{
 
   }
 })
-
+router.get("/orders",auth,async(req,res)=>{
+    try{
+      if(req.user.role === "ADMIN"){
+        const allorders= await Orders.find({});
+        return res.status(200).json(allorders);
+      }else{
+        return res.status(400).json({message:"You do not have the needed access level"})
+      }      
+    } catch(error) {
+        return res.status(404).json({ message: error });
+    }
+})
 router.post("/order",async(req,res)=>{
 
     try{
@@ -85,10 +120,10 @@ router.post("/order",async(req,res)=>{
 router.post("/saveCart",
     async (req, res) => {
       try {
-        console.log("api/saveCart is called");
-        // const {user, cart} = req.body
+
+
         const {user, cart} = req.body;
-        console.log("/saveCart req.body ", req.body)
+
         const userToUpdate = await User.findOne({_id: user.id}).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
         console.log("user.populated('cart')", userToUpdate.populated("cart"));
         userToUpdate.cart = [...cart]

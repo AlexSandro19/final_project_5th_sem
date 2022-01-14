@@ -7,7 +7,7 @@ import {updateItem, createItem} from "../redux/actions/item";
 import PaypalCheckoutButton from './PaypalCheckoutButton';
 import { useHistory } from "react-router-dom"
 
-const OrderDetailsComponent = ({ user, itemsInBasket, createOrderAction }) => {
+const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }) => {
 
     const history = useHistory()
     // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
@@ -144,7 +144,7 @@ const OrderDetailsComponent = ({ user, itemsInBasket, createOrderAction }) => {
 </Grid>
   <Grid item xs={12}>
     <PaypalCheckoutButton user={user} history={history} itemsInBasket={itemsInBasket} createOrderAction={createOrderAction}/>
-    
+    <Button onClick={goBack} variant="contained" color="primary">Back</Button>
     </Grid>
   </Grid>
 </>

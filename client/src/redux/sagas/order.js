@@ -10,15 +10,14 @@ import { saveCartAction, saveOrderAction } from "../actions/order";
 
 function* createOrderFlow(action) {
   try {
-    console.log("In saga -- createOrderFlow action.payload", action.payload)
+
     const order = action.payload;
     const user = action.user
-    console.log("In saga -- createOrderFlow ", order )
+
     const {orderCreated} = yield call(createOrderService, order)  
     if (orderCreated) {
       user.orders.push(order)
       user.cart = []
-      console.log("User in createOrderFlow", user)
       yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
       const lastcreatedOrderIndex = user.orders.length - 1
       const lastCreatedOrder = user.orders[lastcreatedOrderIndex]
@@ -27,12 +26,25 @@ function* createOrderFlow(action) {
       yield put({
         type: LOGIN_SUCCESS,
       });
+      yield put({
+        type:"SUCCESS",
+        message:{
+            text:"You have successfully created the order",
+            severity:"success"
+        }
+    })
     } 
   //   yield put(setUser(updatedUser))
 
   }catch (error) {
-    console.log(error.message);
-    console.log(error);
+    yield put({
+      type:"FAILURE",
+      message:{
+          text:error.message,
+          severity:"error",
+      },
+      errors:error.errors
+  })
   }
 }
 
@@ -53,36 +65,64 @@ function* updateOrderFlow(action){
     try{
         const order = action.payload;
         const user= action.user;
-        console.log(user);
         const updateOrder = yield call(getUpdateOrderApi,order)
         const payload=yield call(refreshUser,user);
-        console.log(payload);
         yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.firstName, payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
         yield put({
           type: LOGIN_SUCCESS,
         });
+        yield put({
+          type:"SUCCESS",
+          message:{
+              text:"You have successfully updated the order",
+              severity:"success"
+          }
+      })
     }catch(error){
-        console.log(error);
-        throw error;
+   
+        yield put({
+          type:"FAILURE",
+          message:{
+              text:error.message,
+              severity:"error",
+          },
+          errors:error.errors
+      })
     }
 }
 function* deleteOrderFlow(action){
     try{
         const deleteOrder= action.payload;
-        yield call(deleteOrderService,deleteOrder)
+        yield call(deleteOrderService,deleteOrder);
+        yield put({
+          type:"SUCCESS",
+          message:{
+              text:"You have successfully deleted the order",
+              severity:"success"
+          }
+      })
     }catch(error){
         console.log(error);
-        throw error;
+        yield put({
+          type:"FAILURE",
+          message:{
+              text:error.message,
+              severity:"error",
+          },
+          errors:error.errors
+      })
     }
 }
 
 
 function* saveCartFlow(action) {
     try {
-      console.log("In saga -- saveCartFlow ", action)
-      const cart = action.payload;
-      const user = action.user;
+
+      const user = action.payload.user;
+      const cart = action.payload.cart;
+      const activityType = action.activityType;
       const {didUserUpdate} = yield call(saveCartService, user, cart)  
+      
       if (didUserUpdate) {
         user.cart = [...cart]
         console.log("User after upfate in saveCartFlow", user)
@@ -90,12 +130,37 @@ function* saveCartFlow(action) {
         yield put({
           type: LOGIN_SUCCESS,
         });
+
       } 
+      if(activityType === "ADD"){
+        yield put({
+          type:"SUCCESS",
+          message:{
+              text:"You have successfully added an item to the cart",
+              severity:"success"
+          }
+      })
+      }else if (activityType === "REMOVE"){
+        yield put({
+          type:"SUCCESS",
+          message:{
+              text:"You have successfully removed an item from the cart",
+              severity:"success"
+          }
+      })
+      }
+  
     //   yield put(setUser(updatedUser))
 
     }catch (error) {
-      console.log(error.message);
-      console.log(error);
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
     }
 }
 
@@ -106,6 +171,5 @@ function* orderWatcher(){
     yield takeLatest(SAVE_CART, saveCartFlow) 
     yield takeLatest(CREATE_ORDER, createOrderFlow) 
 }
-
 
 export default orderWatcher;

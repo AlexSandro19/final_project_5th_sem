@@ -1,26 +1,26 @@
 import {Box,TextField,Typography,Button} from "@mui/material";
 import {useState} from "react";
 import { useHistory } from "react-router-dom";
-export const EditOrder=({user,currentOrder,updateOrder})=>{
+export const EditOrder=({formErrors,errors,user,currentOrder,updateOrder})=>{
     const history=useHistory()
     const format=(date)=>{
+        // date.split("-").map((dateCheck)=>{
+        //     if(!dateCheck){
+        //         setForm({...currentOrder});
+        //     }
+        // })
         const formattedDate= date.split("-")[2]+"-"+ date.split("-")[1]+"-"+ date.split("-")[0];
-        //console.log(formattedDate);
         return formattedDate
     }
+    console.log(currentOrder);
     const [form, setForm] = useState({
       ...currentOrder
     });
  
-    //console.log(form);
-    //console.log(currentOrder);
+
     const handleSubmit = (e) => { // e = event
         e.preventDefault();
-        console.log(form)
-        updateOrder(user,form);
-        // console.log(currentId, postData);
-        history.push("/profile")
-
+        updateOrder(user,form);  
         // if(currentId){
         //     dispatch(updatePost(currentId, postData));
         // }else{
@@ -28,7 +28,8 @@ export const EditOrder=({user,currentOrder,updateOrder})=>{
         // }
     }
     const cancel = () => {
-        setForm({...currentOrder})
+        setForm({...currentOrder});
+        history.goBack();
     }
 
     return(
@@ -36,17 +37,25 @@ export const EditOrder=({user,currentOrder,updateOrder})=>{
         <Box>
         <form autoComplete="off" noValidate onSubmit={handleSubmit}>
             <Typography variant="h6">{true ? 'Editing' : 'Creating'} an Order</Typography>
-            <TextField helperText="Enter message for the delivery" name="message" variant="outlined" 
-                       label="Message"  defaultValue={form.message} value={form.message} 
+            <TextField name="message" variant="outlined" 
+                       label="Message"  value={form.message}
+                       error={!!formErrors["message"]}
+                       helperText={formErrors["message"] ? formErrors["message"] : "Enter message for the delivery"}
                        onChange={(e) => setForm({ ...form, message: e.target.value })} />
-            <TextField helperText="Enter date with format dd-MM-yyyy" placeholder="dd-MM-yyyy"  type="date" name="ordered" 
-                       label="Ordered"  value={format(form.ordered)}
+            <TextField placeholder="dd-MM-yyyy"  type="date" name="ordered" 
+                       label="Ordered"   value={format(form.ordered)}
+                       error={!!formErrors["ordered"]}
+                       helperText={formErrors["ordered"] ? formErrors["ordered"] : "Enter date with format dd-MM-yyyy"}
                        onChange={(e) =>  setForm({ ...form, ordered: format(e.target.value) })}  />
-            <TextField helperText="Enter date with format dd-MM-yyyy" placeholder="dd-MM-yyyy" type="date"  name="sent" 
-                       label="Sent" value={format(form.sent)} 
+            <TextField placeholder="dd-MM-yyyy" type="date"  name="sent" 
+                       label="Sent" value={format(form.sent)}
+                       error={!!formErrors["sent"]}
+                       helperText={formErrors["sent"] ? formErrors["sent"] : "Enter date with format dd-MM-yyyy"}
                        onChange={(e) => setForm({ ...form, sent:  format(e.target.value)})}   />
-            <TextField helperText="Enter date with format dd-MM-yyyy" placeholder="dd-MM-yyyy"  name="delivered"  
+            <TextField placeholder="dd-MM-yyyy"  name="delivered"  
                        label="Delivered" type="date" value={format(form.delivered)} 
+                       error={!!formErrors["delivered"]}
+                       helperText={formErrors["delivered"] ? formErrors["delivered"] : "Enter date with format dd-MM-yyyy"}
                        onChange={(e) => setForm({ ...form, delivered: format(e.target.value)})} />
 
 

@@ -1,5 +1,6 @@
 
 import { Card, Grid, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, } from "@mui/material"
+import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { DateTime } from "luxon";
 
@@ -21,6 +22,10 @@ export const ViewOrder=({currentOrder})=>{
         return date.toFormat('MMMM dd, yyyy')
     }
 
+    const history=useHistory();
+    const goBack=()=>{
+        history.goBack();
+    }
     return(
 
         <div >
@@ -137,6 +142,7 @@ export const ViewOrder=({currentOrder})=>{
             </Grid>
             </Grid>
             </Grid>
+            <Grid> <Button onClick={goBack} variant="contained" color="primary">Back</Button></Grid>
             </Grid>
         </Card>
         </div>

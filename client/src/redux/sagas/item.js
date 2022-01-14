@@ -18,9 +18,22 @@ function* updateItemFlow(action) {
         type: LOGIN_SUCCESS,
       });
       yield put({type:REQUEST_ALL_ITEMS})
+      yield put({
+        type:"SUCCESS",
+        message:{
+            text:"You have successfully updated the item",
+            severity:"success"
+        }
+    })
     }catch (error) {
-      console.log(error.message);
-      console.log(error);
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
     }
 }
 function* deleteItemFlow (action){
@@ -29,20 +42,47 @@ function* deleteItemFlow (action){
     const response = yield call(deleteItemService,deleteItem);
     console.log(response);
     yield put({type:REQUEST_ALL_ITEMS})
+    yield put({
+      type:"SUCCESS",
+      message:{
+          text:"You have successfully deleted your item",
+          severity:"success"
+      }
+  })
     }catch(error){
-    console.log(error)
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
   }
 }
 function* createItemFlow (action){
   try{
     const {newItem} = action.payload;
-    console.log(newItem);
+   
     const response = yield call (createItem,newItem);
-    console.log(response);
-    //yield put ()
+
+    yield put({type:REQUEST_ALL_ITEMS})
+    yield put({
+      type:"SUCCESS",
+      message:{
+          text:"You have successfully created the Item",
+          severity:"success"
+      }
+  })
   }catch(error){
-    console.log(error.message);
-    console.log(error);
+    yield put({
+      type:"FAILURE",
+      message:{
+          text:error.message,
+          severity:"error",
+      },
+      errors:error.errors
+  })
   }
 }
 function* shoppingPageFlow(action) {
@@ -50,17 +90,21 @@ function* shoppingPageFlow(action) {
     try {
 
       const responseMessage = yield call(requestItems);
-        console.log(responseMessage)
       yield put(requestAllItemsSuccess(responseMessage));
   
     } catch (error) {
-      console.log(error.message);
-      console.log(error);
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
     }
 }
 
 function* shoppingPageWatcher() {
-    console.log("shoppingPageWarcher called");
     yield takeLatest(REQUEST_ALL_ITEMS, shoppingPageFlow );
     yield takeLatest(UPDATE_ITEM, updateItemFlow);
     yield takeLatest(CREATE_ITEM,createItemFlow);

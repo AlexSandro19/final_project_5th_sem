@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useCallback, useState } from "react";
-import { Card, CardActionArea, ListItemButton,Tooltip, Checkbox, Radio, CardContent,ListItem, ListItemIcon,ListItemText,Toolbar, List, Drawer, Grid, Box, Typography, ButtonBase, Badge, Divider, Snackbar, Alert } from "@mui/material";
+import { Card, CardActionArea, ListItemButton,Tooltip, Checkbox, Radio, Button,CardContent,ListItem, ListItemIcon,ListItemText,Toolbar, List, Drawer, Grid, Box, Typography, ButtonBase, Badge, Divider, Snackbar, Alert } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import {requestAllItems, setFilteredItems} from "../redux/actions/item"
@@ -30,13 +30,15 @@ const useStyles=makeStyles(()=>({
         width:"90%",
     },
     fab:{
+        margin: "-2%"
     },
+    basket:{
+    }
 
 }))
 
-export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, addItemToBasket})=>{
+export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenticated, addItemToBasket})=>{
     const classes=useStyles();
-    console.log("In the ShoppingPageComponent itemsInBasket", itemsInBasket);
  
     
     const [checked, setChecked] = useState([]);
@@ -53,8 +55,7 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
         setFilteredItems([...itemsInStock]);
         setItemsReceived(true);
     }, [items])
-    //console.log(refreshPage);
-    console.log(filteredItems);
+
     
     
     const drawerWidth = 240;
@@ -66,9 +67,8 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
         console.log(`Checkbox pressed ${filterOption}`);
         // const currentIndex = checked.indexOf(filterOption);
         const newChecked = [...checked];
-        console.log(typeof filterOption);
+
         if ((typeof filterOption) === 'string'){
-            console.log(`filterOption === string`);
             const currentIndex = checked.indexOf(filterOption);
             if (currentIndex === -1) {
                 newChecked.push(filterOption);
@@ -78,15 +78,11 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
 
         }
         if ((typeof filterOption) === 'number'){
-           console.log(`filterOption === number`);
             if ((typeof newChecked[0]) === 'number' && newChecked[0] === filterOption){
-                console.log("1st option");
                 newChecked.shift(); 
             }else if ((typeof newChecked[0]) === 'number' && newChecked[0] !== filterOption){
-                console.log("2nd option");
                 newChecked.splice(0, 1, filterOption);
             }else if (newChecked.length === 0 || (typeof newChecked[0]) === 'string'){
-                console.log("3rd option");
                 newChecked.unshift(filterOption); 
             }
             // if (currentIndex === -1) {
@@ -143,10 +139,6 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
         }
 
         }
-        console.log("items length: ", items.length);
-        console.log("itemsInStock length: ", itemsInStock.length);
-        console.log("filtered length: ", filtered.length);
-        console.log("filtered : ", filtered);
         
         // if (items.length && (!filtered.length)){
         //     console.log("items.length && !filtered.length: here");
@@ -260,8 +252,9 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
           </List>
         </Box>
       </Drawer>
-
+           
             <Grid container spacing={3} alignItems="stretch" >
+                
                 {/* <Grid key={"sideBar"} item sm={6} md={4} >
                     <Tabs variant="permanent" open >
                     <Toolbar />
@@ -301,14 +294,16 @@ export const ShoppingPageComponent=({items, itemsInBasket, userIsAuthenticated, 
 
                 }
             </Grid>
+            <Button onClick={goBack} variant="contained" color="primary">Back</Button>
             {userIsAuthenticated ? 
                 <Badge color="secondary" badgeContent={itemsInBasket.length}>
                      <Tooltip title="See added items in Basket" arrow>
                          <Fab color="primary" className={classes.fab} aria-label="Shopping Bag" component={Link} to="/basket">
-                             <ShoppingBasketIcon />
+                             <ShoppingBasketIcon className={classes.basket} />
                          </Fab>
                          </Tooltip>
                      </Badge>
+                     
                 : <></>
             }
                      

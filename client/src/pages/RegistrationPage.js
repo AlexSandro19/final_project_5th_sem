@@ -1,34 +1,55 @@
 import { connect } from "react-redux";
 import { Registration } from "../components/Registration";
-import {useState} from "react";
+import {useState,useEffect} from "react";
 import {registerUser} from "../redux/actions/user"
 import { useHistory } from "react-router-dom";
-const RegistrationPage=({registerUser})=>{
+const RegistrationPage=({errors,scenario,registerUser})=>{
   const history = useHistory();
+  const [formErrors,setFormErrors]=useState({});
+  useEffect(() => {
+    if (errors) {
+   
+    errors.forEach((error) => {
+       console.log(error);
+        setFormErrors((i) => ({ ...i, [error.param]: error.msg }));
+      });
+    }
+    console.log(formErrors);
+  }, [errors]);
   const [form, setForm] = useState({
     email: "",
     username:"",
     firstName:"",
     lastName:"",
     password:"",
+    confirmPassword:"",
     phone:"",
     address:"",
-
   });
   const changeHandler = (event) => {
+
     setForm({ ...form, [event.target.name]: event.target.value });
   };
   const sendRegistrationForm= (e)=>{
     e.preventDefault();
-
     registerUser(form);
-    history.push("/");
+    if(scenario){
+      console.log("AETWE");
+      setForm({});
+      history.push("/");
+      setFormErrors({});
+    };
+ 
+   
+  }
+  const goBack=()=>{
+    history.goBack();
   }
     return(
       <div style={{marginLeft:"15%"}}>
 
-  
-        <Registration form={form} sendRegistrationForm={sendRegistrationForm} changeHandler={changeHandler}>
+        
+        <Registration goBack={goBack} formErrors={formErrors} form={form} sendRegistrationForm={sendRegistrationForm} changeHandler={changeHandler}>
 
         </Registration>
       </div>
@@ -37,6 +58,7 @@ const RegistrationPage=({registerUser})=>{
 
 }
 const mapStateToProps = (state) =>({
-    
+  scenario:state.message.scenario,
+  errors:state.message.errors,
   });
 export default connect(mapStateToProps,{registerUser})(RegistrationPage)
