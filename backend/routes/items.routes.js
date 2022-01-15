@@ -54,6 +54,7 @@ router.post("/createItem",
   check("categoryArray","Error with categorry property").isArray().notEmpty().exists().escape().blacklist(["#x2F","&lt;","&gt;","&amp;","&quot;"]),
   check("materialArray","Error with material property").isArray().notEmpty().exists().escape().blacklist(["#x2F","&lt;","&gt;","&amp;","&quot;"]),
   check("ratings","Error with the ratings set up").isObject().notEmpty().exists().escape(),
+ 
   check("hasWarranty","Error with the warranty").isBoolean().notEmpty().exists().escape(),
   check("isPopular","Error with the popularity").isBoolean().notEmpty().exists().escape(),
   check("stock","Error with the stock property").isBoolean().notEmpty().exists().escape(),

@@ -1,13 +1,29 @@
 import {    take, takeLatest, call, put } from "redux-saga/effects";
-import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,SAVE_CART,CREATE_ORDER,SAVE_ORDER} from "../constants/order";
+import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,SAVE_CART,CREATE_ORDER,SAVE_ORDER,GET_ALL_ORDERS} from "../constants/order";
 import {LOGIN_SUCCESS} from "../constants/auth";
 import {refreshUser} from "../../services/auth.service";
-import {getCurrentOrderApi,getUpdateOrderApi,deleteOrderService,saveCartService,createOrderService} from "../../services/order.service";
-import {setCurrentOrder} from "../actions/order";
+import {getCurrentOrderApi,getUpdateOrderApi,deleteOrderService,saveCartService,createOrderService,getAllOrders} from "../../services/order.service";
+import {setCurrentOrder,getAllOrdersSUCCESS,} from "../actions/order";
 import {setUser} from "../actions/user";
 
 import { saveCartAction, saveOrderAction } from "../actions/order";
-
+function* getOrdersFlow(action){
+  try{
+    const token = action.payload;
+    const orders= yield call(getAllOrders,token);
+    console.log(orders);
+    yield put(getAllOrdersSUCCESS(orders));
+  }catch(error){
+    yield put({
+      type:"FAILURE",
+      message:{
+          text:error.message,
+          severity:"error",
+      },
+      errors:error.errors
+  })
+  }
+}
 function* createOrderFlow(action) {
   try {
 
@@ -165,9 +181,10 @@ function* saveCartFlow(action) {
 function* orderWatcher(){
     yield takeLatest(GET_CURRENT_ORDER,getCurrentOrderFlow);
     yield takeLatest(UPDATE_ORDER,updateOrderFlow);
-    yield takeLatest(DELETE_ORDER,deleteOrderFlow)
-    yield takeLatest(SAVE_CART, saveCartFlow) 
-    yield takeLatest(CREATE_ORDER, createOrderFlow) 
+    yield takeLatest(DELETE_ORDER,deleteOrderFlow);
+    yield takeLatest(SAVE_CART, saveCartFlow); 
+    yield takeLatest(CREATE_ORDER, createOrderFlow); 
+    yield takeLatest(GET_ALL_ORDERS,getOrdersFlow)
 }
 
 export default orderWatcher;

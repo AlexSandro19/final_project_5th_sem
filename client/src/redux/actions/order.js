@@ -1,4 +1,12 @@
-import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,SAVE_CART,CREATE_ORDER,SAVE_ORDER} from "../constants/order"
+import {
+    GET_CURRENT_ORDER,
+    DELETE_ORDER, 
+    GET_CURRENT_ORDER_SUCCESS,
+    UPDATE_ORDER,SAVE_CART,
+    CREATE_ORDER,
+    SAVE_ORDER,
+    GET_ALL_ORDERS,
+    GET_ALL_ORDERS_SUCCESS,} from "../constants/order"
 export const setCurrentOrder = (order) => {
 
     return {
@@ -6,7 +14,19 @@ export const setCurrentOrder = (order) => {
         payload: order
     }
 } 
+export const getAllOrders = (token) => {
+    return {
+        type: GET_ALL_ORDERS,
+        payload: token
+    }
+} 
+export const getAllOrdersSUCCESS = (orders) => {
 
+    return {
+        type: GET_ALL_ORDERS_SUCCESS,
+        payload: orders
+    }
+}
 export const getCurrentOrder = (orderId) => {
 
     return {

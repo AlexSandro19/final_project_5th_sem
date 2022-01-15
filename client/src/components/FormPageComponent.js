@@ -147,7 +147,7 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
         </Box>
     );
 }
-
+}
 const mapStateToProps = (state) => {
     return {
         user:state.user,

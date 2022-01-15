@@ -200,7 +200,6 @@ router.post(
   [
     check("email", "Enter valid email").normalizeEmail().isEmail(),
     check("password", "Enter password").exists().notEmpty(),
-    check('password').isLength({ max: 8 }).withMessage('Password Must Be at Least 8 Characters')
   ],
   async (req, res) => {
     try {

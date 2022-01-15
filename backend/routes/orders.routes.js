@@ -56,18 +56,19 @@ check("delivered","Try again. Error with the order").exists(),
 
   }
 })
-router.get("/orders",auth,async(req,res)=>{
+router.post("/orders",auth,async(req,res)=>{
     try{
       if(req.user.role === "ADMIN"){
-        const allorders= await Orders.find({});
+        const allorders= await Order.find({}).populate("items");
+        
         return res.status(200).json(allorders);
       }else{
         return res.status(400).json({message:"You do not have the needed access level"})
       }      
     } catch(error) {
-        return res.status(404).json({ message: error });
+        return res.status(404).json({ message: error.message });
     }
-})
+});
 router.post("/order",async(req,res)=>{
 
     try{
