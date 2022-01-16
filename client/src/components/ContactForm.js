@@ -42,9 +42,9 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
       }
     return (
         <div>
-       <Button onClick={goBack} variant="outlined">Back</Button>
+    
         <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
-            <TextField
+            <TextField sx={{ marginBottom: '15px' }}
             label="First-Name"
             required
             id = "outlined"
@@ -52,7 +52,7 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             name = "firstName"
             onChange={changeHandler}
             />
-            <TextField
+            <TextField sx={{ marginBottom: '15px' }}
             label="Last-Name"
             required
             id = "outlined"
@@ -60,7 +60,7 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             name = "lastName"
             onChange={changeHandler}
             />
-            <TextField
+            <TextField sx={{ marginBottom: '15px' }}
             label="Email"
             required
             onChange={changeHandler}
@@ -69,7 +69,7 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             name="email"
             />
             
-            <TextField
+            <TextField sx={{ marginBottom: '15px' }}
             label="Subject"
             required
             onChange={changeHandler}
@@ -77,7 +77,7 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             type="text" 
             name="subject"
             />
-            <TextField
+            <TextField sx={{ marginBottom: '15px' }}
             label="Message"
             required
             value={form.message}
@@ -87,10 +87,11 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             multiline
             rows={5}
             />
-                <Button
+                <Button 
             type="submit" color="primary" variant="contained">Submit</Button> 
 
         </form>
+        <Button onClick={goBack} variant="outlined">Back</Button>
         </div>
           
     )

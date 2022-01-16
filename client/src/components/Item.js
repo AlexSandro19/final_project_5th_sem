@@ -106,7 +106,7 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
                     <Typography variant="h5">{item.name}</Typography>
                 </div>
                     <Typography variant="body1">{item.description}</Typography>
-                    <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price}</Typography>
+                    <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price} DKK</Typography>
                 </CardContent>
             </CardActionArea>
             <CardActions>
