@@ -99,7 +99,7 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
     return(
         <>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
-            <img src={item.picturesArray[0]} alt=""></img> 
+            <img src={item.picturesArray[0]} alt="" style={{width:"200px"}}></img> 
             <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(items,item,user.token)}}>
                 <CardContent>
                     <div>

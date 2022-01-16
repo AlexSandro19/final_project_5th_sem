@@ -84,16 +84,16 @@ const ItemPage=({items, currentItem, user,itemsInBasket,saveCartAction,addItemTo
     }
     
     return (
-        <div style={{height:"60vh"}}>
-        <Paper width="90%">
-            <img src={currentItem.picturesArray[0]} alt=""></img>
+        <div style={{height:"80vh"}}>
+        <Paper width="90%" sx={{ margin: '15px', padding: "20px" }}>
+            <img src={currentItem.picturesArray[0]} alt="" style={{width:"400px"}}></img>
             <Typography variant="h1">{currentItem.name}</Typography>
             <Typography variant="subtitle1">{currentItem.description}</Typography>
-            <Typography variant="body2">Color: ADD COLOR TO FURNITURE</Typography>
-            {/* <Typography variant="body2">Suitable for: {currentItem.categories.join(', ')}</Typography>
-            <Typography variant="body2">Materials for: {currentItem.materials.join(', ')}</Typography> */}
+            <Typography variant="body2">Suitable for: {currentItem.categoryArray.join(', ')}</Typography>
+            <Typography variant="body2">Made of: {currentItem.materialArray.join(', ')}</Typography>
             <Typography variant="body2">Warranty: {currentItem.hasWarranty ? "Yes" : "No"}</Typography>
-            <Typography variant="h5">Price: {currentItem.price}</Typography>
+            <Typography variant="body2">Rating: {currentItem.ratings.medianValueRating}</Typography>
+            <Typography variant="h5">Price: {currentItem.price} DKK</Typography>
             {user.isAuthenticated  && !isItemInBasket? 
                 
                 <Button onClick={addToCartPressed}><Typography style={{textAlign:"center"}} variant="h6">ADD <AddShoppingCartIcon  fontSize="default"/></Typography></Button>
@@ -109,7 +109,7 @@ const ItemPage=({items, currentItem, user,itemsInBasket,saveCartAction,addItemTo
                 : <></>
             }
             </Paper>
-         <Button variant="outlined" onClick={goBack}>Back</Button>
+         <Button sx={{ marginLeft: '15px'}} variant="outlined" onClick={goBack}>Back</Button>
          </div>
     )
 }

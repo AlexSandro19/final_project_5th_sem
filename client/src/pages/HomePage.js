@@ -70,7 +70,7 @@ var displayText=[
 return(
     <div>
         <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12} >
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6} >
             <Carousel >
                 {
                    displayText.map((item)=>{
@@ -86,13 +86,13 @@ return(
 
             </Carousel>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12} >
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6} >
         <iframe width="560" height="315" src="https://www.youtube.com/embed/YU6VqT03Lgk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </Grid>
 
         <Grid item xs={12}>
         <Grid container  direction="row" justifyContent="center"  alignItems="center" spacing={2}>
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12}>
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6}>
         <Box style={{height:"600px"}}   className={classes.back}>
         <Typography variant="h4" textAlign="center">Most Popular Items Right Now</Typography>
         <Grid container spacing={1}>
@@ -124,11 +124,11 @@ return(
         </Box>
         </Grid>
        
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12}>
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6}>
         <Box style={{height:"300px"}}   className={classes.back}>
         <Typography variant="h4" textAlign="center">Highest Rated Designs</Typography>
         <Grid container spacing={1}>
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12}>
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6}>
         <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
             <CardContent>
                 <Typography variant="h5">Dinning Chair</Typography>

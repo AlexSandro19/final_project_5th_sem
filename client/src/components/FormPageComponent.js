@@ -33,32 +33,32 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
         <Box>
             <form autoComplete="off" noValidate onSubmit={handleSubmit}>
                 <Typography variant="h6">{false ? 'Editing' : 'Creating'} an Item</Typography>
-                <TextField name="name" variant="outlined" 
+                <TextField name="name" variant="outlined"  sx={{ marginBottom: '15px' }}
                            label="Name" fullWidth value={form.name} 
                            onChange={(e) => setForm({ ...form, name: e.target.value })} 
                            error={!!formErrors["name"]}
                            helperText={formErrors["name"] ? formErrors["name"] : ""}/>
-                <TextField name="description" variant="outlined" 
+                <TextField name="description" variant="outlined"  sx={{ marginBottom: '15px' }}
                            label="Description" fullWidth value={form.description} multiline
                            onChange={(e) => setForm({ ...form, description: e.target.value })} 
                            error={!!formErrors["description"]}
                            helperText={formErrors["description"] ? formErrors["description"] : ""}/>
-                <TextField name="price" variant="outlined" 
+                <TextField name="price" variant="outlined"  sx={{ marginBottom: '15px' }}
                            label="Price" fullWidth value={form.price} 
                            onChange={(e) => setForm({ ...form, price: e.target.value })}
                            error={!!formErrors["price"]}
                            helperText={formErrors["price"] ? formErrors["price"] : ""} />
-                <TextField name="quantity" variant="outlined" 
+                <TextField name="quantity" variant="outlined"  sx={{ marginBottom: '15px' }}
                            label="Quantity" fullWidth value={form.quantity} 
                            onChange={(e) => setForm({ ...form, quantity: e.target.value })} 
                            error={!!formErrors["quantity"]}
                            helperText={formErrors["quantity"] ? formErrors["quantity"] : ""}/>
-                <TextField name="categoryArray" variant="outlined" 
+                <TextField name="categoryArray" variant="outlined"  sx={{ marginBottom: '15px' }}
                            label="Categories (put ',' between them)" fullWidth value={form.categoryArray} 
                            onChange={(e) => setForm({ ...form, categoryArray: e.target.value.split(',') })} 
                            error={!!formErrors["categoryArray"]}
                            helperText={formErrors["categoryArray"] ? formErrors["categoryArray"] : ""}/>
-                <TextField name="materialArray" variant="outlined" 
+                <TextField name="materialArray" variant="outlined"  sx={{ marginBottom: '15px' }}
                            label="Materials  (put ',' between them)" fullWidth value={form.materialArray} 
                            onChange={(e) => setForm({ ...form, materialArray: e.target.value.split(',') })} 
                            error={!!formErrors["materialArray"]}
@@ -66,6 +66,8 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
 
                 <InputLabel id="has-warranty">Warranty</InputLabel>
                 <Select
+                    fullWidth 
+                    sx={{ marginBottom: '15px' }}
                     name="hasWarranty"
                     error={!!formErrors["hasWarranty"]}
                     helperText={formErrors["hasWarranty"] ? formErrors["hasWarranty"] : ""}
@@ -81,6 +83,8 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
                 </Select>
                 <InputLabel id="is-popular">Popular</InputLabel>
                 <Select
+                    fullWidth
+                    sx={{ marginBottom: '15px' }}
                     name="isPopular"
                     labelId="is-popular"
                     id="is-popular-option"
@@ -95,6 +99,8 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
                 </Select>
                 <InputLabel id="in-stock">In Stock</InputLabel>
                 <Select
+                    fullWidth
+                    sx={{ marginBottom: '15px' }}
                     name="stock"
                     error={!!formErrors["stock"]}
                     helperText={formErrors["stock"] ? formErrors["stock"] : ""}
@@ -119,8 +125,8 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
                             }}
                 />
                            
-                <Button  variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-                <Button variant="outlined" size="small" onClick={cancel} fullWidth>Cancel</Button>
+                <Button  sx={{ margin: '15px' }} variant="contained" color="primary" size="large" type="submit" >Submit</Button>
+                <Button sx={{ margin: '15px' }} variant="outlined" size="large" onClick={cancel} >Cancel</Button>
             </form>
         </Box>
     );
