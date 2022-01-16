@@ -132,7 +132,7 @@ router.post("/updateUser",
         replyTo:email,
         subject: `Email confirmation for ${firstName} ${lastName}`,
         text:`Thank you for creating a profile on our website. To confirm your profile please click the link specified
-          Link: http://localhost:3000/emailConfirmation/${confirmationHash}
+          Link: https://kea-final-project.herokuapp.com/emailConfirmation/${confirmationHash}
         `,
       };
       transporter.sendMail(mailOptions, function(error, info){
