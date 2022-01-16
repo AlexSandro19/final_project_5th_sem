@@ -7,8 +7,8 @@ import {updateItem, createItem} from "../redux/actions/item";
 import PaypalCheckoutButton from './PaypalCheckoutButton';
 import { useHistory } from "react-router-dom"
 
-const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }) => {
 
+const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }) => {
     const history = useHistory()
     // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
     const countSameItems = (receivedItem) => {
@@ -23,16 +23,16 @@ const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }
     const itemsToDisplay = []
     if (itemsInBasket.length){
       for (let i = 0; i < itemsInBasket.length; i++){
-      console.log("Index in the beginning", i)
-      const item = itemsInBasket[i]
-      console.log("item in itemsToDisplay", item)
-      const numberOfDuplicates = countSameItems(item) - 1
-      console.log("numberOfDuplicates ", numberOfDuplicates)
-      itemsToDisplay.push(item)
-      i += numberOfDuplicates
-      console.log("Index in the end", i)
-    }
-    console.log("items in itemsToDisplay", itemsToDisplay)
+        console.log("Index in the beginning", i)
+        const item = itemsInBasket[i]
+        console.log("item in itemsToDisplay", item)
+        const numberOfDuplicates = countSameItems(item) - 1
+        console.log("numberOfDuplicates ", numberOfDuplicates)
+        itemsToDisplay.push(item)
+        i += numberOfDuplicates
+        console.log("Index in the end", i)
+      }
+      console.log("items in itemsToDisplay", itemsToDisplay)
 
     }
     
@@ -41,7 +41,7 @@ const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }
     const [form, setForm] = useState({...user});
 
     // const [checked, setChecked] = useState(false);
-    let checked = false
+    // let checked = false
 
     const handleSubmit = (e) => { // e = event
         console.log("Details: ", form)
@@ -56,19 +56,19 @@ const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }
 
     }
 
-    const checkboxPressed = () =>  {
-        console.log("Checkbix pressed", checked)
-        checked = !checked
-        console.log("Checkbix pressed", checked)
-        if (checked) {
-            setForm({...user});
-        }else {
-            // setForm({...userProperties})
+    // const checkboxPressed = () =>  {
+    //     console.log("Checkbix pressed", checked)
+    //     checked = !checked
+    //     console.log("Checkbix pressed", checked)
+    //     if (checked) {
+    //         setForm({...user});
+    //     }else {
+    //         // setForm({...userProperties})
             
-        }
-        console.log("Form ", form)
+    //     }
+    //     console.log("Form ", form)
 
-    }
+    // }
 
     const capitalizeString = (initialStr) => {
         return initialStr
@@ -86,30 +86,30 @@ const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }
         <Typography variant="h3">Order Details</Typography>
         <Paper>
             <form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                <Typography variant="h6">Customer Information</Typography>
-                <Checkbox
+                <Typography variant="h6" sx={{ margin: '20px' }} >Customer Information</Typography>
+                {/* <Checkbox
                     checked={checked}
                     onChange={checkboxPressed}
                     inputProps={{ 'aria-label': 'controlled' }}
-                />
-                <TextField name="first-name" variant="outlined" disabled
+                /> */}
+                <TextField sx={{ marginBottom: '15px' }} name="first-name" variant="outlined" disabled
                            label="First Name" fullWidth value={form.firstName} 
                            onChange={(e) => ({ ...form, firstName: e.target.value })} />
-                <TextField name="last-name" variant="outlined" disabled
+                <TextField sx={{ marginBottom: '15px' }} name="last-name" variant="outlined" disabled
                            label="Last Name" fullWidth value={form.lastName} 
                            onChange={(e) => ({ ...form, lastName: e.target.value })} />
-                <TextField name="email" variant="outlined" disabled
+                <TextField sx={{ marginBottom: '15px' }} name="email" variant="outlined" disabled
                            label="Email" fullWidth value={form.email} multiline
                            onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                <TextField name="address" variant="outlined" disabled
+                <TextField sx={{ marginBottom: '15px' }} name="address" variant="outlined" disabled
                            label="Address" fullWidth value={form.address} 
                            onChange={(e) => setForm({ ...form, address: e.target.value })} />
-                <TextField name="phone" variant="outlined" disabled
+                <TextField sx={{ marginBottom: '15px' }} name="phone" variant="outlined" disabled
                            label="Phone" fullWidth value={form.phone} 
                            onChange={(e) => setForm({ ...form, phone: e.target.value })} />       
             </form>
         </Paper>
-        <Typography variant="h6">Chosen Items</Typography>
+        <Typography variant="h6" sx={{ marginTop: '10px' }}>Chosen Items</Typography>
         </Grid>
         <Grid item xs={12}>
          
@@ -133,8 +133,8 @@ const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }
           {capitalizeString(item.name)}
         </TableCell>
         <TableCell align="right">{countSameItems(item)}</TableCell>
-        <TableCell align="right">{item.price}</TableCell>
-        <TableCell align="right">{item.price * countSameItems(item)}</TableCell>
+        <TableCell align="right">{item.price} DKK</TableCell>
+        <TableCell align="right">{item.price * countSameItems(item)} DKK</TableCell>
         
       </TableRow>
     ))}
@@ -144,8 +144,10 @@ const OrderDetailsComponent = ({ goBack,user, itemsInBasket, createOrderAction }
 </Grid>
   <Grid item xs={12}>
     <PaypalCheckoutButton user={user} history={history} itemsInBasket={itemsInBasket} createOrderAction={createOrderAction}/>
-    <Button onClick={goBack} variant="contained" color="primary">Back</Button>
-    </Grid>
+  </Grid>
+  <Grid item xs={12}>
+    <Button onClick={goBack} variant="outlined">Back</Button>
+  </Grid>
   </Grid>
 </>
     );

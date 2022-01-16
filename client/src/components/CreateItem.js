@@ -117,8 +117,8 @@ export const CreateItem = ({user,formErrors,errors,items,createItem})=>{
                             }}
                 />
                            
-                <Button  variant="contained" color="primary" size="large" type="submit" onClick={submitHandler} fullWidth>Submit</Button>
-                <Button variant="contained" color="secondary" size="small" onClick={cancel} fullWidth>Cancel</Button>
+                <Button  variant="contained" color="primary" size="large" type="submit" onClick={submitHandler}>Submit</Button>
+                <Button variant="outlined" size="small" onClick={cancel}>Cancel</Button>
            </form>
            </Grid>
         </div>

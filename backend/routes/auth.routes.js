@@ -41,7 +41,7 @@ router.post("/updateUser",
           errors: [{ value: "password", msg: "Confirm password is not correct", param: "password" }],
         });
       }
-      const user =  await User.findOne({ email }).select(" password email emailConfirmed orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      const user =  await User.findOne({ email }).select(" password email emailConfirmed orders cart username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
       user.firstName=firstName;
       user.lastName=lastName;
       user.username=username;
@@ -214,7 +214,7 @@ router.post(
 
       const { email, password } = req.body;
 
-      const userCheck = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      const userCheck = await User.findOne({ email }).select(" password email orders cart emailConfirmed username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
       
       if (!userCheck) {
         return res.status(400).json({
@@ -222,7 +222,7 @@ router.post(
           errors: [{ value: email, msg: "User not found", param: "email" }],
         });
       }
-      const user = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      const user = await User.findOne({ email }).select(" password email orders cart emailConfirmed username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {

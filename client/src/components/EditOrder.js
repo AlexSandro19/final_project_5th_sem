@@ -59,8 +59,8 @@ export const EditOrder=({formErrors,errors,user,currentOrder,updateOrder})=>{
                        onChange={(e) => setForm({ ...form, delivered: format(e.target.value)})} />
 
 
-            <Button  variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-            <Button variant="contained" color="secondary" size="small" onClick={cancel} fullWidth>Cancel</Button>
+            <Button  variant="contained" color="primary" size="large" type="submit">Submit</Button>
+            <Button variant="outlined" size="small" onClick={cancel}>Cancel</Button>
         </form>
     </Box>
     )

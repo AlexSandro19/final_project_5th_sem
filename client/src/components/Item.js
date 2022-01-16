@@ -58,7 +58,8 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
 
     const classes = useStyles();
 
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [itemRemovedSnackbar, setItemRemovedSnackbar] = useState(false);
+    const [itemAddedSnackbar, setItemAddedSnackbar] = useState(false);
     
 
     const addToCartPressed = (e) => {
@@ -70,7 +71,7 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
             itemsInBasket.splice(index, 0, item);
         }
         addItemToBasket(itemsInBasket);
-        setOpenSnackbar(true);
+        setItemAddedSnackbar(true);
         setIsItemInBasket(true);
         saveCartAction(user, itemsInBasket,"ADD");
     }
@@ -90,6 +91,7 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
         console.log("updatedItemsInBasket", updatedItemsInBasket)
         updateItemsBasket(updatedItemsInBasket); 
         console.log("Delete: ", item);
+        setItemRemovedSnackbar(true);
         setIsItemInBasket(false);
         saveCartAction(user, updatedItemsInBasket,"REMOVE");
     }
@@ -102,10 +104,6 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
                 <CardContent>
                     <div>
                     <Typography variant="h5">{item.name}</Typography>
-                
-                <Button component={Link} to="/updateItem">
-                    <MoreHorizIcon fontSize="default" />
-                </Button>
                 </div>
                     <Typography variant="body1">{item.description}</Typography>
                     <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price}</Typography>
@@ -139,14 +137,25 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
             
             </Card>
             <Snackbar
-                open={openSnackbar}
+                open={itemAddedSnackbar}
                 autoHideDuration={2000}
-                onClose={() => {setOpenSnackbar(false)}}
+                onClose={() => {setItemAddedSnackbar(false)}}
                 // message={`${item.name} item was added to Basket!`}
                 // action={action}
             >
                 <Alert severity="success" sx={{ width: '100%' }}>
                     <b>{capitalizeString(item.name)}</b> item was added to Basket!
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={itemRemovedSnackbar}
+                autoHideDuration={2000}
+                onClose={() => {setItemRemovedSnackbar(false)}}
+                // message={`${item.name} item was added to Basket!`}
+                // action={action}
+            >
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    <b>{capitalizeString(item.name)}</b> item was removed from Basket.
                 </Alert>
             </Snackbar>
         </>

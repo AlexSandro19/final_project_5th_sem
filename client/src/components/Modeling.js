@@ -110,6 +110,7 @@ function init() {
     //hold our methods in dat.gui
     var introGui = new dat.GUI({autoplace: false})
     introGui.domElement.id = "introGui"
+    var GUI = document.getElementById("webgl")
     var threeContainer = document.getElementById("webgl1")
     threeContainer.appendChild(introGui.domElement)
     var id1 = document.getElementById("introGui")
@@ -148,6 +149,8 @@ function init() {
         }}
         this.addBox = {addBox: function(){
             var newBox = getBox(0.2,0.2,0.2)
+            var bbox = new THREE.Box3().setFromObject(newBox);
+            newBox.properties = {normalScale: bbox.getSize(new THREE.Vector3)}
             newBox.position.y = 1
             objects3D.push(newBox)
             sceneMeshes.push(newBox)
@@ -156,6 +159,8 @@ function init() {
         }}
         this.addSphere = {addSphere: function(){
             var newSphere = getSphere(0.2)
+            var bbox = new THREE.Box3().setFromObject(newSphere);
+            newSphere.properties = {normalScale: bbox.getSize(new THREE.Vector3)}
             newSphere.position.y = 1
             objects3D.push(newSphere)
             control.attach(newSphere)
@@ -163,7 +168,7 @@ function init() {
         }}
         this.takeScreen = {takeScreen: function(){
             gui.hide()
-            html2canvas(document.body).then(function(canvas){
+            html2canvas(GUI).then(function(canvas){
                 return canvas2Image.saveAsPNG(canvas);
             })
             gui.show()
@@ -240,8 +245,12 @@ function init() {
     // objeect names
     props.addGUIObject = ''
     //load the gltf obj to scene
+    
+    
+    
     let addObject = function(src, value){
         loader.load( src, function ( gltf ) {   
+            //calculate object size
             var bbox = new THREE.Box3().setFromObject(gltf.scene);
             //gltf.scene.updateMatrixWorld(true)
             
@@ -264,8 +273,7 @@ function init() {
     //mouse info
     var MouseControls = {
         LeftClick: "Pick object",
-        MiddleClick: "Position object on floor",
-        RightClick: "Rotate object"
+        RightClick: "Position object on floor"
     }
     //gui folders
     var f1 = gui.addFolder('Premade Objects')
@@ -364,7 +372,6 @@ function init() {
         sphere5.position.z = e
     }) 
     f6.add(MouseControls,'LeftClick')
-    f6.add(MouseControls,'MiddleClick',true)
     f6.add(MouseControls,'RightClick')
     
     f6.open()
@@ -508,15 +515,14 @@ function init() {
                 scene.remove(control);
             }
             break;
-            case 1:
-                if(selected.properties.hasOwnProperty('normalScale') ){
-
-                    selected.position.y = (selected.scale.y*selected.properties.normalScale.y)/2
-                }
-                
+            case 1:console.log("middle")
+                 
             break;
             case 2: 
-                selected.rotation.y += Math.PI/2
+            if(selected.properties.hasOwnProperty('normalScale') ){
+                event.preventDefault()
+                selected.position.y = (selected.scale.y*selected.properties.normalScale.y)/2
+            }
                   
         }
     }

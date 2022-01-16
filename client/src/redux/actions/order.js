@@ -72,7 +72,8 @@ export const saveCartAction = (user, cart,activityType) => {
    
     return {
         type: SAVE_CART,
-        payload: {user, cart},
+        payload: cart,
+        user,
         activityType:activityType
     }
 }

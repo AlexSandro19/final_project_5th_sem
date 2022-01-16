@@ -1,12 +1,39 @@
 
 import { Card, Grid, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, } from "@mui/material"
-import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useState } from "react";
+import { DateTime } from "luxon";
+
 export const ViewOrder=({currentOrder})=>{
+
+    const orderItems = currentOrder.items;
+
     const [page,setPage]=useState(0);
     const [rowsPerPage,setRowsPerPage]=useState(5);
     const emptyRows=rowsPerPage - Math.min(rowsPerPage,currentOrder.items.length-page*rowsPerPage);
     
+    const countSameItems = (receivedItem) => {
+      const sameItemArray = orderItems.filter(item => receivedItem._id === item._id);
+      return sameItemArray.length;
+    } 
+
+
+    const itemsToDisplay = []
+    if (orderItems.length){
+      for (let i = 0; i < orderItems.length; i++){
+        console.log("Index in the beginning", i)
+        const item = orderItems[i]
+        console.log("item in itemsToDisplay", item)
+        const numberOfDuplicates = countSameItems(item) - 1
+        console.log("numberOfDuplicates ", numberOfDuplicates)
+        itemsToDisplay.push(item)
+        i += numberOfDuplicates
+        console.log("Index in the end", i)
+      }
+      console.log("items in itemsToDisplay", itemsToDisplay)
+
+    }
+
     const handlePageChange=(event,newPage)=>{
         setPage(newPage);
     }
@@ -14,6 +41,12 @@ export const ViewOrder=({currentOrder})=>{
         setRowsPerPage(parseInt(event.target.value,5));
         setPage(0);
     }
+
+    const printDate=(initialFormat)=>{
+        const date = DateTime.fromFormat(initialFormat, 'dd-MM-yyyy')
+        return date.toFormat('MMMM dd, yyyy')
+    }
+
     const history=useHistory();
     const goBack=()=>{
         history.goBack();
@@ -21,26 +54,27 @@ export const ViewOrder=({currentOrder})=>{
     return(
 
         <div >
-        <Card style={{background:"#D7CD79"}}>
-            <Grid container>
-                
+        <Card style={{background:"#D7CD79", marginBottom: "20px", padding:"7px"}}>
+            <Grid container> 
             <Grid item xs={6}>
             <Grid container spacing={2}>
             <Grid item xs={12}>
-            <Typography variant="h5">Order Id: 1 </Typography>
+            <Typography variant="h5">Order Id: {currentOrder._id}</Typography>
             </Grid>
             <Grid item xs={12}>
-            <Typography variant="h5" >Order date : {currentOrder.ordered} </Typography>
+            {(currentOrder.orderPaid) ? 
+                <Typography variant="h5" >Order Paid: Yes</Typography>
+                :
+                <Typography variant="h5" >Order Paid: No</Typography>
+            }
             </Grid>
             <Grid item xs={12}>
-            <Typography variant="h5">Sent date : {currentOrder.sent} </Typography>
+            {currentOrder.message === "" ?(<Typography variant="h5">   Message: No message was given for the order.</Typography>):(<Typography variant="h5">   Message:  {currentOrder.message}</Typography>)}
             </Grid>
+            <Grid item xs={6}></Grid>
+            <Grid item xs={6}><Typography style={{width:"100%",textAlign:"right"}} variant="h2">ITEMS</Typography></Grid>
             <Grid item xs={12}>
-            <Typography variant="h5">Delivery date : {currentOrder.delivered} </Typography>
-            </Grid>
-            <Grid item xs={12}><Typography style={{width:"100%",textAlign:"right"}} variant="h2">ITEMS</Typography></Grid>
-            <Grid item xs={12}>
-            <Table style={{marginLeft:"15%"}}>
+            <Table>
                         <TableHead>
                         <TableRow>
                             <TableCell>ID</TableCell>
@@ -49,16 +83,14 @@ export const ViewOrder=({currentOrder})=>{
                             <TableCell>CATEGORY</TableCell>
                             <TableCell>MATERIAL</TableCell>
                             <TableCell>WARRANTY</TableCell>
-                            <TableCell>PRICE</TableCell>
                             <TableCell>QUANTITY</TableCell>
-                            <TableCell>STOCK</TableCell>
-                            <TableCell>POPULAR</TableCell>
+                            <TableCell>UNIT PRICE</TableCell>
+                            <TableCell>TOTAL PRICE</TableCell>
                             <TableCell>RATING</TableCell>
-                            <TableCell></TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                        {currentOrder.items.slice(page*rowsPerPage,page*rowsPerPage+rowsPerPage).map((item,index)=>{
+                        {itemsToDisplay.slice(page*rowsPerPage,page*rowsPerPage+rowsPerPage).map((item,index)=>{
                             return(
                                 <TableRow key={index}>
                                     <TableCell>
@@ -76,12 +108,10 @@ export const ViewOrder=({currentOrder})=>{
                                     <TableCell>
                                         {item.materialArray[0]},{item.materialArray[1]}
                                     </TableCell>
-                                    
                                 {item.hasWarranty ?(<TableCell>YES</TableCell>):(<TableCell>NO</TableCell>)}
+                                <TableCell>{countSameItems(item)}</TableCell>
                                 <TableCell>{item.price} DKK</TableCell>
-                                <TableCell>{item.quantity}</TableCell>
-                                {item.stock ?(<TableCell>YES</TableCell>):(<TableCell>NO</TableCell>)}
-                                {item.isPopular ?(<TableCell>YES</TableCell>):(<TableCell>NO</TableCell>)}
+                                <TableCell>{item.price * countSameItems(item)} DKK</TableCell>
                                 <TableCell>{item.ratings.medianValueRating}</TableCell>
                                 </TableRow>
                             )
@@ -95,7 +125,7 @@ export const ViewOrder=({currentOrder})=>{
                                 <TablePagination
                                 page={page}
                                 rowsPerPage={rowsPerPage}
-                                count={currentOrder.items.length}
+                                count={itemsToDisplay.length}
                                 onPageChange={handlePageChange}
                                 onRowsPerPageChange={handleChangeRowsPerPage}
                                 ></TablePagination>
@@ -108,14 +138,34 @@ export const ViewOrder=({currentOrder})=>{
             </Grid>
             <Grid item xs={6}>
             <Grid container spacing={2}>
-            <Grid item xs={12}>
-          {currentOrder.message === "" ?(<Typography variant="h5">   Message: No message was given for the order.</Typography>):(<Typography variant="h5">   Message:  {currentOrder.message}</Typography>)}
+            {(currentOrder.ordered) && (
+                <Grid item xs={12}>
+                <Typography variant="h5" >Order date : {printDate(currentOrder.ordered)} </Typography>
+                </Grid>
+            )}
+            {(currentOrder.sent) ? 
+                <Grid item xs={12}>
+                <Typography variant="h5">Sent date : {printDate(currentOrder.sent)} </Typography>
+                </Grid>
+                : 
+                <Grid item xs={12}>
+                <Typography variant="h5">Order not sent</Typography>
+                </Grid>
+            }
+            {(currentOrder.delivered) ?
+                <Grid item xs={12}>
+                <Typography variant="h5">Delivery date : {printDate(currentOrder.delivered)} </Typography>
+                </Grid>
+                :
+                <Grid item xs={12}>
+                <Typography variant="h5">Order not delivered</Typography>
+                </Grid>
+            }
             </Grid>
             </Grid>
-            </Grid>
-            <Grid> <Button onClick={goBack} variant="contained" color="primary">Back</Button></Grid>
             </Grid>
         </Card>
+            <Grid item xs={12}> <Button onClick={goBack} variant="outlined">Back</Button></Grid>
         </div>
     )
 }

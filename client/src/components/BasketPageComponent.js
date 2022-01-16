@@ -33,13 +33,13 @@ const useStyles=makeStyles(()=>({
         marginLeft:"5%",
         width:"90%",
     },
-    fab:{
-    },
 
 }))
 
 export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItemsBasket, saveCartAction, })=>{
-   const history = useHistory()
+
+    const [emailNotConfirmed, setEmailNotConfirmed] = useState(false)
+    const history = useHistory()
     // const [noMoreItemsToAdd, setNoMoreItemsToAdd] = useState(false);
     let noMoreItemsToAdd = false;
     const countSameItems = (receivedItem) => {
@@ -48,7 +48,22 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
     } 
 
     
-    const itemsToDisplay = [...new Set(itemsInBasket)];
+    const itemsToDisplay = []
+    if (itemsInBasket.length){
+      for (let i = 0; i < itemsInBasket.length; i++){
+        console.log("Index in the beginning", i)
+        const item = itemsInBasket[i]
+        console.log("item in itemsToDisplay", item)
+        const numberOfDuplicates = countSameItems(item) - 1
+        console.log("numberOfDuplicates ", numberOfDuplicates)
+        itemsToDisplay.push(item)
+        i += numberOfDuplicates
+        console.log("Index in the end", i)
+      }
+      console.log("items in itemsToDisplay", itemsToDisplay)
+
+    }
+
     const capitalizeString = (initialStr) => {
       if (initialStr) {
         return initialStr
@@ -111,14 +126,18 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
       // const itemsInCart = itemsInBasket.map(item => item._id);
       // const itemsInCart = itemsToDisplay.map(currentItem => ({itemObject:currentItem, itemName:currentItem.name,itemPrice:currentItem.price, quantityInCart: countSameItems(currentItem), totalPerItem: countSameItems(currentItem) * currentItem.price}))
       // console.log("itemsInCart ", itemsInCart)
-      saveCartAction(user, itemsInBasket);
-     
-      history.push("/orderDetails");
+      if (user.emailConfirmed){
+        history.push("/orderDetails")
+      }else{
+        setEmailNotConfirmed(true);
+      }
     }
 
     return (
         (!itemsToDisplay.length || !itemsInBasket.length) ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
             <>
+    <Grid container>
+    <Grid item xs={12}>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="items-table">
         <TableHead>
@@ -143,8 +162,8 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
               </TableCell>
               <TableCell align="right">{item.description}</TableCell>
               <TableCell align="right">{countSameItems(item)}</TableCell>
-              <TableCell align="right">{item.price}</TableCell>
-              <TableCell align="right">{item.price * countSameItems(item)}</TableCell>
+              <TableCell align="right">{item.price} DKK</TableCell>
+              <TableCell align="right">{item.price * countSameItems(item)} DKK</TableCell>
               <TableCell align="right">
               <ButtonGroup>
           <Button
@@ -184,22 +203,38 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
         </TableBody>
       </Table>
     </TableContainer>
-<Snackbar
-                            open={noMoreItemsToAdd}
-                            anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-                            autoHideDuration={2000}
-                            onClose={() => {noMoreItemsToAdd = false}}
-                            // message={`${item.name} item was added to Basket!`}
-                            // action={action}
-                        >
-                            <Alert severity="info" sx={{ width: '100%' }}>
-                                <b>You reached the quantity limit for this item.</b>
-                            </Alert>
-                        </Snackbar>
-                
-                <Button onClick={buttonPressed}>Proceed to Checkout</Button>
-                <Button onClick={goBack} variant="contained" color="primary">Back</Button>
-            </>
+    </Grid>
+    <Grid item xs={12}>
+      <Button sx={{ marginTop: '15px' }} onClick={buttonPressed} variant="contained">Proceed to Checkout</Button>
+    </Grid>
+    <Grid item xs={12}>
+      <Button sx={{ marginTop: '15px' }} onClick={goBack} variant="outlined">Back</Button>
+    </Grid>
+    </Grid>
+    <Snackbar
+      open={noMoreItemsToAdd}
+      anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+      autoHideDuration={2000}
+      onClose={() => {noMoreItemsToAdd = false}}
+      // message={`${item.name} item was added to Basket!`}
+      // action={action}
+    >
+      <Alert severity="info" sx={{ width: '100%' }}>
+        <b>You reached the quantity limit for this item.</b>
+      </Alert>
+    </Snackbar>
+    <Snackbar
+      open={emailNotConfirmed}
+      anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+      autoHideDuration={2000}
+      // message={`${item.name} item was added to Basket!`}
+      // action={action}
+    >
+      <Alert severity="info" sx={{ width: '100%' }}>
+        <b>You need to confirm your email before proceeeding.</b>
+      </Alert>
+    </Snackbar>
+    </>
     ))
 }
 
