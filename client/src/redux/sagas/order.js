@@ -217,7 +217,7 @@ function* saveCartFlow(action) {
       if (didUserUpdate) {
         user.cart = [...cart]
         console.log("User after upfate in saveCartFlow", user)
-        yield put(setUser(token, user.id, user.role,exp,user.username,user.firstName,user.lastName, user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
+        yield put(setUser(token, user._id, user.role,exp,user.username,user.firstName,user.lastName, user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
         yield put({
           type: LOGIN_SUCCESS,
         });
