@@ -19,9 +19,9 @@ export const updateUserApi =(name,email,username,firstName,lastName,password,pas
     throw error.response.data;
   })
 }
-export const refreshUser = (user) => {
+export const refreshUser = (token) => {
   return axios
-    .post(refreshUrl, { email:user.email, userId:user.id })
+    .post(refreshUrl, {},{headers:{authorization:`Bearer ${token}`}})
     .then((response) => response.data)
     .catch((error) => {
       throw error.response.data;

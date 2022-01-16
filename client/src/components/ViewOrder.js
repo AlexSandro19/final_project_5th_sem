@@ -21,16 +21,16 @@ export const ViewOrder=({currentOrder})=>{
     const itemsToDisplay = []
     if (orderItems.length){
       for (let i = 0; i < orderItems.length; i++){
-        console.log("Index in the beginning", i)
+
         const item = orderItems[i]
-        console.log("item in itemsToDisplay", item)
+
         const numberOfDuplicates = countSameItems(item) - 1
-        console.log("numberOfDuplicates ", numberOfDuplicates)
+
         itemsToDisplay.push(item)
         i += numberOfDuplicates
-        console.log("Index in the end", i)
+  
       }
-      console.log("items in itemsToDisplay", itemsToDisplay)
+
 
     }
 
@@ -49,7 +49,7 @@ export const ViewOrder=({currentOrder})=>{
 
     const history=useHistory();
     const goBack=()=>{
-        history.goBack();
+        history.push("/profile");
     }
     return(
 
@@ -58,9 +58,6 @@ export const ViewOrder=({currentOrder})=>{
             <Grid container> 
             <Grid item xs={6}>
             <Grid container spacing={2}>
-            <Grid item xs={12}>
-            <Typography variant="h5">Order Id: {currentOrder._id}</Typography>
-            </Grid>
             <Grid item xs={12}>
             {(currentOrder.orderPaid) ? 
                 <Typography variant="h5" >Order Paid: Yes</Typography>

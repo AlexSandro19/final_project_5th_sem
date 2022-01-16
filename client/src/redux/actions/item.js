@@ -23,7 +23,7 @@ export const setCurrentItem = (items,item) => {
     return {
         type: SET_CURRENT_ITEM,
         payload: item,
-        items: items
+        items: items,
     }
 } 
 export const setFilteredItems = (filteredItems) => {
@@ -34,25 +34,26 @@ export const setFilteredItems = (filteredItems) => {
     }
 } 
 
-export const createItem = (items,newItem) => {
+export const createItem = (items,newItem,token) => {
 
     return {
         type: CREATE_ITEM,
-        payload: {items:items,newItem:newItem}
+        payload: {items:items,newItem:newItem,token:token},
+        
     }
 } 
-export const deleteItem = (deleteItem) => {
+export const deleteItem = (deleteItem,token) => {
 
     return {
         type: DELETE_ITEM,
-        payload: {deleteItem:deleteItem}
+        payload: {deleteItem:deleteItem,token:token}
     }
 } 
-export const updateItem = (user,updatedItem) => {
+export const updateItem = (user,updatedItem,token) => {
 
     return {
         type: UPDATE_ITEM,
-        payload: {updatedItem},
+        payload: {updatedItem:updatedItem,token:token},
         user
     }
 } 

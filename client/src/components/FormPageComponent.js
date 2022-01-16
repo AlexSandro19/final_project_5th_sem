@@ -19,7 +19,7 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
     // }, [post])
 
     const handleSubmit = (e) => { // e = event
-        updateItem(user,form);
+        updateItem(user,form,user.token);
         e.preventDefault();
     }
 

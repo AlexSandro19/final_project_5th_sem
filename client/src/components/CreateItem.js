@@ -4,7 +4,7 @@ import { useState,useEffect } from "react"
 import FileBase from 'react-file-base64';
 import { useHistory } from "react-router-dom";
 
-export const CreateItem = ({formErrors,errors,items,createItem})=>{
+export const CreateItem = ({user,formErrors,errors,items,createItem})=>{
     const history= useHistory();
     const [form,setForm] = useState({});
     const updatedItemsList =[...items];
@@ -12,7 +12,8 @@ export const CreateItem = ({formErrors,errors,items,createItem})=>{
         event.preventDefault();
         form.ratings={ratingsArray:[{userId:"6188f2447bfae277ce60e9f3",rating:4}],medianValueRating:4}
         updatedItemsList.push(form);
-        createItem(updatedItemsList,form);
+        createItem(updatedItemsList,form,user.token);
+        history.goBack();
     }
 
     const cancel = () => {

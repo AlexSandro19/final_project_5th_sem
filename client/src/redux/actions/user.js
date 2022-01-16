@@ -14,9 +14,10 @@ export const setUser = (token, userId, role, exp,username,firstName,lastName,ema
   };
 };
 
-export const unsetUser = () => {
+export const unsetUser = (error) => {
   return {
     type: USER_UNSET,
+    error:error
   };
 };
 

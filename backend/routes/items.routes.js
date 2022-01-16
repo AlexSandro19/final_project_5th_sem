@@ -26,7 +26,7 @@ router.get("/items",
 
     }
  );
- router.post("/deleteItem",async(req,res)=>{
+ router.post("/deleteItem",auth,async(req,res)=>{
    try{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -46,17 +46,20 @@ router.get("/items",
    }
  })
 router.post("/createItem",
+  auth,
   [
-  check("name","Error with name property").isString().notEmpty().exists().escape().blacklist(["#x2F","&lt;","&gt;","&amp;","&quot;"]),
-  check("description","Error with description property").isString().notEmpty().exists().escape().blacklist(["#x2F","&lt;","&gt;","&amp;","&quot;"]),
-  check("price","Error with price property").isNumeric().notEmpty().exists().escape().blacklist(["#x2F","&lt;","&gt;","&amp;","&quot;"]),
-  check("quantity","Error with quantity property").isNumeric().notEmpty().exists().escape().blacklist(["#x2F","&lt;","&gt;","&amp;","&quot;"]),
-  check("categoryArray","Error with categorry property").isArray().notEmpty().exists().escape().blacklist(["#x2F","&lt;","&gt;","&amp;","&quot;"]),
-  check("materialArray","Error with material property").isArray().notEmpty().exists().escape().blacklist(["#x2F","&lt;","&gt;","&amp;","&quot;"]),
-  check("ratings","Error with the ratings set up").isObject().notEmpty().exists().escape(),
-  check("hasWarranty","Error with the warranty").isBoolean().notEmpty().exists().escape(),
-  check("isPopular","Error with the popularity").isBoolean().notEmpty().exists().escape(),
-  check("stock","Error with the stock property").isBoolean().notEmpty().exists().escape(),
+  check("name","Error with name property").isString().notEmpty().exists().escape(),
+  check("description","Error with description property").isString().notEmpty().exists().escape(),
+  check("price","Price should be a number not text").isNumeric(),
+  check("price","Error with price property").notEmpty().exists(),
+  check("quantity","Quantity should be a number not text").isNumeric(),
+  check("quantity","Error with quantity property").notEmpty().exists(),
+  check("categoryArray","Error with categorry property").isArray().notEmpty().exists(),
+  check("materialArray","Error with material property").isArray().notEmpty().exists(),
+  check("ratings","Error with the ratings set up").isObject().notEmpty().exists(),
+  check("hasWarranty","Error with the warranty").isBoolean().notEmpty().exists(),
+  check("isPopular","Error with the popularity").isBoolean().notEmpty().exists(),
+  check("stock","Error with the stock property").isBoolean().notEmpty().exists(),
   ],async(req,res)=>{
   try{
     const errors = validationResult(req);
@@ -74,18 +77,21 @@ router.post("/createItem",
     return res.status(404).json({ message: error,errors:[ { value: error, msg: error.message, },] });
   }
 })
-router.post("/updateItem",
-[
-check("name","Error with name property").isString().notEmpty().exists(),
-check("description","Error with description property").isString().notEmpty().exists(),
-check("price","Error with price property").isNumeric().notEmpty().exists(),
-check("quantity","Error with quantity property").isNumeric().notEmpty().exists(),
-check("categoryArray","Error with categorry property").isArray().notEmpty().exists(),
-check("materialArray","Error with material property").isArray().notEmpty().exists(),
-check("ratings","Error with the ratings set up").isObject().notEmpty().exists(),
-check("hasWarranty","Error with the warranty").isBoolean().notEmpty().exists(),
-check("isPopular","Error with the popularity").isBoolean().notEmpty().exists(),
-check("stock","Error with the stock property").isBoolean().notEmpty().exists(),
+router.post("/updateItem",auth,
+  [
+    check("name","Error with name property").isString().notEmpty().exists().escape(),
+    check("description","Error with description property").isString().notEmpty().exists().escape(),
+    check("price","Price should be a number not text").isNumeric(),
+    check("price","Error with price property").notEmpty().exists(),
+    check("quantity","Quantity should be a number not text").isNumeric(),
+    check("quantity","Error with quantity property").notEmpty().exists(),
+    check("categoryArray","Error with categorry property").isArray().notEmpty().exists(),
+    check("materialArray","Error with material property").isArray().notEmpty().exists(),
+    check("ratings","Error with the ratings set up").isObject().notEmpty().exists(),
+    check("hasWarranty","Error with the warranty").isBoolean().notEmpty().exists(),
+    check("isPopular","Error with the popularity").isBoolean().notEmpty().exists(),
+    check("stock","Error with the stock property").isBoolean().notEmpty().exists(),
+    
 ],
     async (req, res) => {
       try {
@@ -100,7 +106,7 @@ check("stock","Error with the stock property").isBoolean().notEmpty().exists(),
         console.log("api/updateItem is called");
         const updatedItem = req.body;
         const savedItem = await  Furniture.findByIdAndUpdate(updatedItem._id, updatedItem,  { new: true }); 
-
+        
         return res.status(200).json(savedItem);
         // if (Object.keys(savedItem).length !== 0){
         //   console.log("item updated successfully");
@@ -116,7 +122,7 @@ check("stock","Error with the stock property").isBoolean().notEmpty().exists(),
         
       } catch(error) {
         console.log(error.message);
-          return res.status(404).json({ message: error });
+          return res.status(404).json({ message: error,errors:[{value:error,}] });
 
       }
 

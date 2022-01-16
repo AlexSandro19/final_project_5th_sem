@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useState } from "react";
 import { Card, CardActionArea, CardContent, Grid, Box, Typography, Button, ButtonBase, Paper, Divider, Tooltip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {requestAllItems, getCurrentItem} from "../redux/actions/item"
 import {addItemToBasket, updateItemsBasket} from "../redux/actions/basket";
 import ShoppingPageComponent from "../components/ShoppingPageComponent"
@@ -33,6 +34,7 @@ const useStyles=makeStyles(()=>({
 
 const ItemPage=({items, currentItem, user,itemsInBasket,saveCartAction,addItemToBasket,updateItemsBasket})=> {
     console.log("ItemInBasket in ItemOage", itemsInBasket)
+    const history = useHistory();
     const classes=useStyles();
 
     const [isItemInBasket, setIsItemInBasket] = useState(false);
@@ -52,10 +54,10 @@ const ItemPage=({items, currentItem, user,itemsInBasket,saveCartAction,addItemTo
     useEffect( () => {
         const returnedValue = checkIfItemInBasket()
         console.log("returnedValue", returnedValue)
-
+        
         setIsItemInBasket(returnedValue);
     }, [currentItem])
-
+    
     const addToCartPressed = (e) => {
         e.preventDefault();
         const index = itemsInBasket.indexOf(currentItem);
@@ -66,7 +68,7 @@ const ItemPage=({items, currentItem, user,itemsInBasket,saveCartAction,addItemTo
         }
         addItemToBasket(itemsInBasket);
         setIsItemInBasket(true);
-        saveCartAction(user, itemsInBasket,"ADD");
+        saveCartAction(itemsInBasket,user.token, user.exp, "ADD");
     }
 
     const removeItem = () => {
@@ -75,10 +77,14 @@ const ItemPage=({items, currentItem, user,itemsInBasket,saveCartAction,addItemTo
         updateItemsBasket(updatedItemsInBasket); 
         console.log("Delete: ", currentItem);
         setIsItemInBasket(false);
-        saveCartAction(user, updatedItemsInBasket,"REMOVE");
+        saveCartAction(updatedItemsInBasket, user.token, user.exp, "REMOVE");
     }
-
+    const goBack = ()=>{
+        history.goBack();
+    }
+    
     return (
+        <div style={{height:"60vh"}}>
         <Paper width="90%">
             <img src={currentItem.picturesArray[0]} alt=""></img>
             <Typography variant="h1">{currentItem.name}</Typography>
@@ -103,7 +109,8 @@ const ItemPage=({items, currentItem, user,itemsInBasket,saveCartAction,addItemTo
                 : <></>
             }
             </Paper>
-         
+         <Button variant="outlined" onClick={goBack}>Back</Button>
+         </div>
     )
 }
 

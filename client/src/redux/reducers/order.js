@@ -1,29 +1,36 @@
-import {GET_CURRENT_ORDER,GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,DELETE_ORDER,CREATE_ORDER, SAVE_ORDER, SAVE_CART} from "../constants/order"
+import {GET_CURRENT_ORDER,GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,DELETE_ORDER,
+    CREATE_ORDER, GET_ALL_ORDERS_SUCCESS, SAVE_CART} from "../constants/order"
 const initialState={
     currentOrder:{},
-    order:{}
+    orders:[],
 }
 const reducer=(state=initialState,action)=>{
-    console.log("In the Basket Reducer", action.type, action.payload);
     switch(action.type){
         case GET_CURRENT_ORDER:
             return{
-            currentOrder:null
+            currentOrder:null,
+            orders:[]
             }
         case GET_CURRENT_ORDER_SUCCESS:
             return{
-                currentOrder:action.payload
+                currentOrder:action.payload,
+                orders:[]
             }
         case UPDATE_ORDER:
             return{
-                currentOrder:action.payload
+                currentOrder:action.payload,
+                orders:[]
             }
         case DELETE_ORDER:
             return{
-                currentOrder:null,
-
+                currentOrder:{},
+                orders:[]
             }
-            
+        case GET_ALL_ORDERS_SUCCESS:
+            return{
+                currentOrder:{},
+                orders:action.payload,
+            }   
         default: 
         return state;
     }

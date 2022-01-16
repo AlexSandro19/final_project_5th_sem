@@ -2,19 +2,18 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import { TextField, Box, CardContent, CardMedia, Button, Typography } from '@mui/material';
+import { TextField, Box, CardContent, CardMedia, Button, Typography,Grid } from '@mui/material';
 import { contactFormRequest } from "../redux/actions/contact";
 
 const useStyles = makeStyles((theme) => ({
    
     formEmail: {
         margin: "0",
+        marginLeft:"25%",
+        width:"1000px",
         color: "#989898",
         textAlign: "center",
-        border: "2px solid #ccc",
-        borderRadius: "4px",
-        display: "flex",
-        flexDirection: "column",
+
     }, 
    
   }));
@@ -41,26 +40,33 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
         history.goBack();
       }
     return (
-        <div>
-    
+        <div style={{width:"1000px" }}>
+        <Grid container spacing={2}>
+        <Grid item xs={12}> 
+        <Grid item xs={12} > <Typography variant="h2" style={{textAlign:"center"}}> Contact Form</Typography> </Grid>
         <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
-            <TextField sx={{ marginBottom: '15px' }}
-            label="First-Name"
+        <Grid item xs={12}><TextField sx={{ marginBottom: '15px' }}
+            fullWidth
+            label="First Name"
             required
             id = "outlined"
             value={form.firstName}
             name = "firstName"
             onChange={changeHandler}
-            />
-            <TextField sx={{ marginBottom: '15px' }}
-            label="Last-Name"
+            /></Grid>
+         <Grid item xs={12}>  
+         <TextField sx={{ marginBottom: '15px' }}
+          fullWidth
+            label="Last Name"
             required
             id = "outlined"
             value={form.lastName}
             name = "lastName"
             onChange={changeHandler}
-            />
-            <TextField sx={{ marginBottom: '15px' }}
+            /></Grid> 
+           <Grid item xs={12}> 
+           <TextField sx={{ marginBottom: '15px' }}
+            fullWidth
             label="Email"
             required
             onChange={changeHandler}
@@ -68,8 +74,10 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             type="email" 
             name="email"
             />
-            
+            </Grid> 
+            <Grid item xs={12}> 
             <TextField sx={{ marginBottom: '15px' }}
+             fullWidth
             label="Subject"
             required
             onChange={changeHandler}
@@ -77,7 +85,10 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             type="text" 
             name="subject"
             />
+            </Grid>
+            <Grid item xs={12}>  
             <TextField sx={{ marginBottom: '15px' }}
+             fullWidth
             label="Message"
             required
             value={form.message}
@@ -87,11 +98,13 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             multiline
             rows={5}
             />
-                <Button 
+            </Grid>
+            <Grid item xs={12}>       <Button
             type="submit" color="primary" variant="contained">Submit</Button> 
-
+            </Grid>
         </form>
-        <Button onClick={goBack} variant="outlined">Back</Button>
+        <Button onClick={goBack} variant="outlined" color="primary">Back</Button></Grid>
+        </Grid>
         </div>
           
     )

@@ -1,29 +1,59 @@
-import {    take, takeLatest, call, put } from "redux-saga/effects";
-import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,SAVE_CART,CREATE_ORDER,SAVE_ORDER} from "../constants/order";
-import {LOGIN_SUCCESS} from "../constants/auth";
+import { takeLatest, call, put } from "redux-saga/effects";
+import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,SAVE_CART,CREATE_ORDER,SAVE_ORDER,GET_ALL_ORDERS} from "../constants/order";
+import {LOGIN_SUCCESS,LOGIN_FAILURE} from "../constants/auth";
 import {refreshUser} from "../../services/auth.service";
-import {getCurrentOrderApi,getUpdateOrderApi,deleteOrderService,saveCartService,createOrderService} from "../../services/order.service";
-import {setCurrentOrder} from "../actions/order";
-import {setUser} from "../actions/user";
+import {getCurrentOrderApi,getUpdateOrderApi,deleteOrderService,saveCartService,createOrderService,getAllOrders} from "../../services/order.service";
+import {setCurrentOrder,getAllOrdersSUCCESS,} from "../actions/order";
+import {setUser,unsetUser} from "../actions/user";
 
 import { saveCartAction, saveOrderAction } from "../actions/order";
-
+function* getOrdersFlow(action){
+  try{
+    const token = action.payload;
+    const orders= yield call(getAllOrders,token);
+    console.log(orders);
+    yield put(getAllOrdersSUCCESS(orders));
+  }catch(error){
+    console.log(error);
+    if(error.status === 401){
+      yield put(unsetUser(true));
+        yield put({
+         type: LOGIN_FAILURE,
+         message: {
+           text: "Session expired. Please login again",
+          severity: "error",
+         },
+       });
+     
+    }else{
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
+    }
+    
+  }
+}
 function* createOrderFlow(action) {
   try {
 
-    const order = action.payload;
-    const user = action.user
+    const {order,token} = action.payload;
+    console.log(token);
 
-    const {orderCreated,addedOrderId} = yield call(createOrderService, order)  
+    const {orderCreated} = yield call(createOrderService, order,token)  
     if (orderCreated) {
-      order._id = addedOrderId      
-      user.orders.push(order)
-      user.cart = []
-      yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
-      const lastcreatedOrderIndex = user.orders.length - 1
-      const lastCreatedOrder = user.orders[lastcreatedOrderIndex]
-      console.log("lastCreatedOrder in createOrderFlow ", lastCreatedOrder)
-      yield put(setCurrentOrder(lastCreatedOrder));
+      // order._id = addedOrderId      
+      //user.orders.push(order)
+      //user.cart = []
+      // yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
+      //const lastcreatedOrderIndex = user.orders.length - 1
+      //const lastCreatedOrder = user.orders[lastcreatedOrderIndex]
+      //console.log("lastCreatedOrder in createOrderFlow ", lastCreatedOrder)
+      yield put(setCurrentOrder(order));
       yield put({
         type: LOGIN_SUCCESS,
       });
@@ -38,14 +68,26 @@ function* createOrderFlow(action) {
   //   yield put(setUser(updatedUser))
 
   }catch (error) {
-    yield put({
-      type:"FAILURE",
-      message:{
-          text:error.message,
-          severity:"error",
-      },
-      errors:error.errors
-  })
+    if(error.status === 401){
+      yield put(unsetUser(true));
+        yield put({
+         type: LOGIN_FAILURE,
+         message: {
+           text: "Session expired. Please login again",
+          severity: "error",
+         },
+       });
+     
+    }else{
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
+    }
   }
 }
 
@@ -53,25 +95,50 @@ function* getCurrentOrderFlow(action){
 
     try{
         const orderId= action.payload;
-        const order = yield call(getCurrentOrderApi,orderId);
+        const token= action.token;
+        const order = yield call(getCurrentOrderApi,orderId,token);
         // console.log(orderId);
-        // console.log(order);
+        console.log(order);
         yield put(setCurrentOrder(order));
     }catch(error){
         console.log(error);
-        throw error;
+
+        if(error.status === 401){
+          yield put(unsetUser(true));
+            yield put({
+             type: LOGIN_FAILURE,
+             message: {
+               text: "Session expired. Please login again",
+              severity: "error",
+             },
+           });
+         
+        }else{
+          yield put({
+            type:"FAILURE",
+            message:{
+                text:error.message,
+                severity:"error",
+            },
+            errors:error.errors
+        })
+        }
+    
     }
 }
 function* updateOrderFlow(action){
     try{
-        const order = action.payload;
-        const user= action.user;
-        const updateOrder = yield call(getUpdateOrderApi,order)
-        const payload=yield call(refreshUser,user);
-        yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.firstName, payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
-        yield put({
-          type: LOGIN_SUCCESS,
-        });
+        const {order} = action.payload;
+        const token = action.token
+        const {updatedOrder,user} = yield call(getUpdateOrderApi,order,token)
+        if(user.role === "ADMIN"){
+          yield put({
+            type:GET_ALL_ORDERS,
+            payload:token
+          })
+        }else {
+          yield put(setUser(token.token, token.userId, token.role, token.exp,user.username,user.firstName, user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
+        }
         yield put({
           type:"SUCCESS",
           message:{
@@ -80,7 +147,17 @@ function* updateOrderFlow(action){
           }
       })
     }catch(error){
-   
+      if(error.status === 401){
+        yield put(unsetUser(true));
+          yield put({
+           type: LOGIN_FAILURE,
+           message: {
+             text: "Session expired. Please login again",
+            severity: "error",
+           },
+         });
+       
+      }else{
         yield put({
           type:"FAILURE",
           message:{
@@ -89,12 +166,14 @@ function* updateOrderFlow(action){
           },
           errors:error.errors
       })
+      }
     }
 }
 function* deleteOrderFlow(action){
     try{
-        const deleteOrder= action.payload;
-        yield call(deleteOrderService,deleteOrder);
+        const {order,token}= action.payload;
+        const allOrders = yield call(deleteOrderService,order,token);
+        yield put(getAllOrdersSUCCESS(allOrders));
         yield put({
           type:"SUCCESS",
           message:{
@@ -104,30 +183,41 @@ function* deleteOrderFlow(action){
       })
     }catch(error){
         console.log(error);
-        yield put({
-          type:"FAILURE",
-          message:{
-              text:error.message,
-              severity:"error",
-          },
-          errors:error.errors
-      })
+        if(error.status === 401){
+          yield put(unsetUser(true));
+            yield put({
+             type: LOGIN_FAILURE,
+             message: {
+               text: "Session expired. Please login again",
+              severity: "error",
+             },
+           });
+         
+        }else{
+          yield put({
+            type:"FAILURE",
+            message:{
+                text:error.message,
+                severity:"error",
+            },
+            errors:error.errors
+        })
+        }
     }
 }
 
 
 function* saveCartFlow(action) {
     try {
-      console.log("action in saveCartFlow ", action)
-      const user = action.user;
-      const cart = action.payload;
+      const {cart,token,exp} = action.payload;
+      console.log(token.exp);
       const activityType = action.activityType;
-      const {didUserUpdate} = yield call(saveCartService, user, cart)  
+      const {didUserUpdate,user} = yield call(saveCartService, cart,token)  
       
       if (didUserUpdate) {
         user.cart = [...cart]
         console.log("User after upfate in saveCartFlow", user)
-        yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName, user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
+        yield put(setUser(token, user.id, user.role,exp,user.username,user.firstName,user.lastName, user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
         yield put({
           type: LOGIN_SUCCESS,
         });
@@ -154,23 +244,30 @@ function* saveCartFlow(action) {
     //   yield put(setUser(updatedUser))
 
     }catch (error) {
-      yield put({
-        type:"FAILURE",
-        message:{
-            text:error.message,
-            severity:"error",
-        },
-        errors:error.errors
-    })
+      if(error.status === 401){
+        yield put(unsetUser(true));
+         
+       
+      }else{
+        yield put({
+          type:"FAILURE",
+          message:{
+              text:error.message,
+              severity:"error",
+          },
+          errors:error.errors
+      })
+      }
     }
 }
 
 function* orderWatcher(){
     yield takeLatest(GET_CURRENT_ORDER,getCurrentOrderFlow);
     yield takeLatest(UPDATE_ORDER,updateOrderFlow);
-    yield takeLatest(DELETE_ORDER,deleteOrderFlow)
-    yield takeLatest(SAVE_CART, saveCartFlow) 
-    yield takeLatest(CREATE_ORDER, createOrderFlow) 
+    yield takeLatest(DELETE_ORDER,deleteOrderFlow);
+    yield takeLatest(SAVE_CART, saveCartFlow); 
+    yield takeLatest(CREATE_ORDER, createOrderFlow); 
+    yield takeLatest(GET_ALL_ORDERS,getOrdersFlow)
 }
 
 export default orderWatcher;

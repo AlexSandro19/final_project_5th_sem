@@ -1,12 +1,12 @@
 import { takeLatest,take, call, put } from "redux-saga/effects";
-
+import history from "../../history";
 import {
   LOGIN_REQUESTING,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
 } from "../constants/auth";
 
-import { setUser } from "../actions/user";
+import { setUser, } from "../actions/user";
 
 import { USER_UNSET } from "../constants/user";
 
@@ -15,10 +15,11 @@ import {
   getLocalAuthToken,
   setAuthToken,
   removeAuthToken,
+  refreshUser
 } from "../../services/auth.service";
 
-const expirationTime = 60 * 60 * 1000;
-
+//const expirationTime = 60 * 60 * 1000;
+const expirationTime = 30 * 60 * 1000;
 function logout() {
   removeAuthToken();
 }
@@ -28,7 +29,6 @@ function* loginFlow(credentials) {
   try {
     payload = yield call(loginApi, credentials.email, credentials.password);
     const exp = new Date().valueOf() + expirationTime;
-
     yield put(setUser(payload.token, payload.userId, payload.role, exp,payload.username,payload.firstName,payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
     yield put({
       type: LOGIN_SUCCESS,
@@ -46,11 +46,17 @@ function* loginFlow(credentials) {
       role: payload.role,
       exp: exp,
     });
-
+   
 
   } catch (error) {
     console.log(error);
-    yield put({type:LOGIN_FAILURE});
+    yield put({
+      type: LOGIN_FAILURE,
+      message: {
+        text: "Session expired. Please login again",
+        severity: "error",
+      },
+    });
     yield put({
       type: "FAILURE",
       message: {
@@ -69,11 +75,12 @@ function* loginWatcher() {
     if (!token) {
       while (!token) {
         const { payload } = yield take(LOGIN_REQUESTING);
+        console.log(payload);
         yield call(loginFlow, payload);
         token = yield call(getLocalAuthToken);
       }
     } else if (token.exp < Date.now().valueOf()) {
-      removeAuthToken();
+      yield call(logout);
       yield put({
         type: LOGIN_FAILURE,
         message: {
@@ -81,23 +88,39 @@ function* loginWatcher() {
           severity: "error",
         },
       });
+      yield put({
+        type:"FAILURE",
+        message:{
+          text:"Session expired. Please login again",
+          severity:"error"
+        }
+      })
       const { payload } = yield take(LOGIN_REQUESTING);
       yield call(loginFlow, payload);
     } else {
-      yield put(setUser(token.token, token.userId, token.role, token.exp));
+      
+      const payload=yield call(refreshUser,token.token);
+      console.log(payload);
+      console.log(token);
+      yield put(setUser(token.token, payload.userId, payload.role, token.exp,payload.username,payload.firstName, payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
       yield put({ type: LOGIN_SUCCESS });
     }
-    yield take(USER_UNSET);
-    token = null;
-    yield call(logout);
-    yield put({
-      type:"SUCCESS",
-      message:{
-        text:"Logged out successfully",
-        severity:"success"
-      }
-    });
-  }
+    const {error} = yield take(USER_UNSET);
+    if(error){
+      history.push("/");
+    }else{
+      token = null;
+      yield call(logout);
+      yield put({
+        type:"SUCCESS",
+        message:{
+          text:"Logged out successfully",
+          severity:"success"
+        }
+      });
+    }  
+    }
+ 
 }
 
 export default loginWatcher;

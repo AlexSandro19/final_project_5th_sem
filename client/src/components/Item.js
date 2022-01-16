@@ -73,7 +73,7 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
         addItemToBasket(itemsInBasket);
         setItemAddedSnackbar(true);
         setIsItemInBasket(true);
-        saveCartAction(user, itemsInBasket,"ADD");
+        saveCartAction(itemsInBasket,user.token,user.token,"ADD");
     }
 
     const capitalizeString = (initialStr) => {
@@ -93,14 +93,14 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
         console.log("Delete: ", item);
         setItemRemovedSnackbar(true);
         setIsItemInBasket(false);
-        saveCartAction(user, updatedItemsInBasket,"REMOVE");
+        saveCartAction(updatedItemsInBasket,user.token,user.token,"REMOVE");
     }
 
     return(
         <>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
             <img src={item.picturesArray[0]} alt=""></img> 
-            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(items,item)}}>
+            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(items,item,user.token)}}>
                 <CardContent>
                     <div>
                     <Typography variant="h5">{item.name}</Typography>
