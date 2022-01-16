@@ -1,5 +1,5 @@
 import { Switch } from "react-router-dom";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, } from "react-router-dom";
 import HomePage  from "./pages/HomePage";
 import { connect } from "react-redux";
 import ShoppingPage from "./pages/ShoppingPage";

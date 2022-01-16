@@ -5,16 +5,7 @@ const requestItemsUrl = "/api/items";
 const updateItemUrl = "/api/updateItem";
 const createItemUrl ="/api/createItem";
 const deleteItemUrl="/api/deleteItem";
-// export const getLocalAuthToken = () =>
-//   JSON.parse(localStorage.getItem(storageName));
 
-// export const setAuthToken = (token) => {
-//   localStorage.setItem(storageName, JSON.stringify(token));
-// };
-
-// export const removeAuthToken = () => {
-//   localStorage.removeItem(storageName);
-// };
 
 export const requestItems = () => {
 
@@ -24,26 +15,26 @@ export const requestItems = () => {
                     throw error.response.data;
                 });
 } 
-export const updateItem = (item) => {
+export const updateItem = (item,token) => {
 
-    return axios.post(updateItemUrl, item) // ?????
+    return axios.post(updateItemUrl, item,{headers:{authorization:`Bearer ${token}`}}) 
                 .then((response) => response.data)
                 .catch((error) => {
                     throw error.response.data;
                 });
 } 
-export const createItem = (currentItem) => {
+export const createItem = (currentItem,token) => {
 
-    return axios.post(createItemUrl, currentItem) // ?????
+    return axios.post(createItemUrl, currentItem,{headers:{authorization:`Bearer ${token}`}}) 
                 .then((response) => response.data)
                 .catch((error) => {
                     console.log(error);
                     throw error.response.data;
                 });
 } 
-export const deleteItemService = (deleteItem) => {
+export const deleteItemService = (deleteItem,token) => {
 
-    return axios.post(deleteItemUrl, deleteItem) // ?????
+    return axios.post(deleteItemUrl, deleteItem,{headers:{authorization:`Bearer ${token}`}}) 
                 .then((response) => response.data)
                 .catch((error) => {
                     console.log(error);

@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
       setModalOpen(true);
     };
     const logOut = ()=>{
-      unsetUser();
+      unsetUser(false);
+      setModalOpen(false);
     }
     const handleClose = () => {
       setModalOpen(false);
@@ -116,6 +117,7 @@ const useStyles = makeStyles((theme) => ({
         </>
         )
     }
+
     return(
         <>
         <AppBar position="sticky" style={{backgroundColor:"#C4C4C4"}}  className={classes.appBar}  sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>

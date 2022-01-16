@@ -1,10 +1,10 @@
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import { useState } from "react";
-//import { DataGrid } from '@mui/x-data-grid';
 import { TextField,ButtonBase,Grid,Divider, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, Tab } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import {Tooltip} from "@mui/material";
+import {Loader} from "../components/Loader";
 const useStyles=makeStyles(()=>({
     back:{
         margin:"1%",
@@ -33,9 +33,9 @@ const useStyles=makeStyles(()=>({
 
 export const Profile=({adminOrders,setForm,setEnable,enable,formErrors,getCurrentOrder,setCurrentItem,handleDeleteOrderOpen,handleDeleteItemOpen,user,form,sendProfileUpdateForm,changeHandler,items})=>{
 const classes=useStyles();
-if(user.role === "USER"){
-    
-}
+// if(!user.orders){
+//     <Loader></Loader>
+//   }
 
 const [orderPage,setOrderPage]= useState(0);
 const [rowsPerPageOrders,setRowsPerPageOrders] = useState(5);
@@ -60,7 +60,7 @@ const setItem=(item)=>{
 }
 
 const setOrder=(orderId)=>{
-    getCurrentOrder(orderId);
+    getCurrentOrder(orderId,user.token);
 }
 const emptyRowsOrders = rowsPerPageOrders - Math.min(rowsPerPageOrders,adminOrders.length - orderPage*rowsPerPageOrders)
 const emptyRows=rowsPerPage - Math.min(rowsPerPage,items.length-page*rowsPerPage);
@@ -260,7 +260,7 @@ if(user.role === "ADMIN"){
     )
     
     
-}else{
+}else if(user.role ==="USER"){
     const orderList=[...user.orders];
     return(
         <div> 
@@ -343,6 +343,10 @@ if(user.role === "ADMIN"){
        
     )
     
+}else{
+    return(
+        <Loader></Loader>
+    );
 }
 
 

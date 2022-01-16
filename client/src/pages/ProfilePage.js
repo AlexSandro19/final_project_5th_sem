@@ -6,6 +6,7 @@ import { DeleteDialog } from "../components/DeleteDialog";
 import {setCurrentItem,deleteItem,} from "../redux/actions/item"
 import { getCurrentOrder,deleteOrder,getAllOrders } from "../redux/actions/order";
 import { updateUser } from "../redux/actions/user";
+
 const ProfilePage=({getAllOrders,adminOrders,updateUser,errors,user,items,currentItem,currentOrder,setCurrentItem,getCurrentOrder,deleteItem,deleteOrder})=>{
     const history = useHistory();
     const [formErrors,setFormErrors] = useState({});
@@ -50,21 +51,22 @@ const ProfilePage=({getAllOrders,adminOrders,updateUser,errors,user,items,curren
       setModalOpen(true);
       };
       const handleDeleteOrderOpen = (orderId) => {
-        getCurrentOrder(orderId);
+        getCurrentOrder(orderId,user.token);
         setDeleteOrderOpen(true);
       };
       const submitDeleteOrder = ()=>{
-        deleteOrder(currentOrder);
+        deleteOrder(currentOrder,user.token);
         setDeleteOrderOpen(false);
       }
       const submitDeleteItem = ()=>{
-        deleteItem(currentItem);
+        deleteItem(currentItem,user.token);
         setModalOpen(false);
       }
       const handleClose = () => {
         setModalOpen(false);
         setDeleteOrderOpen(false);
       };
+
     return(
         <div>
         <Profile adminOrders={adminOrders} setForm={setForm} setEnable={setEnable} enable={enable} formErrors={formErrors} errros={errors} getCurrentOrder={getCurrentOrder} setCurrentItem={setCurrentItem} handleDeleteOrderOpen={handleDeleteOrderOpen}  handleDeleteItemOpen={handleDeleteItemOpen} items={items} user={user} form={form} sendProfileUpdateForm={sendProfileUpdateForm} changeHandler={changeHandler}>

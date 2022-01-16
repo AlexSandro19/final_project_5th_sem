@@ -3,20 +3,21 @@ import { REQUEST_ALL_ITEMS, REQUEST_ALL_ITEMS_SUCCESS, UPDATE_ITEM,CREATE_ITEM, 
 import {LOGIN_SUCCESS} from "../constants/auth";
 import {refreshUser} from "../../services/auth.service";
 import { requestAllItemsSuccess, setCurrentItem } from "../actions/item";
-import {setUser} from "../actions/user";
+import {setUser,unsetUser} from "../actions/user";
 import { requestItems, updateItem,createItem,deleteItemService } from  "../../services/item.service";
 
 function* updateItemFlow(action) {
     try {
       const item = action.payload.updatedItem;
       const user= action.user;
-      const updatedItem = yield call(updateItem, item)
-      const payload=yield call(refreshUser,user);
+      const token = action.payload.token;
+      const updatedItem = yield call(updateItem, item,token)
+      //const payload=yield call(refreshUser,user);
       //console.log(payload);
-      yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.firstName, payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
-      yield put({
-        type: LOGIN_SUCCESS,
-      });
+      // yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.firstName, payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
+      // yield put({
+      //   type: LOGIN_SUCCESS,
+      // });
       yield put({type:REQUEST_ALL_ITEMS})
       yield put({
         type:"SUCCESS",
@@ -26,20 +27,24 @@ function* updateItemFlow(action) {
         }
     })
     }catch (error) {
-      yield put({
-        type:"FAILURE",
-        message:{
-            text:error.message,
-            severity:"error",
-        },
-        errors:error.errors
-    })
+      if(error.status === 401){
+        yield put(unsetUser(true));
+      }else{
+        yield put({
+          type:"FAILURE",
+          message:{
+              text:error.message,
+              severity:"error",
+          },
+          errors:error.errors
+      })
+      }
     }
 }
 function* deleteItemFlow (action){
   try{
-    const {deleteItem} = action.payload;
-    const response = yield call(deleteItemService,deleteItem);
+    const {deleteItem,token} = action.payload;
+    const response = yield call(deleteItemService,deleteItem,token);
     console.log(response);
     yield put({type:REQUEST_ALL_ITEMS})
     yield put({
@@ -50,21 +55,27 @@ function* deleteItemFlow (action){
       }
   })
     }catch(error){
-      yield put({
-        type:"FAILURE",
-        message:{
-            text:error.message,
-            severity:"error",
-        },
-        errors:error.errors
-    })
+      if(error.status === 401){
+        yield put(unsetUser(true));
+         
+       
+      }else{
+        yield put({
+          type:"FAILURE",
+          message:{
+              text:error.message,
+              severity:"error",
+          },
+          errors:error.errors
+      })
+      }
   }
 }
 function* createItemFlow (action){
   try{
-    const {newItem} = action.payload;
+    const {newItem,token} = action.payload;
    
-    const response = yield call (createItem,newItem);
+    const response = yield call (createItem,newItem,token);
 
     yield put({type:REQUEST_ALL_ITEMS})
     yield put({
@@ -75,14 +86,20 @@ function* createItemFlow (action){
       }
   })
   }catch(error){
-    yield put({
-      type:"FAILURE",
-      message:{
-          text:error.message,
-          severity:"error",
-      },
-      errors:error.errors
-  })
+    if(error.status === 401){
+      yield put(unsetUser(true));
+       
+     
+    }else{
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
+    }
   }
 }
 function* shoppingPageFlow(action) {

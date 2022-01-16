@@ -12,7 +12,7 @@ const router = Router();
 
 
  
-router.post("/updateOrder",
+router.post("/updateOrder",auth,
 [
 check("_id","Try again. Error with the order").exists().isMongoId(),
 check("items","Try again. Error with the order").exists(),
@@ -46,10 +46,11 @@ check("delivered","Try again. Error with the order").exists(),
      order.ordered=" - - "
       // return res.status(500).json({message:"Invalid date selected",errors:[{value:checkOrder.ordered,msg:"Invalid ordered date selected",param:"ordered"}]});
      }
-   console.log(order);
+     
    const updatedOrder = await Order.findByIdAndUpdate(order._id,order,{new:true});
    //console.log(updatedOrder);
-   return res.status(200).json(updatedOrder);
+   const updatedUser = await User.findById(req.user._id).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+   return res.status(200).json({updatedOrder:updatedOrder,user:updatedUser});
   }catch(error){
     console.log(error.message);
     return res.status(500).json({error:error,message:error.message})
@@ -69,7 +70,7 @@ router.post("/orders",auth,async(req,res)=>{
         return res.status(404).json({ message: error.message });
     }
 });
-router.post("/order",async(req,res)=>{
+router.post("/order",auth,async(req,res)=>{
 
     try{
       const errors=  validationResult(req)
@@ -83,7 +84,7 @@ router.post("/order",async(req,res)=>{
      const {orderId}=req.body;
      //console.log(orderId);
      const order = await Order.findOne({_id:orderId}).populate("items");
-     //console.log(order);
+     console.log(order);
      if(!order){
          return res.status(400).json({message:"Order not found"})
      }
@@ -97,7 +98,7 @@ router.post("/order",async(req,res)=>{
 })
 
 
-router.post("/saveCart",
+router.post("/saveCart",auth,
     async (req, res) => {
       try {
 
@@ -132,7 +133,7 @@ router.post("/saveCart",
     }
 ); 
 
-router.post("/createOrder",async(req,res)=>{
+router.post("/createOrder",auth,async(req,res)=>{
 
   try{
 

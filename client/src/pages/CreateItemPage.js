@@ -3,7 +3,7 @@ import {CreateItem} from "../components/CreateItem";
 import { createItem } from "../redux/actions/item";
 import {useState,useEffect} from "react";
 import { useHistory } from "react-router-dom";
-const CreateItemPage = ({errors,items,createItem})=>{
+const CreateItemPage = ({user,errors,items,createItem})=>{
     const [formErrors,setFormErrors]=useState({});
     useEffect(() => {
         if (errors) {
@@ -16,7 +16,7 @@ const CreateItemPage = ({errors,items,createItem})=>{
       }, [errors]);
 
     return(
-        <CreateItem  formErrors={formErrors} errors={errors} items={items} createItem={createItem}>
+        <CreateItem  user={user} formErrors={formErrors} errors={errors} items={items} createItem={createItem}>
 
         </CreateItem>
     )
@@ -26,7 +26,8 @@ const CreateItemPage = ({errors,items,createItem})=>{
 
 const mapStateToProps = (state) => ({
     items:state.items.items,
-    errors:state.message.errors
+    errors:state.message.errors,
+    user:state.user
   });
   
  export default connect(mapStateToProps,{createItem})(CreateItemPage);

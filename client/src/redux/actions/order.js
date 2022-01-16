@@ -27,24 +27,26 @@ export const getAllOrdersSUCCESS = (orders) => {
         payload: orders
     }
 }
-export const getCurrentOrder = (orderId) => {
+export const getCurrentOrder = (orderId,token) => {
 
     return {
         type: GET_CURRENT_ORDER,
-        payload: orderId
+        payload: orderId,
+        token
     }
 } 
-export const updateOrder = (user,order) =>{
+export const updateOrder = (order,token) =>{
     return{
         type:UPDATE_ORDER,
-        payload:order,
-        user
+        payload:{order:order},
+        token:token
     }
 }
-export const deleteOrder = (order) =>{
+export const deleteOrder = (order,token) =>{
     return{
         type:DELETE_ORDER,
         payload:order,
+        token
     }
 }
 

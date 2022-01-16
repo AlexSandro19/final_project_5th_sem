@@ -1,10 +1,10 @@
-import {    take, takeLatest, call, put } from "redux-saga/effects";
+import { takeLatest, call, put } from "redux-saga/effects";
 import {GET_CURRENT_ORDER,DELETE_ORDER, GET_CURRENT_ORDER_SUCCESS,UPDATE_ORDER,SAVE_CART,CREATE_ORDER,SAVE_ORDER,GET_ALL_ORDERS} from "../constants/order";
-import {LOGIN_SUCCESS} from "../constants/auth";
+import {LOGIN_SUCCESS,LOGIN_FAILURE} from "../constants/auth";
 import {refreshUser} from "../../services/auth.service";
 import {getCurrentOrderApi,getUpdateOrderApi,deleteOrderService,saveCartService,createOrderService,getAllOrders} from "../../services/order.service";
 import {setCurrentOrder,getAllOrdersSUCCESS,} from "../actions/order";
-import {setUser} from "../actions/user";
+import {setUser,unsetUser} from "../actions/user";
 
 import { saveCartAction, saveOrderAction } from "../actions/order";
 function* getOrdersFlow(action){
@@ -14,14 +14,28 @@ function* getOrdersFlow(action){
     console.log(orders);
     yield put(getAllOrdersSUCCESS(orders));
   }catch(error){
-    yield put({
-      type:"FAILURE",
-      message:{
-          text:error.message,
-          severity:"error",
-      },
-      errors:error.errors
-  })
+    console.log(error);
+    if(error.status === 401){
+      yield put(unsetUser(true));
+        yield put({
+         type: LOGIN_FAILURE,
+         message: {
+           text: "Session expired. Please login again",
+          severity: "error",
+         },
+       });
+     
+    }else{
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
+    }
+    
   }
 }
 function* createOrderFlow(action) {
@@ -53,14 +67,26 @@ function* createOrderFlow(action) {
   //   yield put(setUser(updatedUser))
 
   }catch (error) {
-    yield put({
-      type:"FAILURE",
-      message:{
-          text:error.message,
-          severity:"error",
-      },
-      errors:error.errors
-  })
+    if(error.status === 401){
+      yield put(unsetUser(true));
+        yield put({
+         type: LOGIN_FAILURE,
+         message: {
+           text: "Session expired. Please login again",
+          severity: "error",
+         },
+       });
+     
+    }else{
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
+    }
   }
 }
 
@@ -68,25 +94,51 @@ function* getCurrentOrderFlow(action){
 
     try{
         const orderId= action.payload;
-        const order = yield call(getCurrentOrderApi,orderId);
+        const token= action.token;
+        console.log(token);
+        const order = yield call(getCurrentOrderApi,orderId,token);
         // console.log(orderId);
-        // console.log(order);
+        console.log(order);
         yield put(setCurrentOrder(order));
     }catch(error){
         console.log(error);
-        throw error;
+
+        if(error.status === 401){
+          yield put(unsetUser(true));
+            yield put({
+             type: LOGIN_FAILURE,
+             message: {
+               text: "Session expired. Please login again",
+              severity: "error",
+             },
+           });
+         
+        }else{
+          yield put({
+            type:"FAILURE",
+            message:{
+                text:error.message,
+                severity:"error",
+            },
+            errors:error.errors
+        })
+        }
+    
     }
 }
 function* updateOrderFlow(action){
     try{
-        const order = action.payload;
-        const user= action.user;
-        const updateOrder = yield call(getUpdateOrderApi,order)
-        const payload=yield call(refreshUser,user);
-        yield put(setUser(payload.token, payload.userId, payload.role, payload.exp,payload.username,payload.firstName, payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
-        yield put({
-          type: LOGIN_SUCCESS,
-        });
+        const {order} = action.payload;
+        const token = action.token
+        const {updatedOrder,user} = yield call(getUpdateOrderApi,order,token)
+        if(user.role === "ADMIN"){
+          yield put({
+            type:GET_ALL_ORDERS,
+            payload:token
+          })
+        }else {
+          yield put(setUser(token.token, token.userId, token.role, token.exp,user.username,user.firstName, user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
+        }
         yield put({
           type:"SUCCESS",
           message:{
@@ -95,7 +147,17 @@ function* updateOrderFlow(action){
           }
       })
     }catch(error){
-   
+      if(error.status === 401){
+        yield put(unsetUser(true));
+          yield put({
+           type: LOGIN_FAILURE,
+           message: {
+             text: "Session expired. Please login again",
+            severity: "error",
+           },
+         });
+       
+      }else{
         yield put({
           type:"FAILURE",
           message:{
@@ -104,6 +166,7 @@ function* updateOrderFlow(action){
           },
           errors:error.errors
       })
+      }
     }
 }
 function* deleteOrderFlow(action){
@@ -119,14 +182,26 @@ function* deleteOrderFlow(action){
       })
     }catch(error){
         console.log(error);
-        yield put({
-          type:"FAILURE",
-          message:{
-              text:error.message,
-              severity:"error",
-          },
-          errors:error.errors
-      })
+        if(error.status === 401){
+          yield put(unsetUser(true));
+            yield put({
+             type: LOGIN_FAILURE,
+             message: {
+               text: "Session expired. Please login again",
+              severity: "error",
+             },
+           });
+         
+        }else{
+          yield put({
+            type:"FAILURE",
+            message:{
+                text:error.message,
+                severity:"error",
+            },
+            errors:error.errors
+        })
+        }
     }
 }
 
@@ -167,14 +242,20 @@ function* saveCartFlow(action) {
     //   yield put(setUser(updatedUser))
 
     }catch (error) {
-      yield put({
-        type:"FAILURE",
-        message:{
-            text:error.message,
-            severity:"error",
-        },
-        errors:error.errors
-    })
+      if(error.status === 401){
+        yield put(unsetUser(true));
+         
+       
+      }else{
+        yield put({
+          type:"FAILURE",
+          message:{
+              text:error.message,
+              severity:"error",
+          },
+          errors:error.errors
+      })
+      }
     }
 }
 

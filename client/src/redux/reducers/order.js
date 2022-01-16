@@ -8,7 +8,7 @@ const reducer=(state=initialState,action)=>{
     switch(action.type){
         case GET_CURRENT_ORDER:
             return{
-            currentOrder:{},
+            currentOrder:null,
             orders:[]
             }
         case GET_CURRENT_ORDER_SUCCESS:

@@ -235,7 +235,7 @@ router.post(
       }
 
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "30s",
       });
       res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,firstName:user.firstName,lastName:user.lastName,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
     } catch (error) {
@@ -250,7 +250,7 @@ router.post(
   }
 );
 
-router.post("/refreshUser",[check("email","Invalid email provided").exists().notEmpty(),check("userId","Invalid userId provided").exists().notEmpty()],async(req,res)=>{
+router.post("/refreshUser",auth,async(req,res)=>{
 
   try{
     const errors = validationResult(req);
@@ -261,14 +261,13 @@ router.post("/refreshUser",[check("email","Invalid email provided").exists().not
         message: "Invalid authorization data",
       });
     }
-    const {email,userId} = req.body;
-
-    const user= await User.findById(userId).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
-
+    const user =req.user;
+   // const user= await User.findById(userId).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+    console.log(req.user);
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "30s",
     });
-    res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,name:user.name,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
+    res.json({userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,firstName:user.firstName,lastName:user.lastName,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
   }catch(error){
     console.log(error);
     return res.status(500).json({

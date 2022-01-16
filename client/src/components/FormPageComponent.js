@@ -19,17 +19,8 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
     // }, [post])
 
     const handleSubmit = (e) => { // e = event
-        updateItem(user,form);
+        updateItem(user,form,user.token);
         e.preventDefault();
-
-
-        
-
-        // if(currentId){
-        //     dispatch(updatePost(currentId, postData));
-        // }else{
-        //     dispatch(createPost(postData));
-        // }
 
         clear();
     }
@@ -41,8 +32,9 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
     const cancel = () => {
         //setForm({...currentItem});
         history.goBack()
+    }
     const updateCurrentItem = (item) => {
-        setCurrentItem(item);
+        setCurrentItem(items,item);
     }
 
     // const updateCurrentItem = (item) => {
@@ -147,7 +139,7 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
         </Box>
     );
 }
-}
+
 const mapStateToProps = (state) => {
     return {
         user:state.user,

@@ -113,7 +113,7 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
       // console.log("itemsInCart ", itemsInCart)
       saveCartAction(user, itemsInBasket);
      
-      history.push("/orderDetails")
+      history.push("/orderDetails");
     }
 
     return (

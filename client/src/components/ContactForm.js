@@ -2,19 +2,18 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import { TextField, Box, CardContent, CardMedia, Button, Typography } from '@mui/material';
+import { TextField, Box, CardContent, CardMedia, Button, Typography,Grid } from '@mui/material';
 import { contactFormRequest } from "../redux/actions/contact";
 
 const useStyles = makeStyles((theme) => ({
    
     formEmail: {
         margin: "0",
+        marginLeft:"25%",
+        width:"1000px",
         color: "#989898",
         textAlign: "center",
-        border: "2px solid #ccc",
-        borderRadius: "4px",
-        display: "flex",
-        flexDirection: "column",
+
     }, 
    
   }));
@@ -41,26 +40,34 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
         history.goBack();
       }
     return (
-        <div>
-       <Button onClick={goBack} variant="contained" color="primary">Back</Button>
+        <div style={{width:"1000px" }}>
+        <Grid container spacing={2}>
+        <Grid item xs={12}> 
+        <Button onClick={goBack} variant="contained" color="primary">Back</Button></Grid>
+        <Grid item xs={12} > <Typography variant="h2" style={{textAlign:"center"}}> Contact Form</Typography> </Grid>
         <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
-            <TextField
-            label="First-Name"
+        <Grid item xs={12}><TextField
+            fullWidth
+            label="First Name"
             required
             id = "outlined"
             value={form.firstName}
             name = "firstName"
             onChange={changeHandler}
-            />
-            <TextField
-            label="Last-Name"
+            /></Grid>
+         <Grid item xs={12}>  
+         <TextField
+          fullWidth
+            label="Last Name"
             required
             id = "outlined"
             value={form.lastName}
             name = "lastName"
             onChange={changeHandler}
-            />
-            <TextField
+            /></Grid> 
+           <Grid item xs={12}> 
+           <TextField
+            fullWidth
             label="Email"
             required
             onChange={changeHandler}
@@ -68,8 +75,10 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             type="email" 
             name="email"
             />
-            
+            </Grid> 
+            <Grid item xs={12}> 
             <TextField
+             fullWidth
             label="Subject"
             required
             onChange={changeHandler}
@@ -77,7 +86,10 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             type="text" 
             name="subject"
             />
+            </Grid>
+            <Grid item xs={12}>  
             <TextField
+             fullWidth
             label="Message"
             required
             value={form.message}
@@ -87,10 +99,12 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
             multiline
             rows={5}
             />
-                <Button
+            </Grid>
+            <Grid item xs={12}>       <Button
             type="submit" color="primary" variant="contained">Submit</Button> 
-
+            </Grid>
         </form>
+        </Grid>
         </div>
           
     )
