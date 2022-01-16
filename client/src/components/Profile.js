@@ -285,54 +285,7 @@ if(user.role === "ADMIN"){
            onSubmit={sendProfileUpdateForm}
            >
                <Grid container spacing={4}>
-                   <Grid item xs={12}>
-                   <Typography style={{width:"100%",textAlign:"center"}} variant="h2">ORDERS</Typography>
-                   <Table>
-                       <TableHead>
-                     
-                           <TableRow>
-                               <TableCell>ID </TableCell>
-                               <TableCell>Date ordered </TableCell>
-                               <TableCell>Date sent </TableCell>
-                               <TableCell>Date delivered </TableCell>
-                               <TableCell>Total Value </TableCell>
-                               <TableCell>Message </TableCell>
-                               <TableCell>Items </TableCell>
-                           </TableRow>
-                       </TableHead>
-                       <TableBody>
-                       {orderList.map((order,index)=>{
-                        return(
-                            <TableRow>
-                                <TableCell>{index+1}</TableCell>
-                                <TableCell>{order.ordered}</TableCell>
-                                <TableCell>{order.sent}</TableCell>
-                                <TableCell>{order.delivered}</TableCell>
-                                <TableCell>{order.totalValue}</TableCell>
-                              { order.message === "" ?(<TableCell>No message provided</TableCell>):(<TableCell>{order.message}</TableCell>)}
-                              <TableCell>
-                                  <Button onClick={()=>setOrder(order._id)} component={NavLink} to={"/viewOrder"}  style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px"}}>View Items</Button>
-                            </TableCell>
-                            </TableRow>
-                        )
-    
-                         })}
-                       </TableBody>
-                   </Table>
-                </Grid>
-                
                 <Divider style={{margin:"5%"}} />
-               
-       
-               <Grid item xs={12}><Typography style={{width:"100%",textAlign:"center"}} variant="h2">UPDATE</Typography></Grid>
-               <Grid item xs={12}><TextField disabled={enable} type="email" value={form.email} onChange={changeHandler} style={{width:"100%"}} required label="Email" id="email" name="email"  error={!!formErrors["email"]}helperText={formErrors["email"] ? formErrors["email"] : ""} ></TextField></Grid>
-               <Grid item xs={12}><TextField disabled={enable} type="text" value={form.username} onChange={changeHandler} style={{width:"100%"}}  required label="Username" id="username" name="username"  error={!!formErrors["username"]}helperText={formErrors["username"] ? formErrors["username"] : ""}></TextField></Grid>
-               <Grid item xs={6}><TextField disabled={enable} type="text" value={form.firstName} onChange={changeHandler} style={{width:"100%"}} required  label="First Name" id="firstName" name="firstName"  error={!!formErrors["firstName"]}helperText={formErrors["firstName"] ? formErrors["firstName"] : ""}></TextField></Grid>
-               <Grid item xs={6}><TextField disabled={enable} type="text" value={form.lastName} onChange={changeHandler} style={{width:"100%"}} required  label="Last Name" id="lastName" name="lastName"  error={!!formErrors["lastName"]}helperText={formErrors["lastName"] ? formErrors["lastName"] : ""}></TextField></Grid>
-               <Grid item xs={12}><TextField disabled={enable} type="password" value={form.password} onChange={changeHandler} style={{width:"100%"}}  required label="Password" id="password" name="password"  error={!!formErrors["password"]}helperText={formErrors["password"] ? formErrors["password"] : ""} ></TextField></Grid>
-               <Grid item xs={12}><TextField disabled={enable} type="password" value={form.passwordConfirm} onChange={changeHandler} style={{width:"100%"}}  required label="Confirm password" id="passwordConfirm" name="passwordConfirm"  error={!!formErrors["passwordConfirm"]}helperText={formErrors["passwordConfirm"] ? formErrors["passwordConfirm"] : ""} ></TextField></Grid>
-               <Grid item xs={12}><TextField disabled={enable} type="tel" value={form.phone} onChange={changeHandler} style={{width:"100%"}} required label="Phone number" id="phone" name="phone" error={!!formErrors["phone"]} helperText={formErrors["phone"] ? formErrors["phone"] : ""}></TextField></Grid>
-               <Grid item xs={12}><TextField disabled={enable} type="text" onChange={changeHandler} multiline value={form.address} style={{width:"100%"}} required  label="Address" id="address" name="address" error={!!formErrors["address"]}helperText={formErrors["address"] ? formErrors["address"] : ""}></TextField></Grid>
                <Grid item xs={12}>
                <Typography style={{width:"100%",textAlign:"center"}} variant="h2">ORDERS</Typography>
                <Table>
@@ -353,7 +306,7 @@ if(user.role === "ADMIN"){
                    {orderList.slice(orderPage*rowsPerPageOrders,orderPage*rowsPerPageOrders+rowsPerPageOrders).map((order,index)=>{
                     return(
                         <TableRow>
-                                <TableCell>{order._id}</TableCell>
+                                <TableCell>{index + 1}</TableCell>
                                 {(order.orderPaid) ? 
                                     <TableCell>Yes</TableCell>
                                 :
@@ -408,6 +361,7 @@ if(user.role === "ADMIN"){
            
    
            <Grid item xs={12}><Typography style={{width:"100%",textAlign:"center"}} variant="h2">UPDATE</Typography></Grid>
+           <Grid item xs={12}>{enable ? (<Button hidden={!enable} variant="contained" color="primary" onClick={()=>{setEnable(false)}} >UNLOCK</Button>):(<></>)}</Grid>
            <Grid item xs={12}><TextField disabled={enable} type="email" value={form.email} onChange={changeHandler} style={{width:"100%"}} required label="Email" id="email" name="email"  error={!!formErrors["email"]}helperText={formErrors["email"] ? formErrors["email"] : ""} ></TextField></Grid>
            <Grid item xs={12}><TextField disabled={enable} type="text" value={form.username} onChange={changeHandler} style={{width:"100%"}}  required label="Username" id="username" name="username"  error={!!formErrors["username"]}helperText={formErrors["username"] ? formErrors["username"] : ""}></TextField></Grid>
            <Grid item xs={6}><TextField disabled={enable} type="text" value={form.firstName} onChange={changeHandler} style={{width:"100%"}} required  label="First Name" id="firstName" name="firstName"  error={!!formErrors["firstName"]}helperText={formErrors["firstName"] ? formErrors["firstName"] : ""}></TextField></Grid>
@@ -417,14 +371,25 @@ if(user.role === "ADMIN"){
            <Grid item xs={12}><TextField disabled={enable} type="tel" value={form.phone} onChange={changeHandler} style={{width:"100%"}} required label="Phone number" id="phone" name="phone" error={!!formErrors["phone"]} helperText={formErrors["phone"] ? formErrors["phone"] : ""}></TextField></Grid>
            <Grid item xs={12}><TextField disabled={enable} type="text" onChange={changeHandler} multiline value={form.address} style={{width:"100%"}} required  label="Address" id="address" name="address" error={!!formErrors["address"]}helperText={formErrors["address"] ? formErrors["address"] : ""}></TextField></Grid>
            <Grid item xs={12}>
-           {!enable ?    (<Button 
-           variant="contained"
-           color="primary" 
-           type="submit"
-           hidden={enable}
-           >
-               Update
-           </Button>):(<></>)}
+           {!enable ? 
+           (<div><Button                 
+           variant="contained"                
+           color="primary"                 
+           type="submit"                
+           hidden={enable}                
+           onClick={sendProfileUpdateForm}                
+           >                    
+           Update                
+           </Button>                
+           <Button                 
+           variant="outlined"                                 
+           onClick={()=>{setEnable(true); setForm({email: user.email,username:user.username,firstName:user.firstName,lastName:user.lastName,password:"",passwordConfirm:"",phone:user.phone,address:user.address,  }) }}>
+           Cancel
+           </Button>
+           </div>
+           )
+           :
+           (<></>)}
            </Grid>
    
            </Grid>
