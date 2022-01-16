@@ -60,7 +60,7 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
             const newOrder = {...emptyOrder, ordered:nowToString, totalValue:total,paypalOrderId:order.id,orderPaid:true}
             console.log("User", user)
             console.log("NewOrder ", newOrder)
-            createOrderAction(user, newOrder)
+            createOrderAction(newOrder,user.token)
             history.push("/orderConfirmation")
             // updateItemsBasket(0);
         }
@@ -82,7 +82,7 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
         const newOrder = {...emptyOrder, ordered:nowToString, totalValue:total}
         console.log("User", user)
         console.log("NewOrder ", newOrder)
-        createOrderAction(user, newOrder)
+        createOrderAction(newOrder,user.token);
         history.push("/orderConfirmation")
             // updateItemsBasket(0);
     }

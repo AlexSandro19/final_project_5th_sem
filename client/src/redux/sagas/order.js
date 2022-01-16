@@ -41,19 +41,19 @@ function* getOrdersFlow(action){
 function* createOrderFlow(action) {
   try {
 
-    const order = action.payload;
-    const user = action.user
+    const {order,token} = action.payload;
+    console.log(token);
 
-    const {orderCreated,addedOrderId} = yield call(createOrderService, order)  
+    const {orderCreated} = yield call(createOrderService, order,token)  
     if (orderCreated) {
-      order._id = addedOrderId      
-      user.orders.push(order)
-      user.cart = []
-      yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
-      const lastcreatedOrderIndex = user.orders.length - 1
-      const lastCreatedOrder = user.orders[lastcreatedOrderIndex]
-      console.log("lastCreatedOrder in createOrderFlow ", lastCreatedOrder)
-      yield put(setCurrentOrder(lastCreatedOrder));
+      // order._id = addedOrderId      
+      //user.orders.push(order)
+      //user.cart = []
+      // yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
+      //const lastcreatedOrderIndex = user.orders.length - 1
+      //const lastCreatedOrder = user.orders[lastcreatedOrderIndex]
+      //console.log("lastCreatedOrder in createOrderFlow ", lastCreatedOrder)
+      yield put(setCurrentOrder(order));
       yield put({
         type: LOGIN_SUCCESS,
       });
@@ -96,7 +96,6 @@ function* getCurrentOrderFlow(action){
     try{
         const orderId= action.payload;
         const token= action.token;
-        console.log(token);
         const order = yield call(getCurrentOrderApi,orderId,token);
         // console.log(orderId);
         console.log(order);
@@ -172,8 +171,9 @@ function* updateOrderFlow(action){
 }
 function* deleteOrderFlow(action){
     try{
-        const deleteOrder= action.payload;
-        yield call(deleteOrderService,deleteOrder);
+        const {order,token}= action.payload;
+        const allOrders = yield call(deleteOrderService,order,token);
+        yield put(getAllOrdersSUCCESS(allOrders));
         yield put({
           type:"SUCCESS",
           message:{
@@ -209,16 +209,15 @@ function* deleteOrderFlow(action){
 
 function* saveCartFlow(action) {
     try {
-      console.log("action in saveCartFlow ", action)
-      const user = action.user;
-      const cart = action.payload;
+      const {cart,token,exp} = action.payload;
+      console.log(token.exp);
       const activityType = action.activityType;
-      const {didUserUpdate} = yield call(saveCartService, user, cart)  
+      const {didUserUpdate,user} = yield call(saveCartService, cart,token)  
       
       if (didUserUpdate) {
         user.cart = [...cart]
         console.log("User after upfate in saveCartFlow", user)
-        yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName, user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
+        yield put(setUser(token, user.id, user.role,exp,user.username,user.firstName,user.lastName, user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
         yield put({
           type: LOGIN_SUCCESS,
         });

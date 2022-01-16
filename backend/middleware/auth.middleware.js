@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
     }
     const { userId, exp } = jwt.verify(token, process.env.JWT_SECRET);
     console.log(userId);
-    req.user = await User.findById(userId).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+    req.user = await User.findById(userId).select(" password email emailConfirmed orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {

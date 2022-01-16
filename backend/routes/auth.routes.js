@@ -235,7 +235,7 @@ router.post(
       }
 
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "30s",
+        expiresIn: "30m",
       });
       res.json({ token,exp: token.exp, userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,firstName:user.firstName,lastName:user.lastName,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
     } catch (error) {
@@ -262,11 +262,8 @@ router.post("/refreshUser",auth,async(req,res)=>{
       });
     }
     const user =req.user;
-   // const user= await User.findById(userId).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
-    console.log(req.user);
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "30s",
-    });
+  
+ 
     res.json({userId: user.id, role: user.role,email:user.email,emailConfirmed:user.emailConfirmed,username:user.username,firstName:user.firstName,lastName:user.lastName,cart:user.cart,phone:user.phone,address:user.address,orders:user.orders});
   }catch(error){
     console.log(error);

@@ -5,7 +5,7 @@ import { TextField,ButtonBase,Grid,Divider, Typography,Button, TableHead, TableC
 import { NavLink } from "react-router-dom";
 import { DateTime } from "luxon";
 import {Tooltip} from "@mui/material";
-
+import {Loader} from "../components/Loader";
 const useStyles=makeStyles(()=>({
     back:{
         margin:"1%",
@@ -152,16 +152,14 @@ if(user.role === "ADMIN"){
                                 </TablePagination>
                                 
                             </TableRow>
-                            <TableRow>
-                           
-                            </TableRow>
+           
                         </TableFooter>
                     </Table>
                 </Grid>
                 </Grid>
               
                
-               <Grid container spacing={4}>
+               <Grid container spacing={2}>
                    <Grid item xs={12}> 
                    <Typography style={{width:"100%",textAlign:"center"}} variant="h2">ORDERS</Typography>
                    <Table>
@@ -181,12 +179,8 @@ if(user.role === "ADMIN"){
                        {adminOrders.slice(orderPage*rowsPerPageOrders,orderPage*rowsPerPageOrders+rowsPerPageOrders).map((order,index)=>{
                         return(
                             <TableRow>
-                                <TableCell>{order._id}</TableCell>
-                                {(order.orderPaid) ? 
-                                    <TableCell>Yes</TableCell>
-                                :
-                                    <TableCell>No</TableCell>
-                                }
+                                <TableCell>{index+1}</TableCell>
+                                <TableCell> {order.orderPaid ? ("Yes"):("No")}</TableCell>
                                 <TableCell>{printDate(order.ordered)}</TableCell>
                                 {(order.sent) ? 
                                     <TableCell>{printDate(order.sent)}</TableCell>
@@ -281,7 +275,7 @@ if(user.role === "ADMIN"){
     )
     
     
-}else if(user.role ==="USER"){
+}else if(user.role ==="USER") {
     const orderList=[...user.orders];
     return(
         <div> 
@@ -290,10 +284,6 @@ if(user.role === "ADMIN"){
            width="1000px"
            onSubmit={sendProfileUpdateForm}
            >
-               
-               <div>
-               
-               
                <Grid container spacing={4}>
                    <Grid item xs={12}>
                    <Typography style={{width:"100%",textAlign:"center"}} variant="h2">ORDERS</Typography>
@@ -360,7 +350,7 @@ if(user.role === "ADMIN"){
                        </TableRow>
                    </TableHead>
                    <TableBody>
-                   {orderList.map((order,index)=>{
+                   {orderList.slice(orderPage*rowsPerPageOrders,orderPage*rowsPerPageOrders+rowsPerPageOrders).map((order,index)=>{
                     return(
                         <TableRow>
                                 <TableCell>{order._id}</TableCell>
@@ -390,7 +380,27 @@ if(user.role === "ADMIN"){
                     )
 
                      })}
-                   </TableBody>
+                    {emptyRowsOrders>0 &&(<TableRow style={{height:100*emptyRowsOrders}}>
+                        <TableCell colSpan={6}></TableCell>
+                        </TableRow>)}
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                page={orderPage}
+                                rowsPerPage={rowsPerPageOrders}
+                                count={adminOrders.length}
+                                onPageChange={handlePageChangeOrders}
+                                onRowsPerPageChange={handleChangeRowsPerPageOrders}
+                                >
+                                    
+                                </TablePagination>
+                                
+                            </TableRow>
+                            <TableRow>
+                           
+                            </TableRow>
+                        </TableFooter>
+                       </TableBody>
                </Table>
             </Grid>
             
@@ -419,12 +429,12 @@ if(user.role === "ADMIN"){
    
            </Grid>
            <Divider/>
+           </Box>
            </div>
-    
-       
     )
     
-}else{
+}
+else{
     return(
         <Loader></Loader>
     );

@@ -23,8 +23,8 @@ export const createOrderService = (order,token) => {
                 });
 } 
 
-export const saveCartService = (user, cart,token) => {
-    return axios.post(saveCartUrl, {user, cart},{headers:{authorization:`Bearer ${token}`}}) 
+export const saveCartService = (cart,token) => {
+    return axios.post(saveCartUrl, {cart},{headers:{authorization:`Bearer ${token}`}}) 
                 .then((response) => response.data)
                 .catch((error) => {
                     console.log(error);

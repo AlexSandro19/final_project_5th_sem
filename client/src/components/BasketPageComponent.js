@@ -81,7 +81,7 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
         const updatedItemsInBasket = itemsInBasket.filter(item => item._id !== itemToRemove._id);
 
         updateItemsBasket(updatedItemsInBasket); 
-        saveCartAction(user, updatedItemsInBasket);
+        saveCartAction(updatedItemsInBasket,user.token,user.token,"REMOVE");
     }
 
     const changeQuantity = (itemToChangeQuantity, action) => {
@@ -96,7 +96,7 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
             updatedItemsList.splice(index, 1);
         }
         updateItemsBasket(updatedItemsList);
-        saveCartAction(user, updatedItemsList);
+        saveCartAction(updatedItemsList,user.token);
     }
 
     const disableIncreaseButton = (itemToCheck) => {

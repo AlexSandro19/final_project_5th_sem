@@ -2,8 +2,8 @@ import React, { useEffect, useCallback } from "react";
 import { Card, CardActionArea, CardContent, Grid, Box, Typography, Button, ButtonBase, Paper, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {requestAllItems, getCurrentItem} from "../redux/actions/item"
-import ShoppingPageComponent from "../components/ShoppingPageComponent"
 import {Loader} from "../components/Loader"
 import Item from "../components/Item"; 
 import {useLocation} from "react-router-dom"
@@ -29,12 +29,15 @@ const useStyles=makeStyles(()=>({
 
 const ItemPage=({items, currentItem, userIsAuthenticated})=> {
     const classes=useStyles();
-
+    const history = useHistory();
     const addItemToCart = (item) => {
 
     }
-
+    const goBack = ()=>{
+        history.goBack();
+    }
     return (
+        <div style={{height:"60vh"}}>
         <Paper width="90%">
             <img src={currentItem.picturesArray[0]} alt=""></img>
             <Typography variant="h1">{currentItem.name}</Typography>
@@ -49,9 +52,10 @@ const ItemPage=({items, currentItem, userIsAuthenticated})=> {
               : <></>
             }
 
-       
+            
             </Paper>
-         
+         <Button variant="outlined" onClick={goBack}>Back</Button>
+         </div>
     )
 }
 

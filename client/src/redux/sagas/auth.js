@@ -19,7 +19,7 @@ import {
 } from "../../services/auth.service";
 
 //const expirationTime = 60 * 60 * 1000;
-const expirationTime = 1 * 30 * 1000;
+const expirationTime = 30 * 60 * 1000;
 function logout() {
   removeAuthToken();
 }
