@@ -34,7 +34,13 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
     const sendEmail = async (event) => {
         event.preventDefault();
         contactFormRequest(form)
-
+        setForm({
+            firstName:" ",
+            lastName:" ",
+            email:" ",
+            subject:" ",
+            message:" ",
+        });
     }
     const goBack=()=>{
         history.goBack();
@@ -43,7 +49,7 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
         <div style={{width:"1000px" }}>
         <Grid container spacing={2}>
         <Grid item xs={12}> 
-        <Grid item xs={12} > <Typography variant="h2" style={{textAlign:"center"}}> Contact Form</Typography> </Grid>
+        <Grid item xs={12} > <Typography variant="h2" style={{textAlign:"center", marginLeft:"25%"}}> Contact Form</Typography> </Grid>
         <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
         <Grid item xs={12}><TextField sx={{ marginBottom: '15px' }}
             fullWidth
