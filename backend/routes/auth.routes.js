@@ -41,7 +41,7 @@ router.post("/updateUser",
           errors: [{ value: "password", msg: "Confirm password is not correct", param: "password" }],
         });
       }
-      const user =  await User.findOne({ email }).select(" password email emailConfirmed orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      const user =  await User.findOne({ email }).select(" password email emailConfirmed orders cart username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
       user.firstName=firstName;
       user.lastName=lastName;
       user.username=username;
@@ -200,7 +200,6 @@ router.post(
   [
     check("email", "Enter valid email").normalizeEmail().isEmail(),
     check("password", "Enter password").exists().notEmpty(),
-    check('password').isLength({ max: 8 }).withMessage('Password Must Be at Least 8 Characters')
   ],
   async (req, res) => {
     try {
@@ -223,7 +222,7 @@ router.post(
           errors: [{ value: email, msg: "User not found", param: "email" }],
         });
       }
-      const user = await User.findOne({ email }).select(" password email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+      const user = await User.findOne({ email }).select(" password email orders cart emailConfirmed username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
@@ -264,7 +263,7 @@ router.post("/refreshUser",[check("email","Invalid email provided").exists().not
     }
     const {email,userId} = req.body;
 
-    const user= await User.findById(userId).select(" password email orders cart  username phone address name role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+    const user= await User.findById(userId).select(" password email orders cart emailConfirmed username phone address name role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
