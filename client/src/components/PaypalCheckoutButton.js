@@ -46,7 +46,7 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
     
     const itemsForPaypal = itemsToDisplay.map(item => ({name:item.name, quantity:countSameItems(item), unit_amount:{currency_code:"DKK", value:item.price}})) 
     console.log("itemsForPaypal", itemsForPaypal)
-    const emptyOrder = {items:itemsInBasket, userId:user.id, totalValue:0, sent:undefined, delivered:undefined, ordered:undefined, message:"", orderPaid:false, paypalOrderId: undefined}
+    const emptyOrder = {items:itemsInBasket, userId:user.id, totalValue:0, sent:"", delivered:"", ordered:"", message:"", orderPaid:false, paypalOrderId: ""}
 
 
     
@@ -56,8 +56,7 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
         if (order.id){
             console.log("Order.id ", order.id)
             const now = DateTime.fromISO(order.create_time)
-            const nowToString = `${now.day}-${now.month}-${now.year}`
-            console.log("now ", now)
+            const nowToString = `${(now.day < 10) ? "0" : ""}${now.day}-${(now.month < 10) ? "0" : ""}${now.month}-${now.year}`
             const newOrder = {...emptyOrder, ordered:nowToString, totalValue:total,paypalOrderId:order.id,orderPaid:true}
             console.log("User", user)
             console.log("NewOrder ", newOrder)
@@ -79,10 +78,7 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
     const payLaterButton = () => {
         console.log("PaypalCheckoutButton payLaterButton pressed")
         const now = DateTime.now()
-        const nowToString = `${now.day}-${now.month}-${now.year}` 
-        console.log("Time now ", now)
-        console.log("Time nowToString ", nowToString)
-        console.log("payLaterButton called");
+        const nowToString = `${(now.day < 10) ? "0" : ""}${now.day}-${(now.month < 10) ? "0" : ""}${now.month}-${now.year}`
         const newOrder = {...emptyOrder, ordered:nowToString, totalValue:total}
         console.log("User", user)
         console.log("NewOrder ", newOrder)
@@ -95,7 +91,8 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
     
     return (
         <>
-        <PayPalButtons
+
+        <PayPalButtons style={{ width: '400px' }} 
          
             createOrder={(data, actions) => {
                 console.log("Paypal createOrder called");
@@ -145,7 +142,7 @@ const PaypalCheckoutButton = ({user, createOrderAction, updateItemsBasket, histo
             }}
         />
         
-            <Button onClick={payLaterButton} color="primary">
+            <Button sx={{ width: '750px', marginBottom:"10px" }} onClick={payLaterButton} variant="contained">
             Pay Later
           </Button>
         </>
