@@ -21,36 +21,14 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
     const handleSubmit = (e) => { // e = event
         updateItem(user,form);
         e.preventDefault();
-
-
-        
-
-        // if(currentId){
-        //     dispatch(updatePost(currentId, postData));
-        // }else{
-        //     dispatch(createPost(postData));
-        // }
-
-        clear();
-    }
-    const clear = () => {
-        // setCurrentId(null);
-        // setPostData({creator:'', title:'', message:'', tags:'', selectedFile:''});
     }
 
     const cancel = () => {
         //setForm({...currentItem});
         history.goBack()
-    const updateCurrentItem = (item) => {
-        setCurrentItem(item);
     }
 
-    // const updateCurrentItem = (item) => {
-    //     // console.log("updated item: ", item);
-    //     setCurrentItem(item);
-    // }
-
-
+    
     return (
         <Box>
             <form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -142,7 +120,7 @@ const FormPageComponent = ({formErrors, user,currentItem, items, setCurrentItem,
                 />
                            
                 <Button  variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-                <Button variant="contained" color="secondary" size="small" onClick={cancel} fullWidth>Cancel</Button>
+                <Button variant="outlined" size="small" onClick={cancel} fullWidth>Cancel</Button>
             </form>
         </Box>
     );

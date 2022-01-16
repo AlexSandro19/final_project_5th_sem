@@ -42,7 +42,7 @@ const ContactForm = ({messageResponse, contactFormRequest}) => {
       }
     return (
         <div>
-       <Button onClick={goBack} variant="contained" color="primary">Back</Button>
+       <Button onClick={goBack} variant="outlined">Back</Button>
         <form className ={classes.formEmail} noValidate onSubmit={sendEmail} >
             <TextField
             label="First-Name"

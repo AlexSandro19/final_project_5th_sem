@@ -30,7 +30,7 @@ const useStyles=makeStyles(()=>({
         width:"90%",
     },
     fab:{
-        margin: "-2%"
+        margin: "-3%",
     },
     basket:{
     }
@@ -39,27 +39,21 @@ const useStyles=makeStyles(()=>({
 
 export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenticated, addItemToBasket})=>{
     const classes=useStyles();
- 
-    
+    const drawerWidth = 240;
+     
     const [checked, setChecked] = useState([]);
     const [filteredItems, setFilteredItems] = useState([]);
     const [itemsReceived, setItemsReceived] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [emptyFilteredItemsList, setEmptyFilteredItemsList] = useState(false);
-
-    //const [refreshPage, setRefreshPage] = useState("test");
-
+    
     useEffect( () => {
         const itemsInStock = items.filter(item => item.stock)
         console.log("itemsInStock ", itemsInStock)
         setFilteredItems([...itemsInStock]);
         setItemsReceived(true);
     }, [items])
-
-    
-    
-    const drawerWidth = 240;
-    
+  
     const filterItems = (filterOption) => () => {
         const itemsInStock = items.filter(item => item.stock)
         console.log("itemsInStock ", itemsInStock)
@@ -85,12 +79,6 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
             }else if (newChecked.length === 0 || (typeof newChecked[0]) === 'string'){
                 newChecked.unshift(filterOption); 
             }
-            // if (currentIndex === -1) {
-            //     newChecked.unshift(filterOption);
-            // } else {
-            //     newChecked.splice(currentIndex, 1);
-            // }
-
         }
 
 
@@ -139,38 +127,7 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
         }
 
         }
-        
-        // if (items.length && (!filtered.length)){
-        //     console.log("items.length && !filtered.length: here");
-        //     setEmptyFilteredItemsList(true);
-        // }
 
-
-
-
-
-
-
-
-
-
-        // const filteredItemsOnCategory = items.filter((item) => {
-        //     let addItem = false;
-        //     item.categoryArray.every(category => {
-        //         // console.log("Print item", item);
-        //         if (category === filterOption){
-        //             addItem = true; 
-        //             return false;  
-        //         }  
-        //         return true;
-        //     })
-
-        //     return addItem;
-        // })
-        // setFilteredItems([...filteredItemsOnCategory]);
-        // console.log("filteredItems array", filteredItems);
-        // console.log("filteredItemsOnCategory array", filteredItemsOnCategory);
-        // setRefreshPage(`new ${filterOption}`);
     }
 
     const capitalizeString = (initialStr) => {
@@ -183,12 +140,9 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
 
 
 
-    return (
-
-        
+    return (       
         (!filteredItems.length && !itemsReceived) ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
-            <>
-            
+            <>         
         <Drawer
         variant="permanent"
         sx={{
@@ -252,30 +206,15 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
           </List>
         </Box>
       </Drawer>
-           
             <Grid container spacing={3} alignItems="stretch" >
-                
-                {/* <Grid key={"sideBar"} item sm={6} md={4} >
-                    <Tabs variant="permanent" open >
-                    <Toolbar />
-                    <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                        <ListItemIcon>
-                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                        </ListItem>
-                        ))}
-                        </List>
-                        </Drawer>
-                    </Grid> */}
-
                 {filteredItems.map((item) => ( 
-                    <Grid key={item._id} item xs={12} sm={6} md={4}>
+                    <Grid item key={item._id} xs={12} sm={6} md={4}>
                         <Item item={item} />  
                     </Grid>      
                 ))}
+                <Grid item xs={12}>
+                    <Button onClick={goBack} variant="outlined">Back</Button>    
+                </Grid>
 
                 {(emptyFilteredItemsList) 
                     ?   <Snackbar
@@ -294,12 +233,12 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
 
                 }
             </Grid>
-            <Button onClick={goBack} variant="contained" color="primary">Back</Button>
+           
             {userIsAuthenticated ? 
-                <Badge color="secondary" badgeContent={itemsInBasket.length}>
-                     <Tooltip title="See added items in Basket" arrow>
-                         <Fab color="primary" className={classes.fab} aria-label="Shopping Bag" component={Link} to="/basket">
-                             <ShoppingBasketIcon className={classes.basket} />
+                <Badge className={classes.fab} color="secondary" badgeContent={itemsInBasket.length}>
+                     <Tooltip className={classes.fab} title="See added items in Basket" arrow>
+                         <Fab className={classes.fab} color="primary" aria-label="Shopping Bag" component={Link} to="/basket">
+                             <ShoppingBasketIcon />
                          </Fab>
                          </Tooltip>
                      </Badge>

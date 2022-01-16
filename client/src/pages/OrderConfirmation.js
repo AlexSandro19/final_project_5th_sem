@@ -35,7 +35,7 @@ const OrderConfirmation=({user, currentOrder})=> {
         <>
         <Grid container spacing={2}>
         <Grid item xs={12}>
-            <Typography variant="h2">Thank you!. The order is confirmed</Typography>
+            <Typography variant="h2" sx={{ margin: '15px', marginTop:"20px" }}>Thank you! The order is confirmed.</Typography>
         </Grid>
         <Grid item xs={12}>
             <ViewOrderPage></ViewOrderPage>

@@ -33,8 +33,6 @@ const useStyles=makeStyles(()=>({
         marginLeft:"5%",
         width:"90%",
     },
-    fab:{
-    },
 
 }))
 
@@ -138,6 +136,8 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
     return (
         (!itemsToDisplay.length || !itemsInBasket.length) ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
             <>
+    <Grid container>
+    <Grid item xs={12}>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="items-table">
         <TableHead>
@@ -162,8 +162,8 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
               </TableCell>
               <TableCell align="right">{item.description}</TableCell>
               <TableCell align="right">{countSameItems(item)}</TableCell>
-              <TableCell align="right">{item.price}</TableCell>
-              <TableCell align="right">{item.price * countSameItems(item)}</TableCell>
+              <TableCell align="right">{item.price} DKK</TableCell>
+              <TableCell align="right">{item.price * countSameItems(item)} DKK</TableCell>
               <TableCell align="right">
               <ButtonGroup>
           <Button
@@ -203,6 +203,14 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
         </TableBody>
       </Table>
     </TableContainer>
+    </Grid>
+    <Grid item xs={12}>
+      <Button sx={{ marginTop: '15px' }} onClick={buttonPressed} variant="contained">Proceed to Checkout</Button>
+    </Grid>
+    <Grid item xs={12}>
+      <Button sx={{ marginTop: '15px' }} onClick={goBack} variant="outlined">Back</Button>
+    </Grid>
+    </Grid>
     <Snackbar
       open={noMoreItemsToAdd}
       anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
@@ -226,8 +234,6 @@ export const BasketPageComponent=({goBack,itemsInBasket, items, user, updateItem
         <b>You need to confirm your email before proceeeding.</b>
       </Alert>
     </Snackbar>
-    <Button onClick={buttonPressed}>Proceed to Checkout</Button>
-    <Button onClick={goBack} variant="contained" color="primary">Back</Button>
     </>
     ))
 }

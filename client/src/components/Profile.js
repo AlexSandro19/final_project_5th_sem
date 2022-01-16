@@ -177,7 +177,6 @@ if(user.role === "ADMIN"){
                                     <TableCell>Yes</TableCell>
                                 :
                                     <TableCell>No</TableCell>
-
                                 }
                                 <TableCell>{printDate(order.ordered)}</TableCell>
                                 {(order.sent) ? 
@@ -188,7 +187,7 @@ if(user.role === "ADMIN"){
                                 {(order.delivered) ?
                                     <TableCell>{printDate(order.delivered)}</TableCell>
                                 :
-                                    <TableCell>{printDate(order.delivered)}</TableCell>
+                                    <TableCell>Order not delivered</TableCell>
                                 }
                                 <TableCell>{order.totalValue}</TableCell>
                               { order.message === "" ?(<TableCell>No message provided</TableCell>):(<TableCell>{order.message}</TableCell>)}
@@ -273,6 +272,7 @@ return(
                  
                        <TableRow>
                            <TableCell>ID </TableCell>
+                           <TableCell>Paid </TableCell>
                            <TableCell>Date ordered </TableCell>
                            <TableCell>Date sent </TableCell>
                            <TableCell>Date delivered </TableCell>
@@ -285,10 +285,24 @@ return(
                    {orderList.map((order,index)=>{
                     return(
                         <TableRow>
-                            <TableCell>{index+1}</TableCell>
-                            <TableCell>{order.ordered}</TableCell>
-                            <TableCell>{order.sent}</TableCell>
-                            <TableCell>{order.delivered}</TableCell>
+                                <TableCell>{order._id}</TableCell>
+                                {(order.orderPaid) ? 
+                                    <TableCell>Yes</TableCell>
+                                :
+                                    <TableCell>No</TableCell>
+
+                                }
+                                <TableCell>{printDate(order.ordered)}</TableCell>
+                                {(order.sent) ? 
+                                    <TableCell>{printDate(order.sent)}</TableCell>
+                                :
+                                    <TableCell>Order not sent</TableCell>
+                                }
+                                {(order.delivered) ?
+                                    <TableCell>{printDate(order.delivered)}</TableCell>
+                                :
+                                    <TableCell>Order not delivered</TableCell>
+                                }
                             <TableCell>{order.totalValue}</TableCell>
                           { order.message === "" ?(<TableCell>No message provided</TableCell>):(<TableCell>{order.message}</TableCell>)}
                           <TableCell>

@@ -104,10 +104,6 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
                 <CardContent>
                     <div>
                     <Typography variant="h5">{item.name}</Typography>
-                
-                <Button component={Link} to="/updateItem">
-                    <MoreHorizIcon fontSize="default" />
-                </Button>
                 </div>
                     <Typography variant="body1">{item.description}</Typography>
                     <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price}</Typography>

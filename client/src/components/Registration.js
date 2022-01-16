@@ -32,7 +32,7 @@ return(
         
         <div>
         <Grid container spacing={4}>
-        <Grid item xs={12}><Button onClick={goBack}>Back</Button></Grid>
+        <Grid item xs={12}><Button variant="outlined" onClick={goBack}>Back</Button></Grid>
         <Grid item xs={12}><Typography  style={{width:"100%",textAlign:"center"}} variant="h2">Register</Typography></Grid>
         <Grid item xs={12}><TextField  error={!!formErrors["email"]}  helperText={formErrors["email"] ? formErrors["email"] : ""} type="email" value={form.email} onChange={changeHandler} style={{width:"100%"}} required label="Email" id="email" name="email" ></TextField></Grid>
         <Grid item xs={12}><TextField type="text" value={form.username} error={!!formErrors["username"]}  helperText={formErrors["username"] ? formErrors["username"] : ""}  onChange={changeHandler} style={{width:"100%"}}  required label="Username" id="username" name="username"></TextField></Grid>
