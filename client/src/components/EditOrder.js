@@ -9,6 +9,7 @@ export const EditOrder=({formErrors,errors,user,currentOrder,updateOrder})=>{
         //         setForm({...currentOrder});
         //     }
         // })
+        console.log(date);
         const formattedDate= date.split("-")[2]+"-"+ date.split("-")[1]+"-"+ date.split("-")[0];
         return formattedDate
     }
@@ -20,7 +21,7 @@ export const EditOrder=({formErrors,errors,user,currentOrder,updateOrder})=>{
 
     const handleSubmit = (e) => { // e = event
         e.preventDefault();
-        updateOrder(user,form);  
+        updateOrder(form,user.token);  
         // if(currentId){
         //     dispatch(updatePost(currentId, postData));
         // }else{
@@ -28,7 +29,6 @@ export const EditOrder=({formErrors,errors,user,currentOrder,updateOrder})=>{
         // }
     }
     const cancel = () => {
-        setForm({...currentOrder});
         history.goBack();
     }
 

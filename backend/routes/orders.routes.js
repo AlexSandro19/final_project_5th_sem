@@ -11,29 +11,8 @@ const auth= require("../middleware/auth.middleware");
 const router = Router();
 
 
-
-// GET /api/items
-router.get("/items",
-    async (req, res) => {
-      try {
-        console.log("api/items is called");
-        const allItems = await Furniture.find({});
-        console.log(allItems);
-        // console.log(allItems[0]); -- to access a specifc element in the array
-        if (allItems.length === 0) {
-          return res.status(404).json({ message: "No data available" });
-        }
-    
-        return res.status(200).json(allItems);
-        
-      } catch(error) {
-          return res.status(404).json({ message: error });
-      }
-
-    }
- );
-
-router.post("/updateOrder",
+ 
+router.post("/updateOrder",auth,
 [
 check("_id","Try again. Error with the order").exists().isMongoId(),
 check("items","Try again. Error with the order").exists(),
@@ -56,40 +35,42 @@ check("delivered","Try again. Error with the order").exists(),
    }
    const order = req.body;
    if(order.sent.split("-")[0] === "undefined"){ 
-      order.sent=" - - "
+      order.sent=""
        //return res.status(500).json({message:"Invalid date selected",errors:[{value:checkOrder.sent,msg:"Invalid sent date selected",param:"sent"}]})
      } 
      if ( order.delivered.split("-")[0] === "undefined"){
       //return res.status(500).json({message:"Invalid date selected",errors:[{value:checkOrder.delivered,msg:"Invalid delivered date selected",param:"delivered"}]});
-      order.delivered=" - - "
+      order.delivered=""
     } 
     if ( order.ordered.split("-")[0] === "undefined"){
-     order.ordered=" - - "
+     order.ordered=""
       // return res.status(500).json({message:"Invalid date selected",errors:[{value:checkOrder.ordered,msg:"Invalid ordered date selected",param:"ordered"}]});
      }
-   console.log(order);
+     
    const updatedOrder = await Order.findByIdAndUpdate(order._id,order,{new:true});
    //console.log(updatedOrder);
-   return res.status(200).json(updatedOrder);
+   const updatedUser = await User.findById(req.user._id).select(" password emailConfirmed email orders cart  username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
+   return res.status(200).json({updatedOrder:updatedOrder,user:updatedUser});
   }catch(error){
     console.log(error.message);
     return res.status(500).json({error:error,message:error.message})
 
   }
 })
-router.get("/orders",auth,async(req,res)=>{
+router.post("/orders",auth,async(req,res)=>{
     try{
       if(req.user.role === "ADMIN"){
-        const allorders= await Orders.find({});
+        const allorders= await Order.find({}).populate("items");
+        
         return res.status(200).json(allorders);
       }else{
         return res.status(400).json({message:"You do not have the needed access level"})
       }      
     } catch(error) {
-        return res.status(404).json({ message: error });
+        return res.status(404).json({ message: error.message });
     }
-})
-router.post("/order",async(req,res)=>{
+});
+router.post("/order",auth,async(req,res)=>{
 
     try{
       const errors=  validationResult(req)
@@ -103,7 +84,7 @@ router.post("/order",async(req,res)=>{
      const {orderId}=req.body;
      //console.log(orderId);
      const order = await Order.findOne({_id:orderId}).populate("items");
-     //console.log(order);
+     console.log(order);
      if(!order){
          return res.status(400).json({message:"Order not found"})
      }
@@ -117,19 +98,17 @@ router.post("/order",async(req,res)=>{
 })
 
 
-router.post("/saveCart",
+router.post("/saveCart",auth,
     async (req, res) => {
       try {
 
 
-        const {user, cart} = req.body;
-
-        const userToUpdate = await User.findOne({_id: user.id}).select(" password email orders cart emailConfirmed username phone address firstName lastName role").populate({path:"orders",populate:{path:"items"}}).populate("cart").exec();
-        console.log("user.populated('cart')", userToUpdate.populated("cart"));
-        userToUpdate.cart = [...cart]
-        await userToUpdate.save();
-        console.log("userToUpdate, ", userToUpdate)
-        return res.status(200).json({didUserUpdate:true});
+        const {cart} = req.body;
+        const user= req.user;
+        user.cart = [...cart]
+        await user.save();
+        console.log("userToUpdate, ", user)
+        return res.status(200).json({user:user,didUserUpdate:true});
         // if (Object.keys(savedItem).length !== 0){
         //   console.log("item updated successfully");
         //   return res.status(200).json(savedItem);
@@ -150,29 +129,42 @@ router.post("/saveCart",
 
     }
 ); 
+router.post("/deleteOrder",auth,async(req,res)=>{
+  try{
 
-router.post("/createOrder",async(req,res)=>{
+    const {order} = req.body;
+    console.log(order);
+    await Order.findByIdAndDelete(order._id);
+    const  allOrders = await Order.find({});
+    return res.status(200).json(allOrders);
+  }catch(error){
+    console.log(error.message);
+    return res.status(500).json({error:error,message:error.message})
+  }
+})
+router.post("/createOrder",auth,async(req,res)=>{
 
   try{
 
     const data = req.body;
-    console.log("/createOrder req.body, ", req.body)
-    const order = new Order({...data})
+
+    const order = new Order({...data}).populate("items");
+    console.log(order);
     await order.save();
-    console.log("CreatedOrder, ", order)
-    const userUpdated = await User.findOne({_id:order.userId}).populate("items");
-    userUpdated.orders.push(order)
-    userUpdated.cart = []
-    await userUpdated.save()
-    console.log("userUpdated ", userUpdated)
-    const addedOrderIndex = userUpdated.orders.length - 1
-    const addedOrderId = userUpdated.orders[addedOrderIndex]
+    const user = req.user;
+   // const userUpdated = await User.findOne({_id:order.userId}).populate("items");
+    user.orders.push(order)
+    user.cart = []
+    await user.save();
+    console.log("userUpdated ", user)
+    //const addedOrderIndex = userUpdated.orders.length - 1
+    //const addedOrderId = userUpdated.orders[addedOrderIndex]
     // const updatedOrders = [...user.orders, order._id];
     // console.log("updatedOrders ", updatedOrders)
     // console.log("updatedOrders ofter push ", updatedOrders)
     // await user.updateOne({_id: user._id}, {orders: updatedOrders})
 
-    return res.status(201).json({orderCreated : true, addedOrderId});
+    return res.status(201).json({orderCreated : order});
   }catch(error){
 
       console.log(error.message);

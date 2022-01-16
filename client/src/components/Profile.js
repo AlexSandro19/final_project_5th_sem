@@ -1,12 +1,11 @@
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import { useState } from "react";
-//import { DataGrid } from '@mui/x-data-grid';
 import { TextField,ButtonBase,Grid,Divider, Typography,Button, TableHead, TableCell,TableBody,TableRow,Table, TableFooter, TablePagination, Tab } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { DateTime } from "luxon";
 import {Tooltip} from "@mui/material";
-
+import {Loader} from "../components/Loader";
 const useStyles=makeStyles(()=>({
     back:{
         margin:"1%",
@@ -33,13 +32,23 @@ const useStyles=makeStyles(()=>({
 
 }))
 
-export const Profile=({setForm,setEnable,enable,formErrors,getCurrentOrder,setCurrentItem,handleDeleteOrderOpen,handleDeleteItemOpen,user,form,sendProfileUpdateForm,changeHandler,items})=>{
+export const Profile=({adminOrders,setForm,setEnable,enable,formErrors,getCurrentOrder,setCurrentItem,handleDeleteOrderOpen,handleDeleteItemOpen,user,form,sendProfileUpdateForm,changeHandler,items})=>{
 const classes=useStyles();
+// if(!user.orders){
+//     <Loader></Loader>
+//   }
 
-const orderList=[...user.orders];
-
+const [orderPage,setOrderPage]= useState(0);
+const [rowsPerPageOrders,setRowsPerPageOrders] = useState(5);
 const [page,setPage]=useState(0);
 const [rowsPerPage,setRowsPerPage]=useState(5);
+const handlePageChangeOrders=(event,newPage)=>{
+    setOrderPage(newPage);
+}
+const handleChangeRowsPerPageOrders=(event)=>{
+    setRowsPerPageOrders(parseInt(event.target.value,5));
+    setOrderPage(0);
+}
 const handlePageChange=(event,newPage)=>{
     setPage(newPage);
 }
@@ -52,9 +61,9 @@ const setItem=(item)=>{
 }
 
 const setOrder=(orderId)=>{
-    console.log(orderId);
-    getCurrentOrder(orderId);
+    getCurrentOrder(orderId,user.token);
 }
+const emptyRowsOrders = rowsPerPageOrders - Math.min(rowsPerPageOrders,adminOrders.length - orderPage*rowsPerPageOrders)
 
 const printDate=(initialFormat)=>{
     const date = DateTime.fromFormat(initialFormat, 'dd-MM-yyyy')
@@ -143,16 +152,14 @@ if(user.role === "ADMIN"){
                                 </TablePagination>
                                 
                             </TableRow>
-                            <TableRow>
-                           
-                            </TableRow>
+           
                         </TableFooter>
                     </Table>
                 </Grid>
                 </Grid>
               
                
-               <Grid container spacing={4}>
+               <Grid container spacing={2}>
                    <Grid item xs={12}> 
                    <Typography style={{width:"100%",textAlign:"center"}} variant="h2">ORDERS</Typography>
                    <Table>
@@ -169,15 +176,11 @@ if(user.role === "ADMIN"){
                            </TableRow>
                        </TableHead>
                        <TableBody>
-                       {orderList.map((order,index)=>{
+                       {adminOrders.slice(orderPage*rowsPerPageOrders,orderPage*rowsPerPageOrders+rowsPerPageOrders).map((order,index)=>{
                         return(
                             <TableRow>
-                                <TableCell>{order._id}</TableCell>
-                                {(order.orderPaid) ? 
-                                    <TableCell>Yes</TableCell>
-                                :
-                                    <TableCell>No</TableCell>
-                                }
+                                <TableCell>{index+1}</TableCell>
+                                <TableCell> {order.orderPaid ? ("Yes"):("No")}</TableCell>
                                 <TableCell>{printDate(order.ordered)}</TableCell>
                                 {(order.sent) ? 
                                     <TableCell>{printDate(order.sent)}</TableCell>
@@ -200,6 +203,26 @@ if(user.role === "ADMIN"){
                         )
     
                          })}
+                        {emptyRowsOrders>0 &&(<TableRow style={{height:100*emptyRowsOrders}}>
+                        <TableCell colSpan={6}></TableCell>
+                        </TableRow>)}
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                page={orderPage}
+                                rowsPerPage={rowsPerPageOrders}
+                                count={adminOrders.length}
+                                onPageChange={handlePageChangeOrders}
+                                onRowsPerPageChange={handleChangeRowsPerPageOrders}
+                                >
+                                    
+                                </TablePagination>
+                                
+                            </TableRow>
+                            <TableRow>
+                           
+                            </TableRow>
+                        </TableFooter>
                        </TableBody>
                    </Table>
                 </Grid>
@@ -252,19 +275,17 @@ if(user.role === "ADMIN"){
     )
     
     
-}
-return(
-    <div> 
-       <Box component="form"
-       autoComplete="off"
-       width="1000px"
-       onSubmit={sendProfileUpdateForm}
-       >
-           
-           <div>
-           
-           
-           <Grid container spacing={4}>
+}else if(user.role ==="USER") {
+    const orderList=[...user.orders];
+    return(
+        <div> 
+           <Box component="form"
+           autoComplete="off"
+           width="1000px"
+           onSubmit={sendProfileUpdateForm}
+           >
+               <Grid container spacing={4}>
+                <Divider style={{margin:"5%"}} />
                <Grid item xs={12}>
                <Typography style={{width:"100%",textAlign:"center"}} variant="h2">ORDERS</Typography>
                <Table>
@@ -282,10 +303,10 @@ return(
                        </TableRow>
                    </TableHead>
                    <TableBody>
-                   {orderList.map((order,index)=>{
+                   {orderList.slice(orderPage*rowsPerPageOrders,orderPage*rowsPerPageOrders+rowsPerPageOrders).map((order,index)=>{
                     return(
                         <TableRow>
-                                <TableCell>{order._id}</TableCell>
+                                <TableCell>{index + 1}</TableCell>
                                 {(order.orderPaid) ? 
                                     <TableCell>Yes</TableCell>
                                 :
@@ -312,7 +333,27 @@ return(
                     )
 
                      })}
-                   </TableBody>
+                    {emptyRowsOrders>0 &&(<TableRow style={{height:100*emptyRowsOrders}}>
+                        <TableCell colSpan={6}></TableCell>
+                        </TableRow>)}
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                page={orderPage}
+                                rowsPerPage={rowsPerPageOrders}
+                                count={adminOrders.length}
+                                onPageChange={handlePageChangeOrders}
+                                onRowsPerPageChange={handleChangeRowsPerPageOrders}
+                                >
+                                    
+                                </TablePagination>
+                                
+                            </TableRow>
+                            <TableRow>
+                           
+                            </TableRow>
+                        </TableFooter>
+                       </TableBody>
                </Table>
             </Grid>
             
@@ -320,6 +361,7 @@ return(
            
    
            <Grid item xs={12}><Typography style={{width:"100%",textAlign:"center"}} variant="h2">UPDATE</Typography></Grid>
+           <Grid item xs={12}>{enable ? (<Button hidden={!enable} variant="contained" color="primary" onClick={()=>{setEnable(false)}} >UNLOCK</Button>):(<></>)}</Grid>
            <Grid item xs={12}><TextField disabled={enable} type="email" value={form.email} onChange={changeHandler} style={{width:"100%"}} required label="Email" id="email" name="email"  error={!!formErrors["email"]}helperText={formErrors["email"] ? formErrors["email"] : ""} ></TextField></Grid>
            <Grid item xs={12}><TextField disabled={enable} type="text" value={form.username} onChange={changeHandler} style={{width:"100%"}}  required label="Username" id="username" name="username"  error={!!formErrors["username"]}helperText={formErrors["username"] ? formErrors["username"] : ""}></TextField></Grid>
            <Grid item xs={6}><TextField disabled={enable} type="text" value={form.firstName} onChange={changeHandler} style={{width:"100%"}} required  label="First Name" id="firstName" name="firstName"  error={!!formErrors["firstName"]}helperText={formErrors["firstName"] ? formErrors["firstName"] : ""}></TextField></Grid>
@@ -329,25 +371,39 @@ return(
            <Grid item xs={12}><TextField disabled={enable} type="tel" value={form.phone} onChange={changeHandler} style={{width:"100%"}} required label="Phone number" id="phone" name="phone" error={!!formErrors["phone"]} helperText={formErrors["phone"] ? formErrors["phone"] : ""}></TextField></Grid>
            <Grid item xs={12}><TextField disabled={enable} type="text" onChange={changeHandler} multiline value={form.address} style={{width:"100%"}} required  label="Address" id="address" name="address" error={!!formErrors["address"]}helperText={formErrors["address"] ? formErrors["address"] : ""}></TextField></Grid>
            <Grid item xs={12}>
-           {!enable ?    (<Button 
-           variant="contained"
-           color="primary" 
-           type="submit"
-           hidden={enable}
-           >
-               Update
-           </Button>):(<></>)}
+           {!enable ? 
+           (<div><Button                 
+           variant="contained"                
+           color="primary"                 
+           type="submit"                
+           hidden={enable}                
+           onClick={sendProfileUpdateForm}                
+           >                    
+           Update                
+           </Button>                
+           <Button                 
+           variant="outlined"                                 
+           onClick={()=>{setEnable(true); setForm({email: user.email,username:user.username,firstName:user.firstName,lastName:user.lastName,password:"",passwordConfirm:"",phone:user.phone,address:user.address,  }) }}>
+           Cancel
+           </Button>
+           </div>
+           )
+           :
+           (<></>)}
            </Grid>
    
            </Grid>
            <Divider/>
+           </Box>
            </div>
-           
-       </Box>
-       </div>
-
-   
-)
+    )
+    
+}
+else{
+    return(
+        <Loader></Loader>
+    );
+}
 
 
 }

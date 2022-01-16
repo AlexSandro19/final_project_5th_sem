@@ -11,6 +11,7 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import {Link} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import Item from "../components/Item"; 
 
@@ -40,11 +41,14 @@ const useStyles=makeStyles(()=>({
 export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenticated, addItemToBasket})=>{
     const classes=useStyles();
     const drawerWidth = 240;
-     
+    
+    const history = useHistory()
+    
     const [checked, setChecked] = useState([]);
     const [filteredItems, setFilteredItems] = useState([]);
     const [itemsReceived, setItemsReceived] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [emptyBasket, setEmptyBasket] = useState(false);
     const [emptyFilteredItemsList, setEmptyFilteredItemsList] = useState(false);
     
     useEffect( () => {
@@ -54,6 +58,15 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
         setItemsReceived(true);
     }, [items])
   
+    const basketButtonClicked = () => {
+        if (itemsInBasket.length){
+            setEmptyBasket(false);
+            history.push("/basket")
+        }else{
+            setEmptyBasket(true);
+        }
+    }
+
     const filterItems = (filterOption) => () => {
         const itemsInStock = items.filter(item => item.stock)
         console.log("itemsInStock ", itemsInStock)
@@ -81,8 +94,8 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
             }
         }
 
-
         
+
         setChecked(newChecked);
         console.log("newChecked", newChecked);
         const filtered = [];
@@ -232,12 +245,30 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
                     :   (<> </>)
 
                 }
+
+                {userIsAuthenticated && emptyBasket 
+                    ?
+                    <Snackbar
+                            open={emptyBasket}
+                            anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+                            autoHideDuration={2000}
+                            onClose={() => {setEmptyBasket(false)}}
+                            // message={`${item.name} item was added to Basket!`}
+                            // action={action}
+                        >
+                            <Alert severity="info" sx={{ width: '100%' }}>
+                                <b>No items are added in basket. Try adding some.</b>
+                            </Alert>
+                        </Snackbar>
+                    :
+                    (<> </>)
+                }
             </Grid>
            
             {userIsAuthenticated ? 
                 <Badge className={classes.fab} color="secondary" badgeContent={itemsInBasket.length}>
                      <Tooltip className={classes.fab} title="See added items in Basket" arrow>
-                         <Fab className={classes.fab} color="primary" aria-label="Shopping Bag" component={Link} to="/basket">
+                         <Fab className={classes.fab} onClick={basketButtonClicked} color="primary" aria-label="Shopping Bag" >
                              <ShoppingBasketIcon />
                          </Fab>
                          </Tooltip>
@@ -245,6 +276,8 @@ export const ShoppingPageComponent=({goBack,items, itemsInBasket, userIsAuthenti
                      
                 : <></>
             }
+
+            
                      
             </>
     ))

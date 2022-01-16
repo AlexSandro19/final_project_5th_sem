@@ -32,7 +32,7 @@ const OrderConfirmation=({user, currentOrder})=> {
 
     return (
         (Object.keys(currentOrder).length === 0) ? <Loader></Loader> : (
-        <>
+        <div>
         <Grid container spacing={2}>
         <Grid item xs={12}>
             <Typography variant="h2" sx={{ margin: '15px', marginTop:"20px" }}>Thank you! The order is confirmed.</Typography>
@@ -41,7 +41,7 @@ const OrderConfirmation=({user, currentOrder})=> {
             <ViewOrderPage></ViewOrderPage>
         </Grid>
         </Grid>
-        </>
+        </div>
     ))
 }
 

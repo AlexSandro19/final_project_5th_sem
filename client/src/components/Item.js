@@ -73,7 +73,7 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
         addItemToBasket(itemsInBasket);
         setItemAddedSnackbar(true);
         setIsItemInBasket(true);
-        saveCartAction(user, itemsInBasket,"ADD");
+        saveCartAction(itemsInBasket,user.token,user.exp,"ADD");
     }
 
     const capitalizeString = (initialStr) => {
@@ -93,20 +93,20 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
         console.log("Delete: ", item);
         setItemRemovedSnackbar(true);
         setIsItemInBasket(false);
-        saveCartAction(user, updatedItemsInBasket,"REMOVE");
+        saveCartAction(updatedItemsInBasket,user.token,user.exp,"REMOVE");
     }
 
     return(
         <>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
-            <img src={item.picturesArray[0]} alt=""></img> 
-            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(items,item)}}>
+            <img src={item.picturesArray[0]} alt="" style={{width:"200px"}}></img> 
+            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(items,item,user.token)}}>
                 <CardContent>
                     <div>
                     <Typography variant="h5">{item.name}</Typography>
                 </div>
                     <Typography variant="body1">{item.description}</Typography>
-                    <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price}</Typography>
+                    <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price} DKK</Typography>
                 </CardContent>
             </CardActionArea>
             <CardActions>

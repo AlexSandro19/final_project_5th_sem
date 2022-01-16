@@ -1,11 +1,10 @@
-import { Card, CardActionArea, CardContent, Grid, Box, Typography, Paper } from "@mui/material";
+import { Card, CardActionArea, CardContent,Button, Grid, Box, Typography, Paper } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import {useEffect,useCallback} from "react"
+import {useEffect,useCallback} from "react";
 import { connect } from "react-redux";
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
+import { NavLink } from "react-router-dom";
 import Carousel from 'react-material-ui-carousel'
-import {requestAllItems} from "../redux/actions/item";
+import {requestAllItems,setCurrentItem} from "../redux/actions/item";
 const useStyles=makeStyles(()=>({
     back:{
         margin:"1%",
@@ -31,7 +30,7 @@ const useStyles=makeStyles(()=>({
     },
 
 }))
-const HomePage=({items,requestAllItems})=>{
+const HomePage=({items,requestAllItems,setCurrentItem})=>{
 const classes=useStyles();
 var popular=[];
 var highestRated=[];
@@ -71,8 +70,8 @@ var displayText=[
 return(
     <div>
         <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12} >
-            <Carousel>
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6} >
+            <Carousel >
                 {
                    displayText.map((item)=>{
                        return(
@@ -87,13 +86,13 @@ return(
 
             </Carousel>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12} >
-
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6} >
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/YU6VqT03Lgk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </Grid>
 
         <Grid item xs={12}>
         <Grid container  direction="row" justifyContent="center"  alignItems="center" spacing={2}>
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12}>
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6}>
         <Box style={{height:"600px"}}   className={classes.back}>
         <Typography variant="h4" textAlign="center">Most Popular Items Right Now</Typography>
         <Grid container spacing={1}>
@@ -111,9 +110,9 @@ return(
 
                     </CardContent>
                     </Grid> 
-                <Grid item xs={12}><CardActionArea style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
+                <Grid item xs={12}>
+                    <CardActionArea component={NavLink} to="/item" onClick={()=>{setCurrentItem(items,item)}} style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
                 <Typography style={{textAlign:"center"}} variant="h6">VIEW</Typography>
-              
                 </CardActionArea>
                 </Grid> 
                 </Grid>
@@ -125,11 +124,11 @@ return(
         </Box>
         </Grid>
        
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12}>
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6}>
         <Box style={{height:"300px"}}   className={classes.back}>
         <Typography variant="h4" textAlign="center">Highest Rated Designs</Typography>
         <Grid container spacing={1}>
-        <Grid item xs={12} sm={12} md={6} xl={6} lg={12}>
+        <Grid item xs={12} sm={12} md={6} xl={6} lg={6}>
         <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
             <CardContent>
                 <Typography variant="h5">Dinning Chair</Typography>
@@ -153,7 +152,7 @@ return(
                         <Typography variant="body2">Price: {item.price} DKK</Typography>
 
                     </CardContent>
-                <CardActionArea style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
+                <CardActionArea component={NavLink} to="/item" onClick={()=>{setCurrentItem(items,item)}} style={{width:"50%",marginLeft:"25%",backgroundColor:"#FDFFEE"}} >
                 <Typography style={{textAlign:"center"}} variant="h6">VIEW</Typography>
                 </CardActionArea>
                 </Card>
@@ -177,4 +176,4 @@ const mapStateToProps = (state) => {
     };
   };
   
-export default connect(mapStateToProps,{requestAllItems})(HomePage)
+export default connect(mapStateToProps,{requestAllItems,setCurrentItem})(HomePage)

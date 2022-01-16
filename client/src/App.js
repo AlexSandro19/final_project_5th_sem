@@ -43,7 +43,7 @@ function App() {
   const classes = useStyles();
   return (
     // <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID, "currency":"DKK", "disable-funding":"credit,card"}} > // to hide the credit card option
-    <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID, "disable-funding":"credit,card", "currency":"DKK", "debug":"true"}} >
+    <PayPalScriptProvider options={{"client-id":process.env.REACT_APP_PAYPAL_CLIENT_ID, "disable-funding":"credit,card", "currency":"DKK"}} >
     <Router>
     <div className={classes.root}>
       <CssBaseline />
