@@ -42,6 +42,7 @@ const ProfilePage=({getAllOrders,adminOrders,updateUser,errors,user,items,curren
       e.preventDefault();
       updateUser(form,user.token,user.exp);
       setEnable(true);
+      setForm({...form, password:"", passwordConfirm:""})
     }
   
     const [modalOpen, setModalOpen] = useState(false);
