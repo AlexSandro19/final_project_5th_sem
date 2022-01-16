@@ -60,6 +60,7 @@ export const Auth=({modalOpen,handleClose,form,submitHandler,changeHandler,formE
             name="email"
             label="Email"
             type="email"
+            autoComplete="email"
             fullWidth
             error={!!formErrors["email"]}
             helperText={formErrors["email"] ? formErrors["email"] : ""}
@@ -72,9 +73,10 @@ export const Auth=({modalOpen,handleClose,form,submitHandler,changeHandler,formE
             name="password"
             label="Password"
             type="password"
+            autoComplete="current-password"
             fullWidth
-            error={!!formErrors["tag"]}
-            helperText={formErrors["tag"] ? formErrors["tag"] : ""}
+            error={!!formErrors["password"]}
+            helperText={formErrors["password"] ? formErrors["password"] : ""}
           />
           <Link
           component={NavLink}
@@ -86,7 +88,7 @@ export const Auth=({modalOpen,handleClose,form,submitHandler,changeHandler,formE
           </Link>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleClose} variant="contained" color="secondary">
             Cancel
           </Button>
           <Button

@@ -34,9 +34,7 @@ const useStyles = makeStyles((theme) => ({
     
     const classes = useStyles();
     const [modalOpen, setModalOpen] = useState(false);
-    console.log(successful);
-    console.log(requesting);
-    console.log(errors);
+
     const handleClickOpen = () => {
       setModalOpen(true);
     };
@@ -73,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
             to="/allitems"
             activeClassName="active"
           >
-            All Items
+            Shop
           </Button>
             <Button
             className={classes.button}
@@ -92,6 +90,16 @@ const useStyles = makeStyles((theme) => ({
             to="/modeling"
           >
             3D Modeling
+          </Button>
+          <Button
+          className={classes.button}
+          color="inherit"
+          component={NavLink}
+          to="/contact"
+          activeClassName="active"
+          >
+
+            Contact
           </Button>
           <Button
             component={NavLink}
@@ -134,6 +142,16 @@ const useStyles = makeStyles((theme) => ({
             activeClassName="active"
           >
             All Items
+          </Button>
+          <Button
+          className={classes.button}
+          color="inherit"
+          component={NavLink}
+          to="/contact"
+          activeClassName="active"
+          >
+
+            Contact
           </Button>
             <Button
             

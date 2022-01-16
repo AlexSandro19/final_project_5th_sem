@@ -9,6 +9,7 @@ import Item from "../components/Item";
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { createOrderAction } from "../redux/actions/order";
+import { useHistory } from "react-router-dom";
 
 const useStyles=makeStyles(()=>({
     back:{
@@ -31,12 +32,15 @@ const useStyles=makeStyles(()=>({
 const OrderDetails=({items, itemsInBasket, user, createOrderAction})=> {
     const classes=useStyles();
     console.log("User in OrderDetails", user)
-
+    const history=useHistory()
+    const goBack=()=>{
+        history.goBack();
+    }
 
     return (
         !itemsInBasket.length ? <Loader></Loader> : ( //if posts.length is 0 then is false, !false => true
             <>
-        <OrderDetailsComponent user={user} itemsInBasket={itemsInBasket} createOrderAction={createOrderAction}>
+        <OrderDetailsComponent goBack={goBack} user={user} itemsInBasket={itemsInBasket} createOrderAction={createOrderAction}>
         </OrderDetailsComponent>
         </>
     ))

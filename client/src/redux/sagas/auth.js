@@ -27,14 +27,19 @@ function* loginFlow(credentials) {
   let payload;
   try {
     payload = yield call(loginApi, credentials.email, credentials.password);
-     console.log(payload);
     const exp = new Date().valueOf() + expirationTime;
 
     yield put(setUser(payload.token, payload.userId, payload.role, exp,payload.username,payload.firstName,payload.lastName,payload.email,payload.phone,payload.address,payload.cart,payload.emailConfirmed,payload.orders));
     yield put({
       type: LOGIN_SUCCESS,
     });
-
+    yield put({
+      type:"SUCCESS",
+      message:{
+        text:"Logged in successfully",
+        severity:"success"
+      }
+    });
     setAuthToken({
       userId: payload.userId,
       token: payload.token,
@@ -42,11 +47,12 @@ function* loginFlow(credentials) {
       exp: exp,
     });
 
-    // history.push("/projects");
+
   } catch (error) {
     console.log(error);
+    yield put({type:LOGIN_FAILURE});
     yield put({
-      type: LOGIN_FAILURE,
+      type: "FAILURE",
       message: {
         text: error.message,
         severity: "error",
@@ -63,7 +69,6 @@ function* loginWatcher() {
     if (!token) {
       while (!token) {
         const { payload } = yield take(LOGIN_REQUESTING);
-        console.log(payload);
         yield call(loginFlow, payload);
         token = yield call(getLocalAuthToken);
       }
@@ -85,6 +90,13 @@ function* loginWatcher() {
     yield take(USER_UNSET);
     token = null;
     yield call(logout);
+    yield put({
+      type:"SUCCESS",
+      message:{
+        text:"Logged out successfully",
+        severity:"success"
+      }
+    });
   }
 }
 

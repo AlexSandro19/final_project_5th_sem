@@ -1,18 +1,31 @@
 import { connect } from "react-redux";
 import { Profile } from "../components/Profile";
 import { useHistory } from "react-router-dom";
-import {useState} from "react";
+import {useState,useEffect} from "react";
 import { DeleteDialog } from "../components/DeleteDialog";
 import {setCurrentItem,deleteItem} from "../redux/actions/item"
 import { getCurrentOrder,deleteOrder } from "../redux/actions/order";
-const ProfilePage=({user,items,currentItem,currentOrder,setCurrentItem,getCurrentOrder,deleteItem,deleteOrder})=>{
+import { updateUser } from "../redux/actions/user";
+const ProfilePage=({updateUser,errors,user,items,currentItem,currentOrder,setCurrentItem,getCurrentOrder,deleteItem,deleteOrder})=>{
     const history = useHistory();
+    const [formErrors,setFormErrors] = useState({});
+    const [enable,setEnable] = useState(true);
+    useEffect(() => {
+      if (errors) {
+       
+      errors.forEach((error) => {
+         console.log(error);
+          setFormErrors((i) => ({ ...i, [error.param]: error.msg }));
+        });
+      }
+    }, [errors]);
     const [form, setForm] = useState({
       email: user.email,
       username:user.username,
       firstName:user.firstName,
       lastName:user.lastName,
       password:"",
+      passwordConfirm:"",
       phone:user.phone,
       address:user.address,  
     });
@@ -21,10 +34,10 @@ const ProfilePage=({user,items,currentItem,currentOrder,setCurrentItem,getCurren
     };
     const sendProfileUpdateForm= (e)=>{
       e.preventDefault();
-  
-      //registerUser(form);
-      history.push("/");
+      updateUser(form,user.token,user.exp);
+      setEnable(true);
     }
+  
     const [modalOpen, setModalOpen] = useState(false);
     const [deleteOrderOpen, setDeleteOrderOpen] = useState(false);
     const handleDeleteItemOpen = (item) => {
@@ -47,10 +60,9 @@ const ProfilePage=({user,items,currentItem,currentOrder,setCurrentItem,getCurren
         setModalOpen(false);
         setDeleteOrderOpen(false);
       };
-    
     return(
         <div>
-        <Profile getCurrentOrder={getCurrentOrder} setCurrentItem={setCurrentItem} handleDeleteOrderOpen={handleDeleteOrderOpen}  handleDeleteItemOpen={handleDeleteItemOpen} items={items} user={user} form={form} sendProfileUpdateForm={sendProfileUpdateForm} changeHandler={changeHandler}>
+        <Profile setForm={setForm} setEnable={setEnable} enable={enable} formErrors={formErrors} errros={errors} getCurrentOrder={getCurrentOrder} setCurrentItem={setCurrentItem} handleDeleteOrderOpen={handleDeleteOrderOpen}  handleDeleteItemOpen={handleDeleteItemOpen} items={items} user={user} form={form} sendProfileUpdateForm={sendProfileUpdateForm} changeHandler={changeHandler}>
         
         </Profile>
       
@@ -69,7 +81,8 @@ const mapStateToProps = (state) => {
         items:state.items.items,
         currentItem:state.items.currentItem,
         currentOrder:state.order.currentOrder,
+        errors: state.message.errors
     };
   };
   
-export default connect(mapStateToProps,{setCurrentItem,getCurrentOrder,deleteItem,deleteOrder})(ProfilePage)
+export default connect(mapStateToProps,{updateUser,setCurrentItem,getCurrentOrder,deleteItem,deleteOrder})(ProfilePage)

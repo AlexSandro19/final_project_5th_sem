@@ -8,7 +8,6 @@ export const contactFormRequest = ({ firstName, lastName, email, subject, messag
 };
 
 export const contactFormSuccess = ({ message }) => {
-    console.log(message)
   return {
     type: CONTACT_FORM_SUCCESS,
     payload: { message },

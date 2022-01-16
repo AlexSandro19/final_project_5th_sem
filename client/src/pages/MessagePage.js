@@ -6,7 +6,7 @@ import {hideMessage} from "../redux/actions/user"
 const MessagePage = ({ message, dispatch }) => {
   const onClose = (event, reason) => {
     if (reason === "clickaway") {
-      return;
+      dispatch(hideMessage());
     }
     dispatch(hideMessage());
   };

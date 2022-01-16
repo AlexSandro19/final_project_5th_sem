@@ -13,10 +13,22 @@ function* loginFlow(action) {
       const responseMessage = yield call(contactEmail, firstName, lastName, email, subject, message);
   
       yield put(contactFormSuccess(responseMessage));
-  
+      yield put({
+        type:"SUCCESS",
+        message:{
+            text:"You have successfully sent a contact email!",
+            severity:"success"
+        }
+    })
     } catch (error) {
-      console.log(error.message);
-      console.log(error);
+      yield put({
+        type:"FAILURE",
+        message:{
+            text:error.message,
+            severity:"error",
+        },
+        errors:error.errors
+    })
     }
 }
 

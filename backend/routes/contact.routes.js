@@ -44,15 +44,20 @@ router.post("/contact",
       };
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-          console.log(error);
+          return res.status(500).json({
+            message: "",
+            errors: [
+              { value: error, msg: error.message, },
+            ],
+          });
         } else {
           console.log('Email sent: ' + info.response);
         }
       }); 
       res.status(200).json({ message: "successfully emailed me "});
-    } catch (e) {
-      console.log(e);
-      res.status(500).json({ message: "Something went wrong, try again" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Invalid data" ,errors:[{value:error,value:error.message}]});
     }
   }
 

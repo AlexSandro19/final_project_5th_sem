@@ -52,7 +52,7 @@ function init() {
         this.createRoom = {createRoom: function(){
             if(roomParams.x === roomParams.y && roomParams.x === roomParams.z){
                 if(roomParams.x !== 0){
-                    console.log('square')
+                    ('square')
                     //rooms.push(createSquareRoom(roomParams.x))
                     scene.add(createSquareRoom(roomParams.x))
                     scene.add( new THREE.GridHelper( roomParams.x, roomParams.x, 0x888888, 0x444444 ) );
@@ -67,7 +67,7 @@ function init() {
                     //rooms.push(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
                     scene.add(createDynamicRoom(roomParams.x,roomParams.y,roomParams.z))
                     introGui.hide()
-                    console.log('different')
+                    ('different')
                     gui.show()
                     camera.position.set(-11,11,-5)
                     var f4 = gui.addFolder('Change room aspect')
@@ -129,7 +129,7 @@ function init() {
         this.takeScreen = {takeScreen: function(){
             gui.hide()
             html2canvas(document.body).then(function(canvas){
-                console.log('at least not here')
+                ('at least not here')
                 return canvas2Image.saveAsPNG(canvas);
             })
             gui.show()
@@ -139,9 +139,9 @@ function init() {
             introGui.add()
         }}
         this.changeRoomWall = { changeWall: function(){
-            console.log(scene.children[10].children[1])
-            console.log(scene.children[10])
-            console.log(scene.children)
+            (scene.children[10].children[1])
+            (scene.children[10])
+            (scene.children)
             scene.children[10].children[1].position.z = -scene.children[10].children[1].position.z 
             camera.position.z = - camera.position.z
         }} 
@@ -208,7 +208,7 @@ function init() {
     let addObject = function(src, value){
         loader.load( src, function ( gltf ) {   
             var bbox = new THREE.Box3().setFromObject(gltf.scene);
-            console.log(bbox.getSize(new THREE.Vector3()))
+            (bbox.getSize(new THREE.Vector3()))
             //gltf.scene.updateMatrixWorld(true)
             
             gltf.scene.children[0].material.color.setStyle(box.material.color.getStyle())
@@ -282,7 +282,7 @@ function init() {
     .listen()
     .onChange(
         function(newValue) {
-            console.log(formatResizableObjectFolderName(newValue))    
+            (formatResizableObjectFolderName(newValue))    
             addObject(formatResizableObjectFolderName(newValue),true)
             
         });
@@ -292,7 +292,7 @@ function init() {
     .listen()
     .onChange(
         function(newValue) {
-            console.log(formatStandartObjectFolderName(newValue))    
+            (formatStandartObjectFolderName(newValue))    
             addObject(formatStandartObjectFolderName(newValue),false)
             
         });
@@ -400,16 +400,16 @@ function init() {
             controls.target,
             dir.subVectors(camera.position, controls.target).normalize()
         )
-        console.log('controls',controls.target)
+        ('controls',controls.target)
             
         intersects1 = raycaster1.intersectObjects(sceneMeshes, true)
         if (intersects1.length > 0) {
             if (
                 intersects1[0].distance < controls.target.distanceTo(camera.position)
             ) {
-                console.log(controls.target)
-                console.log(intersects1)
-                console.log(intersects1[0].distance)
+                (controls.target)
+                (intersects1)
+                (intersects1[0].distance)
                 camera.position.copy(intersects1[0].point)
         
             }
@@ -442,22 +442,22 @@ function init() {
             raycaster.setFromCamera(mouse, camera);
             //detectCollisionCubes(plane,box)
             intersects = raycaster.intersectObjects(objects3D, true);
-            console.log(intersects)
+            (intersects)
             if(intersects.length > 0 ){
                 INTERSECTED = intersects[ 0 ].object;
-                console.log(INTERSECTED)
+                (INTERSECTED)
                 control.attach(INTERSECTED);
                 scene.add(control);
                 selected = INTERSECTED
                 
                     //change dat.gui accordingly to selected object
                     guiControls.color = selected.material.color.getStyle();
-                    console.log(selected)
+                    (selected)
                     guiControls.x = selected.scale.x*selected.properties.normalScale.x
                     guiControls.y = selected.scale.y*selected.properties.normalScale.y
                     guiControls.z = selected.scale.z*selected.properties.normalScale.z
-                    console.log(selected)
-                    console.log(selected.properties.normalScale)
+                    (selected)
+                    (selected.properties.normalScale)
                     
                     this.selected = {delete: function(){
                         
@@ -475,17 +475,17 @@ function init() {
             } else{
                 control.detach();
                 scene.remove(control);
-                console.log('dont')
+                ('dont')
             }
             break;
             case 1:
-                console.log('middle')
+                ('middle')
 
                 selected.position.y = (selected.scale.y*selected.properties.normalScale.y)/2
                 
             break;
             case 2: 
-                console.log('right click')
+                ('right click')
                 selected.rotation.y += Math.PI/2
                   
         }
@@ -513,7 +513,7 @@ for (let i = 0; i < sceneMeshes.length; i += 1) {
         const vertices = [];
         const positions = geometry.attributes.position.array;
                 
-        console.log('CollisionDetector BufferGeometry detected', geometry);
+        ('CollisionDetector BufferGeometry detected', geometry);
 
         for ( let k = 0; k < positions.length; k += 3 ) {
             v.set(positions[ k ],positions[ k + 1 ], positions[ k + 2 ]);
@@ -537,7 +537,7 @@ function removeSelected(obj){
     for(let i in mainGroup.children){
         for(let j in mainGroup.children[i].children){
             if(mainGroup.children[i].children[j] === obj){
-                console.log(mainGroup.children[i])
+                (mainGroup.children[i])
                 mainGroup.remove(mainGroup.children[i])
                 scene.remove(mainGroup.children[i])
             }

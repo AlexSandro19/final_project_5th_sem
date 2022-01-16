@@ -30,21 +30,18 @@ const useStyles=makeStyles(()=>({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '95%',
         
     },
 
 })) 
 
-const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToBasket, updateItemsBasket, user,saveCartAction})=>{
+const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToBasket, updateItemsBasket, user,saveCartAction})=>{
 
     const [isItemInBasket, setIsItemInBasket] = useState(false);
     
     const checkIfItemInBasket = () => {
         
         const isItemInArray = itemsInBasket.filter(itemInBasket => itemInBasket._id === item._id);
-        console.log("In the checkIfItemInBasket, index -- ", isItemInArray.length)
-        console.log("In the checkIfItemInBasket, itemsInBasket -- ", itemsInBasket)
         if (isItemInArray.length !== 0){
             return true;
         }else{
@@ -53,17 +50,16 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
     }
    
     useEffect( () => {
-        console.log("In use effect")
         const returnedValue = checkIfItemInBasket()
-        console.log("returned value ", returnedValue)
+   
 
         setIsItemInBasket(returnedValue);
     }, [itemsInBasket])
 
     const classes = useStyles();
-    console.log(itemsInBasket);
 
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [itemRemovedSnackbar, setItemRemovedSnackbar] = useState(false);
+    const [itemAddedSnackbar, setItemAddedSnackbar] = useState(false);
     
 
     const addToCartPressed = (e) => {
@@ -75,9 +71,9 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
             itemsInBasket.splice(index, 0, item);
         }
         addItemToBasket(itemsInBasket);
-        setOpenSnackbar(true);
+        setItemAddedSnackbar(true);
         setIsItemInBasket(true);
-        saveCartAction(user, itemsInBasket);
+        saveCartAction(user, itemsInBasket,"ADD");
     }
 
     const capitalizeString = (initialStr) => {
@@ -95,22 +91,19 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
         console.log("updatedItemsInBasket", updatedItemsInBasket)
         updateItemsBasket(updatedItemsInBasket); 
         console.log("Delete: ", item);
+        setItemRemovedSnackbar(true);
         setIsItemInBasket(false);
-        saveCartAction(user, updatedItemsInBasket);
+        saveCartAction(user, updatedItemsInBasket,"REMOVE");
     }
 
     return(
         <>
             <Card style={{backgroundColor:"#C4C4C4"}} className={classes.card}>
             <img src={item.picturesArray[0]} alt=""></img> 
-            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(item)}}>
+            <CardActionArea style={{backgroundColor:"#FDFFEE"}} component={Link} to="/item" onClick={() => {setCurrentItem(items,item)}}>
                 <CardContent>
                     <div>
                     <Typography variant="h5">{item.name}</Typography>
-                
-                <Button component={Link} to="/updateItem">
-                    <MoreHorizIcon fontSize="default" />
-                </Button>
                 </div>
                     <Typography variant="body1">{item.description}</Typography>
                     <Typography variant="body1" style = {{display: 'flex',flexDirection:'column',alignItems:'flex-end'}}>{item.price}</Typography>
@@ -144,14 +137,25 @@ const Item =({item,itemsInBasket, userIsAuthenticated, setCurrentItem,addItemToB
             
             </Card>
             <Snackbar
-                open={openSnackbar}
+                open={itemAddedSnackbar}
                 autoHideDuration={2000}
-                onClose={() => {setOpenSnackbar(false)}}
+                onClose={() => {setItemAddedSnackbar(false)}}
                 // message={`${item.name} item was added to Basket!`}
                 // action={action}
             >
                 <Alert severity="success" sx={{ width: '100%' }}>
                     <b>{capitalizeString(item.name)}</b> item was added to Basket!
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={itemRemovedSnackbar}
+                autoHideDuration={2000}
+                onClose={() => {setItemRemovedSnackbar(false)}}
+                // message={`${item.name} item was added to Basket!`}
+                // action={action}
+            >
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    <b>{capitalizeString(item.name)}</b> item was removed from Basket.
                 </Alert>
             </Snackbar>
         </>
@@ -163,7 +167,8 @@ const mapStateToProps = (state) => {
     return {
         itemsInBasket: state.basket.itemsInBasket, 
         userIsAuthenticated: state.user.isAuthenticated,
-        user: state.user
+        user: state.user,
+        items:state.items.items
     };
 };
 
