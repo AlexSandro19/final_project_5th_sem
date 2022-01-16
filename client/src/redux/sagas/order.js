@@ -14,8 +14,9 @@ function* createOrderFlow(action) {
     const order = action.payload;
     const user = action.user
 
-    const {orderCreated} = yield call(createOrderService, order)  
+    const {orderCreated,addedOrderId} = yield call(createOrderService, order)  
     if (orderCreated) {
+      order._id = addedOrderId      
       user.orders.push(order)
       user.cart = []
       yield put(setUser(user.token, user.id, user.role, user.exp,user.username,user.firstName,user.lastName,user.email,user.phone,user.address,user.cart,user.emailConfirmed,user.orders));
@@ -117,9 +118,9 @@ function* deleteOrderFlow(action){
 
 function* saveCartFlow(action) {
     try {
-
-      const user = action.payload.user;
-      const cart = action.payload.cart;
+      console.log("action in saveCartFlow ", action)
+      const user = action.user;
+      const cart = action.payload;
       const activityType = action.activityType;
       const {didUserUpdate} = yield call(saveCartService, user, cart)  
       
