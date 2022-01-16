@@ -73,7 +73,7 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
         addItemToBasket(itemsInBasket);
         setItemAddedSnackbar(true);
         setIsItemInBasket(true);
-        saveCartAction(itemsInBasket,user.token,user.token,"ADD");
+        saveCartAction(itemsInBasket,user.token,user.exp,"ADD");
     }
 
     const capitalizeString = (initialStr) => {
@@ -93,7 +93,7 @@ const Item =({items,item,itemsInBasket, userIsAuthenticated, setCurrentItem,addI
         console.log("Delete: ", item);
         setItemRemovedSnackbar(true);
         setIsItemInBasket(false);
-        saveCartAction(updatedItemsInBasket,user.token,user.token,"REMOVE");
+        saveCartAction(updatedItemsInBasket,user.token,user.exp,"REMOVE");
     }
 
     return(
