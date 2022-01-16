@@ -120,8 +120,8 @@ if(user.role === "ADMIN"){
                                 {item.isPopular ?(<TableCell>YES</TableCell>):(<TableCell>NO</TableCell>)}
                                 <TableCell>{item.ratings.medianValueRating}</TableCell>
                                 <TableCell>
-                                 <Button component={NavLink} to={"/editItem"} onClick={()=>setItem(item)}  style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"3%"}}>Edit Item</Button>
-                               <Button onClick={()=>handleDeleteItemOpen(item)}  style={{color:"black",backgroundColor:"#FD6464",borderRadius: "6px",marginRight:"3%"}}>Remove Item</Button>
+                                <Button component={NavLink} to={"/editItem"} onClick={()=>setItem(item)}  style={{color:"black",backgroundColor:"#FDFFEE",borderRadius: "6px",marginRight:"3%",marginBottom:"4%"}}>Edit Item</Button>
+                                <Button onClick={()=>handleDeleteItemOpen(item)}  style={{color:"black",backgroundColor:"#FD6464",borderRadius: "6px",marginRight:"3%"}}>Remove Item</Button>
                             </TableCell>
                                 </TableRow>
                             )
